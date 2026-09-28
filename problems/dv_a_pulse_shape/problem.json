@@ -1,0 +1,59 @@
+{
+  "id": 232,
+  "title": "Assertion: Strobe Pulse Shape",
+  "difficulty": "Medium",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_pulse",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "strobe",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule 1: every `strobe` pulse is exactly **one** cycle wide.",
+    "Rule 2: after a pulse, `strobe` stays low for at least **2** cycles before the next pulse.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Rule 1: `strobe |=> !strobe`.",
+    "Rule 2: when strobe has just fallen (`$fell(strobe)`), it must also be low one cycle later: `$fell(strobe) |=> !strobe`.",
+    "Pulse-shape rules are typical for interrupt lines and one-shot command strobes."
+  ],
+  "examples": [
+    {
+      "check": "legal: well-spaced pulses",
+      "title": "legal",
+      "input": "0100100100",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: two-cycle pulse",
+      "title": "width",
+      "input": "0110",
+      "expected": "assertion fails"
+    }
+  ]
+}

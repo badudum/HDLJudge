@@ -1,0 +1,194 @@
+[
+ {
+  "unit": 2,
+  "length": 20,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "req",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "15",
+     "15",
+     "14",
+     "14",
+     "12",
+     "12",
+     "8",
+     "8",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "gnt",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "2",
+     "2",
+     "4",
+     "4",
+     "8",
+     "8",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "title": "legal: every request served",
+  "caption": "Legal trace: your checker must stay silent. Signals change at falling edges and are sampled at rising edges."
+ },
+ {
+  "unit": 2,
+  "length": 24,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "req",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "9",
+     "9",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "8",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "gnt",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "8",
+     "8",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "title": "violation: master 3 starved",
+  "caption": "VIOLATION: your checker must report an error on this trace. Signals change at falling edges and are sampled at rising edges."
+ }
+]

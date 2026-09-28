@@ -1,0 +1,88 @@
+{
+  "id": 264,
+  "title": "Mod-6 Counter Without an Adder",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "fsm",
+    "brain-teaser",
+    "johnson-counter",
+    "shift-register"
+  ],
+  "top": "johnson6",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "q",
+      "dir": "output",
+      "width": 3
+    },
+    {
+      "name": "tick",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "A **Johnson (twisted-ring) counter** in 3 flip-flops: each enabled edge shifts left and feeds back the **inverted** MSB: `q <= {q[1:0], ~q[2]}`. From reset (000) it cycles 000 → 001 → 011 → 111 → 110 → 100 → 000 (period 6).",
+    "`tick = 1` (combinational) in state 100, the last state before wrapping. No `+`, `-` or `*` anywhere.",
+    "Bonus insight: every state is decoded by a single 2-input gate."
+  ],
+  "hints": [
+    "It's a shift register with one inverter in the feedback path.",
+    "State 100 is the only one with q[2] = 1 and q[1] = 0: `tick = q[2] & ~q[1]`.",
+    "Johnson counters are glitch-free when decoded (only one bit changes per step), which makes them popular for clock dividers and phase generators."
+  ],
+  "examples": [
+    {
+      "check": "full cycle",
+      "title": "sequence",
+      "input": "en = 1 for 7 edges",
+      "expected": "000, 001, 011, 111, 110, 100, 000"
+    },
+    {
+      "check": "enable",
+      "title": "hold",
+      "input": "en = 0",
+      "expected": "state holds"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 3,
+  "forbidden": [
+    {
+      "pattern": "[+\\-*]",
+      "message": "no adders: a Johnson counter needs none",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "[+\\-*]",
+      "message": "no adders: a Johnson counter needs none",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

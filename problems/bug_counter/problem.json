@@ -1,0 +1,75 @@
+{
+  "id": 83,
+  "title": "Debug: Decade Counter",
+  "difficulty": "Easy",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "counter",
+    "off-by-one"
+  ],
+  "top": "bcd_counter",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "digit",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "carry",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Intended behavior: a decimal digit counter 0 → 9 → 0. Each rising edge with `en = 1` increments, and 9 wraps to 0. Synchronous reset.",
+    "`carry = 1` while `digit == 9` **and** `en = 1` (so the next digit of a multi-digit counter ticks on the wrap). Combinational.",
+    "The starter code has **2 bugs**. Fix them without rewriting the design from scratch."
+  ],
+  "hints": [
+    "Run it and look at the first failing check: what value does the counter reach that a decimal digit never should?",
+    "Compare the wrap condition with the value that should be the last one.",
+    "Check `carry` when `en = 0`: a paused counter must not ripple into the next digit."
+  ],
+  "examples": [
+    {
+      "check": "counts 0 to 9",
+      "title": "sequence",
+      "input": "en = 1 for 12 cycles",
+      "expected": "digit = 1, 2, …, 9, 0, 1, 2"
+    },
+    {
+      "check": "carry",
+      "title": "carry",
+      "input": "digit = 9 with en = 1",
+      "expected": "carry = 1"
+    },
+    {
+      "check": "carry needs enable",
+      "title": "paused",
+      "input": "digit = 9 with en = 0",
+      "expected": "carry = 0"
+    }
+  ]
+}

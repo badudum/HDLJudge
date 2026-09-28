@@ -1,0 +1,47 @@
+{
+  "id": 108,
+  "title": "Constraint: Exactly Three Equal Values",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "three_same",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`arr` has 10 elements of 4 bits. Exactly **one** value appears exactly **3** times, and every other value appears at most **once**.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Add a helper `rand bit [3:0] rep;`: it's fine for the class to have extra random variables.",
+    "Count occurrences with `arr.sum() with (int'(item == rep)) == 3`.",
+    "Any duplicate pair must be the repeated value: `(arr[i] == arr[j]) -> (arr[i] == rep)` for i < j."
+  ],
+  "examples": [
+    {
+      "check": "one value appears exactly 3 times",
+      "title": "valid",
+      "input": "{3,7,3,9,0,3,5,1,14,8}",
+      "expected": "accepted: 3 appears 3×, the rest once"
+    },
+    {
+      "check": "one value appears exactly 3 times",
+      "title": "invalid",
+      "input": "{3,3,3,3,…}",
+      "expected": "rejected: 4 copies"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "150 calls",
+      "expected": "at least 120 different arrays"
+    }
+  ]
+}

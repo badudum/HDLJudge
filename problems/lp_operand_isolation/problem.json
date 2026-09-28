@@ -1,0 +1,89 @@
+{
+  "id": 198,
+  "title": "Operand Isolation",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "operand-isolation",
+    "datapath",
+    "clock-enable"
+  ],
+  "top": "iso_alu",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "op",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "add_in",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "mul_in",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "A datapath with an adder and a multiplier. Each unit has its own **operand registers** (`add_in = {add_a, add_b}`, `mul_in = {mul_a, mul_b}`), which are exposed as outputs.",
+    "On a rising edge with `en = 1`, only the selected unit's operand registers load `a` and `b`: the adder's when `op = 0`, the multiplier's when `op = 1`. The other unit's operands **hold**, so its logic doesn't toggle. The selected `op` is registered too.",
+    "`y` (combinational) = `add_a + add_b` if the registered op is 0, else `mul_a × mul_b` (16-bit). With `en = 0` nothing changes. Synchronous reset clears all registers."
+  ],
+  "hints": [
+    "Two enable conditions: `en && !op` and `en && op`.",
+    "Without isolation, every operand change ripples through **both** the adder and the multiplier even though only one result is used. The multiplier is the expensive one.",
+    "Some designs AND the operands with the enable instead of holding them. Holding is better, since forcing zeros also toggles the unit."
+  ],
+  "examples": [
+    {
+      "check": "unused unit's operands hold",
+      "title": "isolation",
+      "input": "op = 0 (add) with changing a, b",
+      "expected": "mul_in unchanged"
+    },
+    {
+      "check": "results",
+      "title": "results",
+      "input": "op = 1, a = 12, b = 11",
+      "expected": "y = 132"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

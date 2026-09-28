@@ -1,0 +1,47 @@
+{
+  "id": 204,
+  "title": "UVM: Coverage Placement in the Env",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "env",
+    "config-db",
+    "factory",
+    "coverage"
+  ],
+  "top": "my_env",
+  "ports": [],
+  "constraints": [
+    "Write `class my_env extends uvm_env` with public handles `bus_agent agent`, `bus_sb sb` and `bus_cov cov`.",
+    "In `build_phase`: read `int has_coverage` from `uvm_config_db#(int)` (field `\"has_coverage\"`, default **1** when not set). Always create `agent` and `sb`. Create `cov` only when coverage is enabled, and leave it `null` otherwise. Create every component through the **factory**.",
+    "In `connect_phase`: connect `agent.mon.ap` to `sb.imp`, and to `cov.analysis_export` when `cov` exists.",
+    "The hidden test builds three envs (coverage on, off, and not configured) and installs a factory override for `bus_cov`."
+  ],
+  "hints": [
+    "`void'(uvm_config_db#(int)::get(this, \"\", \"has_coverage\", has_coverage));` leaves the default untouched if nothing was set.",
+    "`bus_cov::type_id::create(\"cov\", this)` honors type overrides, while `new(\"cov\", this)` silently ignores them.",
+    "Coverage belongs in the env (or a dedicated coverage component), not in the agent: agents are reused across projects, and coverage models are project-specific."
+  ],
+  "examples": [
+    {
+      "check": "no coverage when disabled",
+      "title": "config",
+      "input": "has_coverage = 0",
+      "expected": "env.cov == null"
+    },
+    {
+      "check": "monitor connected to coverage",
+      "title": "connect",
+      "input": "25 monitored transfers",
+      "expected": "coverage and scoreboard each see 25"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

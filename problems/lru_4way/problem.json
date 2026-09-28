@@ -1,0 +1,29 @@
+{
+  "id": 57, "title": "LRU Replacement Policy (4-way)", "difficulty": "Hard", "category": "arch",
+  "tags": ["cache", "replacement", "lru", "sequential"], "top": "lru4",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",    "dir": "input",  "width": 1},
+    {"name": "rst",    "dir": "input",  "width": 1},
+    {"name": "touch",  "dir": "input",  "width": 1},
+    {"name": "way",    "dir": "input",  "width": 2},
+    {"name": "victim", "dir": "output", "width": 2}
+  ],
+  "constraints": [
+    "Track the exact recency order of the 4 ways of one cache set.",
+    "After reset the order, from least to most recently used, is 0, 1, 2, 3, so `victim = 0`.",
+    "On a rising edge with `touch = 1`, way `way` becomes the most recently used. The relative order of the others is unchanged.",
+    "`victim` is always the least recently used way (a function of the stored state). Synchronous reset. Must be synthesizable."
+  ],
+  "hints": [
+    "Option 1: keep a 2-bit *age* per way (0 = MRU … 3 = LRU). On access, every way younger than the accessed one ages by 1, and the accessed one becomes 0.",
+    "Option 2: an ordered list of 4 way numbers. Remove the accessed way and append it at the MRU end.",
+    "The victim is the way with age 3 (or the head of the list)."
+  ],
+  "examples": [
+    {"check": "reset order", "title": "after reset", "input": "rst", "expected": "victim = 0"},
+    {"check": "touch the victim", "title": "accessing the LRU way", "input": "access way 0", "expected": "victim = 1"},
+    {"check": "true LRU", "title": "order", "input": "accesses 3, 1, 0, 2 after reset", "expected": "victim = 3"}
+  ]
+}

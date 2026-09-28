@@ -1,0 +1,112 @@
+{
+  "id": 82,
+  "title": "Memory BIST (March C-)",
+  "difficulty": "Hard",
+  "category": "dft",
+  "tags": [
+    "dft",
+    "bist",
+    "memory-test",
+    "march-algorithm",
+    "fsm"
+  ],
+  "top": "mbist",
+  "synthesis": "required",
+  "timeout_s": 30,
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "mem_rdata",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "mem_addr",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "mem_we",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "mem_wdata",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "fail",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Test a 16 × 4-bit memory with March C-: ⇕(w0); ⇑(r0, w1); ⇑(r1, w0); ⇓(r0, w1); ⇓(r1, w0); ⇕(r0). Here 0 = `4'b0000`, 1 = `4'b1111`, ⇑ = addresses 0 → 15, ⇓ = 15 → 0.",
+    "Memory interface: writes happen on the rising edge when `mem_we = 1` (`mem_addr`, `mem_wdata`). Reads are asynchronous: `mem_rdata` shows `mem[mem_addr]` in the same cycle.",
+    "A rising edge sampling `start = 1` while idle begins a test (`busy = 1`). At the end, pulse `done = 1` for one cycle. `fail = 1` if any read mismatched during this test. `fail` holds until the next start clears it.",
+    "Must finish within 2000 cycles. Synchronous reset → idle. Must be synthesizable."
+  ],
+  "hints": [
+    "State: element index (0–5), address counter, and a phase bit for the read-then-write elements.",
+    "In a read cycle: drive the address, compare `mem_rdata` with the expected value at the edge, and set a sticky error flag on mismatch.",
+    "March C- detects stuck-at, transition, coupling and address-decoder faults. The testbench injects each of them."
+  ],
+  "examples": [
+    {
+      "check": "good memory",
+      "title": "fault-free",
+      "input": "start on a good memory",
+      "expected": "done within 2000 cycles, fail = 0"
+    },
+    {
+      "check": "stuck-at faults",
+      "title": "stuck-at-0",
+      "input": "bit 2 of word 5 stuck at 0",
+      "expected": "fail = 1"
+    },
+    {
+      "check": "address decoder fault",
+      "title": "aliasing",
+      "input": "address 7 aliases to 6",
+      "expected": "fail = 1"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 200,
+      "clock": "clk",
+      "title": "start of the March test"
+    }
+  ]
+}

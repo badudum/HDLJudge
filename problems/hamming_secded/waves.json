@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "code",
+    "kind": "bus",
+    "values": [
+     "0",
+     "87",
+     "99",
+     "1E",
+     "AA",
+     "2D",
+     "33",
+     "B4"
+    ]
+   },
+   {
+    "name": "data",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "single_err",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "double_err",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "clean code words (all 16)"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "code",
+    "kind": "bus",
+    "values": [
+     "1",
+     "2",
+     "4",
+     "8",
+     "10",
+     "20",
+     "40",
+     "80"
+    ]
+   },
+   {
+    "name": "data",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "single_err",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "double_err",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "single-bit errors (16 x 8)"
+ }
+]

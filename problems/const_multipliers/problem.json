@@ -1,0 +1,91 @@
+{
+  "id": 257,
+  "title": "Multiply by 7, 10 and 255 Without *",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "shift-add",
+    "arithmetic"
+  ],
+  "top": "cmul",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "m7",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "m10",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "m255",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "`m7 = 7·x`, `m10 = 10·x`, `m255 = 255·x` (unsigned, 16 bits). No `*` operator.",
+    "Use at most one adder or subtractor per output."
+  ],
+  "hints": [
+    "7x = 8x − x = (x << 3) − x.",
+    "10x = 8x + 2x.",
+    "255x = 256x − x = (x << 8) − x."
+  ],
+  "examples": [
+    {
+      "check": "all 256 values",
+      "title": "x = 3",
+      "input": "x = 3",
+      "expected": "m7 = 21, m10 = 30, m255 = 765"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\*",
+      "message": "no * operator: use shifts and adds",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\*",
+      "message": "no * operator: use shifts and adds",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

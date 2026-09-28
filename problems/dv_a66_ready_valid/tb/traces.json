@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: wait states",
+  "violation": false
+ },
+ {
+  "name": "legal: streaming",
+  "violation": false
+ },
+ {
+  "name": "violation: valid withdrawn",
+  "violation": true
+ },
+ {
+  "name": "violation: data changed while waiting",
+  "violation": true
+ }
+]

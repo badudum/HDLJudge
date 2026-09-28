@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "alu_op",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "funct3",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "1",
+     "1",
+     "2",
+     "2",
+     "3",
+     "3"
+    ]
+   },
+   {
+    "name": "funct7_5",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "alu_ctrl",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "load/store -> ADD"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "alu_op",
+    "kind": "bus",
+    "values": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   {
+    "name": "funct3",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "1",
+     "1",
+     "2",
+     "2",
+     "3",
+     "3"
+    ]
+   },
+   {
+    "name": "funct7_5",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "alu_ctrl",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "6",
+     "6",
+     "9",
+     "9",
+     "10",
+     "10"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "R-type decode"
+ }
+]

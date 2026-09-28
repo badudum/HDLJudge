@@ -1,0 +1,74 @@
+{
+  "id": 97,
+  "title": "Assertion: Registered Sum",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_sum",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "y",
+      "dir": "input",
+      "width": 9
+    }
+  ],
+  "constraints": [
+    "Rule: the design registers `a + b` (9-bit, no overflow): at every edge, `y` must equal the sum of the `a` and `b` sampled at the previous edge.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`$past(expr)` is the value of expr at the previous sample.",
+    "`1'b1 |=> y == $past(a + b)` or `y == $past(a) + $past(b)` with widths extended to 9 bits.",
+    "Mind the width: 8-bit + 8-bit must be evaluated in 9 bits (`9'(a) + b`)."
+  ],
+  "examples": [
+    {
+      "check": "legal",
+      "title": "correct adder",
+      "input": "a=3, b=4, next cycle y=7",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: wrong sum",
+      "title": "wrong value",
+      "input": "y = a + b − 1 once",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: carry dropped",
+      "title": "overflow",
+      "input": "a=200, b=100, y=44",
+      "expected": "assertion fails"
+    }
+  ]
+}

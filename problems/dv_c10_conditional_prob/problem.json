@@ -1,0 +1,49 @@
+{
+  "id": 116,
+  "title": "Constraint: Conditional Probability",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "cond_prob",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`mode = 1` with probability 70 %.",
+    "When `mode = 1`: `len` is in 8 … 15, and `len = 15` in half of those cases. When `mode = 0`: `len` is in 0 … 7.",
+    "Statistics are measured over 1000 calls with a tolerance of about ±6 %.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "`dist` sets weights: `mode dist {1 := 70, 0 := 30};`.",
+    "`:=` gives each value the weight, `:/` divides the weight across a range: `len dist {15 := 50, [8:14] :/ 50};` gives 15 half the probability.",
+    "Put the conditional `dist` inside `if (mode) … else …`."
+  ],
+  "examples": [
+    {
+      "check": "P(mode = 1) is about 70 %",
+      "title": "mode",
+      "input": "1000 calls",
+      "expected": "≈ 700 with mode = 1"
+    },
+    {
+      "check": "P(len = 15 | mode = 1) is about 50 %",
+      "title": "conditional",
+      "input": "calls with mode = 1",
+      "expected": "≈ half have len = 15"
+    },
+    {
+      "check": "len is 8..15 when mode = 1",
+      "title": "ranges",
+      "input": "mode = 0",
+      "expected": "len ≤ 7"
+    }
+  ]
+}

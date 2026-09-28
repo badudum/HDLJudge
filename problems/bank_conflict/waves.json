@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "addr",
+    "kind": "bus",
+    "values": [
+     "3020100",
+     "6050407",
+     "67666564",
+     "8080808",
+     "7070303",
+     "D090909",
+     "C080400",
+     "5000400"
+    ]
+   },
+   {
+    "name": "valid",
+    "kind": "bus",
+    "values": [
+     "15",
+     "15",
+     "15",
+     "15",
+     "15",
+     "15",
+     "15",
+     "15"
+    ]
+   },
+   {
+    "name": "conflict",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "cycles",
+    "kind": "bus",
+    "values": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "2",
+     "4",
+     "2"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "no conflict"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "addr",
+    "kind": "bus",
+    "values": [
+     "C080400",
+     "C080400",
+     "C080400",
+     "5010501",
+     "150C040D",
+     "8510D8E",
+     "B09EA9B",
+     "708B305"
+    ]
+   },
+   {
+    "name": "valid",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "10",
+     "3",
+     "10",
+     "14",
+     "0",
+     "9"
+    ]
+   },
+   {
+    "name": "conflict",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     1,
+     1,
+     0,
+     1,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "cycles",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "2",
+     "2",
+     "1",
+     "2",
+     "0",
+     "1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "inactive lanes are ignored"
+ }
+]

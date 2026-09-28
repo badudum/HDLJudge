@@ -1,0 +1,242 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "7FFF",
+     "8000",
+     "8001",
+     "FFFF",
+     "FFFE"
+    ]
+   },
+   {
+    "name": "op",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "7FFF",
+     "8000",
+     "8001",
+     "FFFF",
+     "FFFE"
+    ]
+   },
+   {
+    "name": "zero",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "carry",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "overflow",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "negative",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "ADD"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "7FFF",
+     "8000",
+     "8001",
+     "FFFF",
+     "FFFE"
+    ]
+   },
+   {
+    "name": "op",
+    "kind": "bus",
+    "values": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "FFFF",
+     "FFFE",
+     "8001",
+     "8000",
+     "7FFF",
+     "1",
+     "2"
+    ]
+   },
+   {
+    "name": "zero",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "carry",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "overflow",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "negative",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "SUB"
+ }
+]

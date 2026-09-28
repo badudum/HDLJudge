@@ -1,0 +1,44 @@
+{
+  "id": 203,
+  "title": "UVM: Functional Coverage Subscriber",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "coverage",
+    "subscriber"
+  ],
+  "top": "alu_cov",
+  "ports": [],
+  "constraints": [
+    "Write `class alu_cov extends uvm_subscriber #(alu_item)`. Its `write()` updates **manual coverage bins** (public arrays): `int op_hits[4]` (per opcode), `int a_bins[3]` (a == 0, a == 255, any other a), `int zero_cross[4]` (per opcode: items where a == 0 **or** b == 0), and `bit big_b` (set once any item has b == 255).",
+    "`function real get_coverage()` returns the percentage of the **12** bins hit at least once: 4 op bins + 3 a bins + 4 cross bins + 1 big_b bin.",
+    "Manual bins are used because Verilator's `covergroup` support is still incomplete. The structure is the same as a covergroup with coverpoints `op`, `a` and a cross."
+  ],
+  "hints": [
+    "`write()` is called synchronously by the monitor's analysis port for every transaction. Keep it fast and never block in it.",
+    "Count bins with `foreach` and divide by 12.0 (not 12, or integer division truncates).",
+    "With a real simulator this would be `covergroup cg; cp_op: coverpoint t.op; cp_a: coverpoint t.a { bins zero = {0}; bins max = {255}; bins other = default; } … endgroup`."
+  ],
+  "examples": [
+    {
+      "check": "get_coverage() percentage",
+      "title": "percentage",
+      "input": "(ADD, a=5, b=7)",
+      "expected": "2 of 12 bins → 16.67 %"
+    },
+    {
+      "check": "reaches 100%",
+      "title": "closure",
+      "input": "every bin hit",
+      "expected": "100 %"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

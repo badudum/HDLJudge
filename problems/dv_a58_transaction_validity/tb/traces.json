@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: 3-beat packet",
+  "violation": false
+ },
+ {
+  "name": "violation: bad parity",
+  "violation": true
+ },
+ {
+  "name": "violation: last without valid",
+  "violation": true
+ },
+ {
+  "name": "violation: packet too long",
+  "violation": true
+ },
+ {
+  "name": "legal: 8-beat packet",
+  "violation": false
+ }
+]

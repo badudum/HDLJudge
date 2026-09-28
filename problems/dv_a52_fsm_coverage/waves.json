@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 2,
+  "length": 24,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "state",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2",
+     "2",
+     "3",
+     "3",
+     "3",
+     "3",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "title": "legal: full transaction",
+  "caption": "Legal trace: your checker must stay silent. Signals change at falling edges and are sampled at rising edges."
+ },
+ {
+  "unit": 2,
+  "length": 16,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "state",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "2",
+     "3",
+     "3",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "title": "violation: IDLE to XFER",
+  "caption": "VIOLATION: your checker must report an error on this trace. Signals change at falling edges and are sampled at rising edges."
+ }
+]

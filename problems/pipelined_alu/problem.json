@@ -1,0 +1,101 @@
+{
+  "id": 166,
+  "title": "Pipelined ALU with Stall",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "pipeline",
+    "alu",
+    "stall",
+    "valid"
+  ],
+  "top": "pipe_alu",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "stall",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid_in",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "op",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "valid_out",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "zero",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Two pipeline stages. Stage 1 registers (valid, op, a, b). Stage 2 computes `y` = a + b (op 0), a − b (1), a & b (2), a ^ b (3), and registers (valid, y, zero = y == 0).",
+    "So a result appears exactly 2 edges after its operands, and one operation can enter every cycle.",
+    "`stall = 1` freezes **both** stages (nothing moves, the input is not taken). Synchronous reset clears both valid bits. `y`/`zero` are don't-care while `valid_out = 0`."
+  ],
+  "hints": [
+    "Two register banks updated in one clocked block, all guarded by `!stall`.",
+    "Compute in stage 2 from the stage-1 registers, not from the inputs.",
+    "Carry the valid bit along with the data: bubbles (`valid_in = 0`) must come out as `valid_out = 0`."
+  ],
+  "examples": [
+    {
+      "check": "latency 2",
+      "title": "latency",
+      "input": "a=3, b=4, op=add enters",
+      "expected": "two edges later: valid_out = 1, y = 7"
+    },
+    {
+      "check": "stall freezes the pipeline",
+      "title": "stall",
+      "input": "stall = 1 for 2 cycles",
+      "expected": "outputs hold, nothing lost"
+    },
+    {
+      "check": "bubbles flow through",
+      "title": "bubbles",
+      "input": "valid_in = 0",
+      "expected": "valid_out = 0 two cycles later"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

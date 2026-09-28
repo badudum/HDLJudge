@@ -1,0 +1,86 @@
+{
+  "id": 245,
+  "title": "Three in a Row, All Alone",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks",
+    "shifts"
+  ],
+  "top": "runs",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "run3",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "alone",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "`run3 = 1` when `x` contains at least three **consecutive** 1 bits somewhere.",
+    "`alone[i] = 1` when `x[i]` is a 1 whose neighbours `x[i-1]` and `x[i+1]` are both 0 (bits outside the word count as 0).",
+    "Purely combinational. No loops or generate: use whole-word shifts."
+  ],
+  "hints": [
+    "Shift the word against itself: bit i of `x & (x >> 1)` says 'bits i and i+1 are both 1'.",
+    "`run3 = |(x & (x >> 1) & (x >> 2))`.",
+    "`alone = x & ~(x << 1) & ~(x >> 1)`."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "run",
+      "input": "x = 0b0111_0000",
+      "expected": "run3 = 1, alone = 0"
+    },
+    {
+      "check": "worked examples",
+      "title": "alone",
+      "input": "x = 0b1010_0110",
+      "expected": "run3 = 0, alone = 0b1010_0000"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

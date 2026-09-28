@@ -1,0 +1,102 @@
+{
+  "id": 196,
+  "title": "Drowsy Cache Lines",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "cache",
+    "drowsy",
+    "leakage",
+    "retention-voltage"
+  ],
+  "top": "drowsy_array",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "idx",
+      "dir": "input",
+      "width": 3
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "ready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "drowsy",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "wakeups",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "An 8-line data array (8 bits per line). Each line is either awake or **drowsy** (low retention voltage: data kept but not accessible). `drowsy[i]` shows line i's state.",
+    "An access (`req`) is resolved on the rising edge with a registered result. If the line is awake: `ready <= 1`, and a read loads `rdata`, a write updates the line. If it is drowsy: `ready <= 0`, no data operation, the line wakes up and `wakeups` increments (the requester retries). Without `req`, `ready <= 0`.",
+    "A free-running 4-bit window counter wraps every 16 cycles. On the edge where it wraps (count 15 → 0), **all** lines become drowsy. An access on that same edge is still resolved using the pre-edge state.",
+    "Synchronous reset: all lines drowsy, data 0, counters 0, `ready = 0`."
+  ],
+  "hints": [
+    "The drowsy mask update on each edge: `drowsy <= wrap ? 8'hFF : (drowsy & ~wake_bit)`.",
+    "`rdata` only needs to be valid when `ready = 1` after a read.",
+    "This 'simple' policy (Flautner et al., ISCA 2002) cuts L1 leakage a lot, because most lines aren't touched within a few thousand cycles."
+  ],
+  "examples": [
+    {
+      "check": "first access wakes the line",
+      "title": "wake",
+      "input": "read line 3 (idx = 3) after reset",
+      "expected": "ready = 0 (wake-up), retry → ready = 1"
+    },
+    {
+      "check": "periodic drowsy window",
+      "title": "window",
+      "input": "16 cycles pass",
+      "expected": "all lines drowsy again"
+    },
+    {
+      "check": "data survives drowsy mode",
+      "title": "retention",
+      "input": "write, go drowsy, wake, read",
+      "expected": "data intact"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

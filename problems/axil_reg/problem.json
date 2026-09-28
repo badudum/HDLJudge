@@ -1,0 +1,176 @@
+{
+  "id": 181,
+  "title": "AXI-Lite Single Register",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "axi",
+    "amba",
+    "bus",
+    "valid-ready"
+  ],
+  "top": "axil_reg",
+  "ports": [
+    {
+      "name": "aclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "aresetn",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awaddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "awvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "wstrb",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "wvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "bvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "araddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "arvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "arready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "rresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "rvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "reg_out",
+      "dir": "output",
+      "width": 32
+    }
+  ],
+  "constraints": [
+    "One 32-bit read/write register at address `0x00`, also driven onto `reg_out`. Reset value 0. Writes honor `wstrb` (byte lanes).",
+    "Any other address: writes are ignored and reads return 0, both with an OKAY response (`2'b00`).",
+    "AXI4-Lite handshake rules: a transfer happens on a rising edge where VALID and READY are both 1. Your slave must accept AW and W in **either order** (or together), must not assert BVALID before both have been accepted, nor RVALID before AR has been accepted, and must hold BVALID/RVALID and their payload stable until BREADY/RREADY. `aresetn` is an active-low synchronous reset."
+  ],
+  "hints": [
+    "Latch AW and W independently into holding registers (`aw_full`, `w_full`), then perform the write once both are full and raise BVALID.",
+    "Deassert AWREADY/WREADY while holding a transaction or while BVALID is waiting, so a second write can't overwrite the first.",
+    "The read channel is independent: `arready = !rvalid`, and register RDATA/RRESP on the AR handshake."
+  ],
+  "examples": [
+    {
+      "check": "write then read back",
+      "title": "basic",
+      "input": "write 0xDEADBEEF to 0x00",
+      "expected": "reads back 0xDEADBEEF, reg_out follows"
+    },
+    {
+      "check": "AW and W in either order",
+      "title": "ordering",
+      "input": "W arrives 3 cycles before AW",
+      "expected": "write still completes correctly"
+    },
+    {
+      "check": "byte strobes",
+      "title": "wstrb",
+      "input": "wstrb = 0110",
+      "expected": "only bytes 1 and 2 change"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 40,
+      "to": 200,
+      "step": 5,
+      "clock": "aclk",
+      "signals": [
+        "aclk",
+        "awvalid",
+        "awready",
+        "awaddr",
+        "wvalid",
+        "wready",
+        "wdata",
+        "bvalid",
+        "bready",
+        "arvalid",
+        "arready",
+        "rvalid",
+        "rready",
+        "rdata"
+      ],
+      "title": "a read, then a write followed by a read",
+      "caption": "Each channel transfers on a rising edge where VALID and READY are both high."
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "id": 93,
+  "title": "Debug: One-Hot FSM",
+  "difficulty": "Medium",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "fsm",
+    "one-hot",
+    "reset"
+  ],
+  "top": "onehot_fsm",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "go",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "state",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Intended behavior: a one-hot FSM, `state` = {FLUSH, RUN, LOAD, IDLE} (IDLE = bit 0). Exactly one bit may be set at any time.",
+    "IDLE → LOAD when `go`. LOAD → RUN (always). RUN → FLUSH when `done`, otherwise stays in RUN. FLUSH → IDLE (always).",
+    "`busy = !IDLE`. Synchronous reset → IDLE (`state = 4'b0001`). The starter has **2 bugs**."
+  ],
+  "hints": [
+    "What does `state` look like right after reset? Is exactly one bit set?",
+    "Run the FSM into RUN and assert `done`. Print `state` for the next few cycles.",
+    "Each next-state bit of a one-hot FSM is an OR over its incoming transitions. Check the RUN self-loop condition."
+  ],
+  "examples": [
+    {
+      "check": "reset to IDLE",
+      "title": "reset",
+      "input": "rst",
+      "expected": "state = 0001, busy = 0"
+    },
+    {
+      "check": "full cycle",
+      "title": "one job",
+      "input": "go, then done after 3 cycles of RUN",
+      "expected": "LOAD → RUN ×3 → FLUSH → IDLE, always exactly one hot bit"
+    },
+    {
+      "check": "1500 random",
+      "title": "random",
+      "input": "random go/done",
+      "expected": "matches the reference"
+    }
+  ]
+}

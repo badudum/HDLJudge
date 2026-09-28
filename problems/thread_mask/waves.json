@@ -1,0 +1,214 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "active",
+    "kind": "bus",
+    "values": [
+     "F0",
+     "F",
+     "81",
+     "FF",
+     "FF",
+     "FF",
+     "3C",
+     "3C"
+    ]
+   },
+   {
+    "name": "cond",
+    "kind": "bus",
+    "values": [
+     "AA",
+     "1",
+     "80",
+     "F",
+     "FF",
+     "0",
+     "3C",
+     "C3"
+    ]
+   },
+   {
+    "name": "taken",
+    "kind": "bus",
+    "values": [
+     "A0",
+     "1",
+     "80",
+     "F",
+     "FF",
+     "0",
+     "3C",
+     "0"
+    ]
+   },
+   {
+    "name": "not_taken",
+    "kind": "bus",
+    "values": [
+     "50",
+     "E",
+     "1",
+     "F0",
+     "0",
+     "FF",
+     "0",
+     "3C"
+    ]
+   },
+   {
+    "name": "divergent",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "first_lane",
+    "kind": "bus",
+    "values": [
+     "4",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "2",
+     "2"
+    ]
+   },
+   {
+    "name": "any_active",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "divergent branch"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "active",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "FF",
+     "FE",
+     "FC",
+     "F8",
+     "F0"
+    ]
+   },
+   {
+    "name": "cond",
+    "kind": "bus",
+    "values": [
+     "0",
+     "FF",
+     "5A",
+     "55",
+     "55",
+     "55",
+     "55",
+     "55"
+    ]
+   },
+   {
+    "name": "taken",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "55",
+     "54",
+     "54",
+     "50",
+     "50"
+    ]
+   },
+   {
+    "name": "not_taken",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "AA",
+     "AA",
+     "A8",
+     "A8",
+     "A0"
+    ]
+   },
+   {
+    "name": "divergent",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "first_lane",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "2",
+     "3",
+     "4"
+    ]
+   },
+   {
+    "name": "any_active",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "empty warp"
+ }
+]

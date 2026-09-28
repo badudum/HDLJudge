@@ -1,0 +1,78 @@
+{
+  "id": 259,
+  "title": "Alternating Bit Pattern",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks"
+  ],
+  "top": "alt16",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "alt",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`alt = 1` when neighbouring bits of `x` always differ: `x` is 0x5555 or 0xAAAA.",
+    "Solve it with a shift-and-XOR trick (comparing against the two constants works but misses the point). No loops."
+  ],
+  "hints": [
+    "`y = x ^ (x >> 1)` has a 1 wherever bit i differs from bit i+1.",
+    "For an alternating pattern, bits 0–14 of y are all ones: `&y[14:0]`."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "0x5555",
+      "input": "x = 0x5555",
+      "expected": "alt = 1"
+    },
+    {
+      "check": "worked examples",
+      "title": "0x5554",
+      "input": "x = 0x5554",
+      "expected": "alt = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

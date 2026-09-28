@@ -1,0 +1,80 @@
+{
+  "id": 91,
+  "title": "Debug: Single-Port RAM",
+  "difficulty": "Medium",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "memory",
+    "read-during-write"
+  ],
+  "top": "sp_ram16",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Intended behavior: 16 × 8-bit synchronous RAM. Everything happens on a rising edge with `en = 1`: if `we`, write `wdata` to `addr`.",
+    "Registered read, **write-first**: on an enabled edge `rdata` becomes `mem[addr]`, or the new `wdata` if this edge writes it. With `en = 0`, `rdata` holds.",
+    "No reset (uninitialized words are don't-care until written). The starter has **2 bugs**."
+  ],
+  "hints": [
+    "Write 16 different values to addresses 0 … 15 and read them all back. Which addresses collide?",
+    "Write and read the same address on the same edge. Which value comes out?",
+    "FPGA block RAMs support read-first, write-first and no-change modes. The spec asks for write-first."
+  ],
+  "examples": [
+    {
+      "check": "all 16 words",
+      "title": "full address range",
+      "input": "write addresses 0–15, read back",
+      "expected": "each word keeps its own value"
+    },
+    {
+      "check": "write-first",
+      "title": "read during write",
+      "input": "we = 1, addr = 3, wdata = 0x5A",
+      "expected": "rdata = 0x5A right after that edge"
+    },
+    {
+      "check": "enable",
+      "title": "disabled",
+      "input": "en = 0",
+      "expected": "no write, rdata holds"
+    }
+  ]
+}

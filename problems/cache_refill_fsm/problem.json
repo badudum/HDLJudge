@@ -1,0 +1,36 @@
+{
+  "id": 71, "title": "Cache Line Refill FSM", "difficulty": "Hard", "category": "arch",
+  "tags": ["cache", "fsm", "write-back", "memory-interface"], "top": "refill_fsm",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",         "dir": "input",  "width": 1},
+    {"name": "rst",         "dir": "input",  "width": 1},
+    {"name": "miss",        "dir": "input",  "width": 1},
+    {"name": "dirty",       "dir": "input",  "width": 1},
+    {"name": "miss_line",   "dir": "input",  "width": 8},
+    {"name": "victim_line", "dir": "input",  "width": 8},
+    {"name": "mem_ack",     "dir": "input",  "width": 1},
+    {"name": "mem_req",     "dir": "output", "width": 1},
+    {"name": "mem_we",      "dir": "output", "width": 1},
+    {"name": "mem_addr",    "dir": "output", "width": 10},
+    {"name": "done",        "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Lines are 4 words. The word address is `{line, beat}` (line × 4 + beat).",
+    "IDLE: a rising edge sampling `miss = 1` latches `miss_line`, `victim_line` and `dirty`. It goes to **WRITEBACK** if dirty, else straight to **REFILL**, starting at beat 0.",
+    "WRITEBACK: `mem_req = 1`, `mem_we = 1`, `mem_addr = {victim_line, beat}`. Each edge with `mem_ack = 1` completes a beat. After beat 3 it goes to REFILL, beat 0.",
+    "REFILL: `mem_req = 1`, `mem_we = 0`, `mem_addr = {miss_line, beat}`. After beat 3 is acknowledged: one cycle of `done = 1`, then IDLE.",
+    "Moore outputs. `mem_we` / `mem_addr` are don't-care when `mem_req = 0`. `miss` is ignored unless IDLE. Synchronous reset → IDLE. Must be synthesizable."
+  ],
+  "hints": [
+    "States: IDLE, WB, RF, DONE, plus a 2-bit beat counter.",
+    "Memory may take several cycles per beat. Only advance the beat on edges where `mem_ack` is 1.",
+    "Latch the addresses at the start: the cache may change its inputs while the refill runs."
+  ],
+  "examples": [
+    {"check": "clean miss", "title": "clean victim", "input": "miss with dirty = 0, memory acks every cycle", "expected": "4 refill beats (addresses line*4 … line*4+3), then done"},
+    {"check": "dirty miss", "title": "dirty victim", "input": "miss with dirty = 1", "expected": "4 write-back beats to the victim, then 4 refill beats, then done"},
+    {"check": "slow memory", "title": "wait states", "input": "mem_ack only every third cycle", "expected": "each beat holds its address until acknowledged"}
+  ]
+}

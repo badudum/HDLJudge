@@ -1,0 +1,43 @@
+{
+  "id": 241,
+  "title": "Constraint: AXI Burst Within a 4 KB Page",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "axi_burst",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Generate AXI INCR bursts: `len` 0–15 (beats − 1) and `size` 0–2 (1, 2 or 4 bytes per beat). `addr` is aligned to the beat size.",
+    "The burst must **not cross a 4 KB boundary**: `addr % 4096 + (len + 1) · 2^size ≤ 4096`.",
+    "Corner bias: at least some bursts must end within 64 bytes of a page boundary (the interesting case).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Avoid variable shifts in constraints (`1 << size`): with Verilator, write one implication per size instead.",
+    "Constrain only the page offset `addr[11:0]`, extended to 32 bits so the sum can't wrap.",
+    "Add a helper `rand bit near_edge` with a `dist`, and an implication that pushes the address into the last 128 bytes of the page."
+  ],
+  "examples": [
+    {
+      "check": "burst does not cross a 4 KB boundary",
+      "title": "4k rule",
+      "input": "addr = 0xFFC, 4 beats of 4 bytes",
+      "expected": "rejected (ends at 0x100C)"
+    },
+    {
+      "check": "address aligned to the beat size",
+      "title": "alignment",
+      "input": "size = 2, addr = 0x102",
+      "expected": "rejected"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": 218,
+  "title": "4-Tap FIR Filter",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "dsp",
+    "fir",
+    "signed",
+    "shift-register"
+  ],
+  "top": "fir4",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "dout",
+      "dir": "output",
+      "width": 12
+    }
+  ],
+  "constraints": [
+    "Signed 8-bit samples. Coefficients (1, 3, 3, 1): `y[n] = x[n] + 3·x[n−1] + 3·x[n−2] + x[n−3]`, a 12-bit signed result.",
+    "On a rising edge with `valid`, the sample is shifted in and `dout` is registered with the result that **includes** the new sample. Without `valid` nothing changes.",
+    "Synchronous reset clears the delay line and `dout`. Must be synthesizable. Multiplying by 3 is `(x << 1) + x`, and no multiplier is needed."
+  ],
+  "hints": [
+    "Keep the three previous samples in registers, and compute the sum from `din` and those registers.",
+    "Sign-extend every term to 12 bits before adding.",
+    "The (1, 3, 3, 1) kernel is a binomial low-pass filter: a cheap smoothing filter."
+  ],
+  "examples": [
+    {
+      "check": "impulse response",
+      "title": "impulse",
+      "input": "1, 0, 0, 0, 0",
+      "expected": "1, 3, 3, 1, 0"
+    },
+    {
+      "check": "negative samples",
+      "title": "signed",
+      "input": "-128 repeated",
+      "expected": "settles at -1024"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

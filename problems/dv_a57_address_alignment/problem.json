@@ -1,0 +1,79 @@
+{
+  "id": 148,
+  "title": "Assertion: Bus Address Alignment",
+  "difficulty": "Hard",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_align",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "ready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "size",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "`size`: 0 = byte, 1 = halfword, 2 = word, 3 = reserved. When `valid = 1`: halfwords need `addr[0] = 0`, words need `addr[1:0] = 0`, and size 3 is illegal.",
+    "While `valid && !ready`, `addr` and `size` must stay stable into the next cycle.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "One implication per size, or one property: `valid |-> size != 3 && (addr & ((1 << size) - 1)) == 0`.",
+    "Stability: `valid && !ready |=> $stable(addr) && $stable(size)`."
+  ],
+  "examples": [
+    {
+      "check": "legal: aligned accesses",
+      "title": "aligned",
+      "input": "word at 0x40, halfword at 0x42, byte at 0x43",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: misaligned word",
+      "title": "misaligned",
+      "input": "word at 0x41",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: address changes while stalled",
+      "title": "unstable",
+      "input": "addr changes before ready",
+      "expected": "assertion fails"
+    }
+  ]
+}

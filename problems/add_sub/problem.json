@@ -1,0 +1,80 @@
+{
+  "id": 74,
+  "title": "N-bit Adder/Subtractor",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "arithmetic",
+    "parameters",
+    "combinational"
+  ],
+  "top": "add_sub",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "synth_params": {
+    "N": 12
+  },
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 12
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 12
+    },
+    {
+      "name": "sub",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 12
+    },
+    {
+      "name": "cout",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Parameter `N` (default 8). The judge uses **N = 12**.",
+    "`sub = 0`: `{cout, y} = a + b`. `sub = 1`: `{cout, y} = a + ~b + 1`, i.e. `y = a − b`, with `cout = 1` when there is no borrow (`a ≥ b`).",
+    "Use **one adder** for both operations: invert `b` with XOR gates and feed `sub` in as the carry-in. A reviewer would reject two separate adders plus a mux.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "`b ^ {N{sub}}` conditionally inverts every bit of b.",
+    "`{cout, y} = a + (b ^ {N{sub}}) + sub` in N+1 bits.",
+    "In VHDL, `(N-1 downto 0 => sub)` builds the replicated vector."
+  ],
+  "examples": [
+    {
+      "check": "add",
+      "title": "add with carry",
+      "input": "N=12, a = 12'hFFF, b = 12'h001, sub = 0",
+      "expected": "y = 12'h000, cout = 1"
+    },
+    {
+      "check": "subtract",
+      "title": "no borrow",
+      "input": "a = 12'h100, b = 12'h001, sub = 1",
+      "expected": "y = 12'h0FF, cout = 1"
+    },
+    {
+      "check": "subtract",
+      "title": "borrow",
+      "input": "a = 12'h000, b = 12'h001, sub = 1",
+      "expected": "y = 12'hFFF, cout = 0"
+    }
+  ]
+}

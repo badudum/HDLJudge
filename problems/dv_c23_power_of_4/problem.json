@@ -1,0 +1,46 @@
+{
+  "id": 129,
+  "title": "Constraint: Power of Four",
+  "difficulty": "Easy",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "pow4",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` (32 bits) must be a power of 4: 1, 4, 16, …, 2³⁰. All 16 values should appear (the testbench needs ≥ 15 in 300 calls).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Power of two: exactly one bit set, `(v & (v - 1)) == 0` and `v != 0`.",
+    "Power of four: that bit is at an even position, `v & 32'h5555_5555`."
+  ],
+  "examples": [
+    {
+      "check": "v is a power of 4",
+      "title": "valid",
+      "input": "v = 64",
+      "expected": "accepted"
+    },
+    {
+      "check": "v is a power of 4",
+      "title": "invalid",
+      "input": "v = 32",
+      "expected": "rejected (power of 2, not 4)"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "≥ 15 of the 16 values"
+    }
+  ]
+}

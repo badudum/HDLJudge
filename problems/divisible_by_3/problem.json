@@ -1,0 +1,36 @@
+{
+  "id": 30,
+  "title": "Serial Divisible-by-3 Detector",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["fsm", "brain-teaser", "number-theory"],
+  "top": "div_by_3",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk", "dir": "input",  "width": 1},
+    {"name": "rst", "dir": "input",  "width": 1},
+    {"name": "din", "dir": "input",  "width": 1},
+    {"name": "div", "dir": "output", "width": 1}
+  ],
+  "forbidden": [
+    {"pattern": "%|(?<![/*])/(?![/*])", "message": "no division or modulo operators: this is an FSM puzzle", "languages": ["verilog", "systemverilog"]},
+    {"pattern": "\\bmod\\b|\\brem\\b|/(?!=)", "message": "no division, mod or rem: this is an FSM puzzle", "languages": ["vhdl"]}
+  ],
+  "constraints": [
+    "Bits arrive MSB first, one per rising edge. After reset the number is 0.",
+    "`div = 1` when the number formed by all bits received since reset is divisible by 3 (so `div = 1` right after reset).",
+    "The number can grow without bound, so you cannot store it. No `/`, `%`, `mod` or `rem`.",
+    "Moore output. Synchronous reset. Must be synthesizable."
+  ],
+  "hints": [
+    "Appending a bit b to a number n gives 2n + b.",
+    "You only need n mod 3. What is (2n + b) mod 3 in terms of (n mod 3) and b?",
+    "Three states: remainder 0, 1 and 2. From remainder r with input b you go to (2r + b) mod 3. Write the 6 transitions as a table."
+  ],
+  "examples": [
+    {"check": "short numbers", "title": "6 = 110b", "input": "din = 1, 1, 0", "expected": "div = 0 (1), 1 (3), 1 (6)"},
+    {"check": "short numbers", "title": "5 = 101b", "input": "din = 1, 0, 1", "expected": "div = 0 (1), 0 (2), 0 (5)"},
+    {"check": "very long", "title": "long stream", "input": "a 200-bit number", "expected": "div follows (number mod 3 == 0) after every bit"}
+  ]
+}

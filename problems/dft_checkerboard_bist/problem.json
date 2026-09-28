@@ -1,0 +1,95 @@
+{
+  "id": 270,
+  "title": "Checkerboard Memory BIST",
+  "difficulty": "Medium",
+  "category": "dft",
+  "tags": [
+    "dft",
+    "mbist",
+    "memory-test",
+    "fsm"
+  ],
+  "top": "cb_bist",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "mem_rdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "mem_addr",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "mem_we",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "mem_wdata",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "fail",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Test a 16 × 8 memory viewed as 4 × 4 cells (`row = addr[3:2]`, `col = addr[1:0]`). The checkerboard value of an address is `8'h55` when `row ^ col` is even (row[0]^col[0] = 0), otherwise `8'hAA`.",
+    "On `start` (while idle): four phases of 16 cycles, addresses 0 → 15, one per cycle: (1) write checkerboard, (2) read and compare with the checkerboard, (3) write the inverse, (4) read and compare with the inverse. Then `done` pulses for one cycle and `busy` drops.",
+    "Outputs `mem_addr`, `mem_we`, `mem_wdata` and `busy` are registered: they present the current cycle's operation. On read cycles, `mem_rdata` (supplied in the same cycle) is compared, and a mismatch sets the sticky `fail` flag, which is cleared by `start`. Synchronous reset → idle."
+  ],
+  "hints": [
+    "A 2-bit phase counter and a 4-bit address counter: the address wraps into the next phase.",
+    "Expected data = `{4{row[0]^col[0] ? 2'b10 : 2'b01}}`, inverted in the second half.",
+    "Checkerboards catch shorts between neighbouring cells (coupling faults), because every neighbour holds the opposite value."
+  ],
+  "examples": [
+    {
+      "check": "fault-free memory",
+      "title": "pass",
+      "input": "a correct memory",
+      "expected": "done after 64 cycles, fail = 0"
+    },
+    {
+      "check": "stuck-at fault detected",
+      "title": "fail",
+      "input": "bit 0 of cell 5 stuck at 1",
+      "expected": "fail = 1"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

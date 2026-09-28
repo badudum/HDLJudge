@@ -1,0 +1,74 @@
+{
+  "id": 172,
+  "title": "Clock Divide by 3 (50 % Duty)",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "clocking",
+    "divider",
+    "negedge",
+    "duty-cycle"
+  ],
+  "top": "clk_div3",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "clk_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`clk_out` has a period of exactly **3** `clk` periods and a **50 % duty cycle**: high for 1.5 periods, low for 1.5 periods.",
+    "Every `clk_out` edge must coincide with an edge of `clk` (rising or falling). No glitches.",
+    "Synchronous reset (`rst` sampled by the clock): `clk_out` is 0 no later than 2 `clk` periods after `rst` rises and stays 0 while `rst` is held. The phase after reset is up to you.",
+    "Must be synthesizable. Negative-edge flip-flops are allowed."
+  ],
+  "hints": [
+    "With rising-edge flops only, every high time is a whole number of clock periods, so 1.5 needs the falling edge.",
+    "Make a divide-by-3 counter and a flop `p` that is high for 1 of every 3 cycles. Copy `p` into a **negedge** flop `n`. Then `p | n` is high for 1.5 cycles.",
+    "`p | n` has no glitch: when `p` falls, `n` is still high."
+  ],
+  "examples": [
+    {
+      "check": "period is 3 clock cycles",
+      "title": "period",
+      "input": "20 output periods",
+      "expected": "rising edges 30 ns apart (clk = 10 ns)"
+    },
+    {
+      "check": "50% duty cycle",
+      "title": "duty",
+      "input": "measure the high time",
+      "expected": "15 ns high, 15 ns low"
+    },
+    {
+      "check": "held low during reset",
+      "title": "reset",
+      "input": "rst = 1",
+      "expected": "clk_out = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 100,
+      "to": 280,
+      "clock": "clk",
+      "title": "divide by 3, 50 % duty"
+    }
+  ]
+}

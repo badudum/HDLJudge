@@ -1,0 +1,48 @@
+{
+  "id": 124,
+  "title": "Constraint: Sub-Square Maximums",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "quad_max",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Split the 4 × 4 matrix into four 2 × 2 quadrants, numbered q = 2·(i/2) + (j/2) (top-left 0, top-right 1, bottom-left 2, bottom-right 3).",
+    "The maximum element of quadrant q must be exactly **5 + 3q** (5, 8, 11, 14).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Two parts: every element ≤ its quadrant's limit, **and** at least one element equals it.",
+    "The quadrant index is `(i / 2) * 2 + j / 2`, and integer division by constants is fine inside constraints.",
+    "The \"at least one equals\" part is an OR over the four cells of each quadrant."
+  ],
+  "examples": [
+    {
+      "check": "the maximum of 2 × 2 quadrant q is 5 + 3q",
+      "title": "valid",
+      "input": "quadrant maxima 5, 8, 11, 14",
+      "expected": "accepted"
+    },
+    {
+      "check": "the maximum of 2 × 2 quadrant q is 5 + 3q",
+      "title": "too small",
+      "input": "quadrant 3 maximum 13",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 190 matrices"
+    }
+  ]
+}

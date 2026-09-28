@@ -1,0 +1,158 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "FFFF",
+     "FFFF",
+     "7FFF",
+     "FFFF",
+     "FF",
+     "5555",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "1",
+     "FFFF",
+     "1",
+     "AAAA",
+     "0",
+     "1"
+    ]
+   },
+   {
+    "name": "cin",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "s",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "8000",
+     "FFFF",
+     "100",
+     "0",
+     "0",
+     "2"
+    ]
+   },
+   {
+    "name": "cout",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "carry chains"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "3",
+     "7",
+     "F",
+     "1F",
+     "3F",
+     "7F"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   {
+    "name": "cin",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "s",
+    "kind": "bus",
+    "values": [
+     "1",
+     "2",
+     "4",
+     "8",
+     "10",
+     "20",
+     "40",
+     "80"
+    ]
+   },
+   {
+    "name": "cout",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "carry stops at every position"
+ }
+]

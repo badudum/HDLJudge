@@ -1,0 +1,44 @@
+{
+  "id": 210,
+  "title": "Split-Beat Driver",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "driver",
+    "valid-ready",
+    "width-conversion"
+  ],
+  "top": "beat_driver",
+  "ports": [],
+  "constraints": [
+    "Write `class beat_driver` with `function new(virtual beat_if vif)` and `task drive(bit [31:0] w)`. The constructor drives `valid = 0`.",
+    "`drive` sends `w` as **4 byte beats, least significant byte first**, over a valid/ready interface, with `last = 1` on the 4th beat only. A beat transfers on a rising edge with `valid && ready`. Hold `valid`, `data` and `last` stable while `ready = 0`. `drive` returns once the 4th beat has transferred.",
+    "When `drive` is called back-to-back and `ready` stays high, beats must go out **every cycle** with no bubbles (at most 2 idle cycles over the whole 100-beat run). No X on the bus."
+  ],
+  "hints": [
+    "Drive with nonblocking assignments right after a clock edge, then `do @(posedge vif.clk); while (!vif.ready);` for each beat.",
+    "To avoid bubbles between words, don't wait an extra cycle after the last beat. The next `drive` call starts driving immediately, in the same time step.",
+    "`w[8*i +: 8]` selects byte i."
+  ],
+  "examples": [
+    {
+      "check": "sends 4 beats per word, LSB first",
+      "title": "beats",
+      "input": "0x44332211",
+      "expected": "beats 11, 22, 33, 44 (last on 44)"
+    },
+    {
+      "check": "back-to-back beats at full throughput",
+      "title": "throughput",
+      "input": "25 words, ready always 1",
+      "expected": "about 100 cycles"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 60,
+  "simulator": "verilator",
+  "kind": "component"
+}

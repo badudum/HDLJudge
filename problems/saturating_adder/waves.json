@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "64",
+     "0",
+     "1",
+     "7F",
+     "40",
+     "64",
+     "7F",
+     "7F"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "E2",
+     "0",
+     "FF",
+     "80",
+     "3F",
+     "64",
+     "1",
+     "7F"
+    ]
+   },
+   {
+    "name": "sum",
+    "kind": "bus",
+    "values": [
+     "46",
+     "0",
+     "0",
+     "FF",
+     "7F",
+     "7F",
+     "7F",
+     "7F"
+    ]
+   },
+   {
+    "name": "ovf",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "no overflow"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "9C",
+     "80",
+     "80",
+     "C0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "9C",
+     "FF",
+     "80",
+     "BF",
+     "0",
+     "1",
+     "7E",
+     "7F"
+    ]
+   },
+   {
+    "name": "sum",
+    "kind": "bus",
+    "values": [
+     "80",
+     "80",
+     "80",
+     "80",
+     "0",
+     "1",
+     "7E",
+     "7F"
+    ]
+   },
+   {
+    "name": "ovf",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "negative overflow"
+ }
+]

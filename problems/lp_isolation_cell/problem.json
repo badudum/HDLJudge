@@ -1,0 +1,80 @@
+{
+  "id": 186,
+  "title": "Isolation Cells",
+  "difficulty": "Easy",
+  "category": "lowpower",
+  "tags": [
+    "isolation",
+    "power-gating",
+    "combinational"
+  ],
+  "top": "iso_cells",
+  "ports": [
+    {
+      "name": "iso_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pd_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "pd_valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pd_req_n",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "ao_data",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "ao_valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "ao_req_n",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Signals leaving a power-gated domain (`pd_*`) float when that domain is off. With `iso_en = 1`, each output is clamped to its **inactive** value: `ao_data = 0`, `ao_valid = 0`, and the active-low `ao_req_n = 1`.",
+    "With `iso_en = 0`, all signals pass straight through.",
+    "Purely combinational, no flip-flops."
+  ],
+  "hints": [
+    "Clamp-0 cell: `out = in & ~iso_en`. Clamp-1 cell: `out = in | iso_en`.",
+    "The clamp value must be the **inactive** level of each signal, or the always-on logic will see a spurious request while the domain is off.",
+    "In a UPF flow these cells are inserted by the tools. Here you write them by hand."
+  ],
+  "examples": [
+    {
+      "check": "pass-through when not isolated",
+      "title": "pass",
+      "input": "iso_en = 0, pd_data = 0xA5",
+      "expected": "ao_data = 0xA5"
+    },
+    {
+      "check": "clamped to inactive values",
+      "title": "isolated",
+      "input": "iso_en = 1, pd_req_n = 0",
+      "expected": "ao_req_n = 1, ao_valid = 0, ao_data = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0
+}

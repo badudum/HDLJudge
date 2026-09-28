@@ -1,0 +1,92 @@
+{
+  "id": 180,
+  "title": "Glitch-Free Clock Mux",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "clocking",
+    "clock-mux",
+    "glitch-free",
+    "cdc"
+  ],
+  "top": "clk_mux_gf",
+  "ports": [
+    {
+      "name": "clk0",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "clk1",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sel",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "clk_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`clk0` and `clk1` are unrelated clocks. `sel` (asynchronous) chooses between them: `clk_out` should be `clk0` when `sel = 0` and `clk1` when `sel = 1`. After a change, `sel` stays stable for at least 8 periods of the slower clock.",
+    "**No glitches:** every high and every low phase of `clk_out` must last at least as long as the shorter half-period of the two clocks. Switching may take a few cycles, and `clk_out` may stay low in between.",
+    "Once switched (within 8 cycles of the slower clock), `clk_out` must equal the selected clock exactly.",
+    "`rst` is an asynchronous active-high reset: `clk_out` is 0 while it is held. Must be synthesizable (negedge flops allowed)."
+  ],
+  "hints": [
+    "Two symmetric branches. Branch 0's enable is `~sel & ~en1`, synchronized to `clk0`, and branch 1's is `sel & ~en0`, synchronized to `clk1`: each branch waits until the other has turned off.",
+    "Update the final enable flop of each branch on the **falling** edge of its clock, so it only changes while that clock is low.",
+    "`clk_out = (clk0 & en0) | (clk1 & en1)`. At most one enable is ever high."
+  ],
+  "examples": [
+    {
+      "check": "follows clk0 when sel = 0",
+      "title": "select 0",
+      "input": "sel = 0",
+      "expected": "clk_out = clk0"
+    },
+    {
+      "check": "follows clk1 when sel = 1",
+      "title": "select 1",
+      "input": "sel = 1",
+      "expected": "clk_out = clk1"
+    },
+    {
+      "check": "no glitch during 150 random switches",
+      "title": "switching",
+      "input": "sel toggles at random times",
+      "expected": "no short high or low pulse"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 575,
+      "to": 690,
+      "step": 1,
+      "unit": 10,
+      "signals": [
+        "clk0",
+        "clk1",
+        "sel",
+        "clk_out"
+      ],
+      "title": "switching from clk0 to clk1",
+      "caption": "After sel rises, clk_out finishes the current clk0 pulse, stays low, then continues with full clk1 pulses."
+    }
+  ]
+}

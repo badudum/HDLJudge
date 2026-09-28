@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "d5",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "small values"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "FFFF",
+     "FFFA",
+     "FFFE",
+     "8000",
+     "FFF0",
+     "D636",
+     "6A7B",
+     "B963"
+    ]
+   },
+   {
+    "name": "d5",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "large values"
+ }
+]

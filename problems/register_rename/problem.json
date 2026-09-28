@@ -1,0 +1,40 @@
+{
+  "id": 66, "title": "Register Renaming (RAT + Free List)", "difficulty": "Hard", "category": "arch",
+  "tags": ["out-of-order", "renaming", "free-list", "sequential"], "top": "rename",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",        "dir": "input",  "width": 1},
+    {"name": "rst",        "dir": "input",  "width": 1},
+    {"name": "ren_valid",  "dir": "input",  "width": 1},
+    {"name": "rs1",        "dir": "input",  "width": 3},
+    {"name": "rs2",        "dir": "input",  "width": 3},
+    {"name": "rd",         "dir": "input",  "width": 3},
+    {"name": "has_rd",     "dir": "input",  "width": 1},
+    {"name": "free_valid", "dir": "input",  "width": 1},
+    {"name": "free_preg",  "dir": "input",  "width": 4},
+    {"name": "ren_ok",     "dir": "output", "width": 1},
+    {"name": "stall",      "dir": "output", "width": 1},
+    {"name": "ps1",        "dir": "output", "width": 4},
+    {"name": "ps2",        "dir": "output", "width": 4},
+    {"name": "pd",         "dir": "output", "width": 4},
+    {"name": "old_pd",     "dir": "output", "width": 4}
+  ],
+  "constraints": [
+    "8 architectural and 16 physical registers. Reset: RAT[i] = i, and the free list is a FIFO holding 8, 9, …, 15 in that order.",
+    "All outputs are registered. On an edge with `ren_valid = 1`, `ps1` / `ps2` = RAT[rs1] / RAT[rs2] (the mapping **before** this instruction).",
+    "If `has_rd`: when the free list is non-empty, pop its head as `pd`, output `old_pd` = RAT[rd], set RAT[rd] = pd, `ren_ok = 1`. When it is empty: `stall = 1`, `ren_ok = 0`, and nothing changes.",
+    "Without `has_rd`: `ren_ok = 1` (pd / old_pd are don't-care). Without `ren_valid`: `ren_ok = 0`, `stall = 0`.",
+    "`free_valid` pushes `free_preg` onto the tail of the free list **after** this cycle's allocation (it can be allocated from the next cycle on). Must be synthesizable."
+  ],
+  "hints": [
+    "RAT: 8 × 4-bit registers. Free list: a 16-entry circular FIFO of 4-bit register numbers with head, tail and count.",
+    "`old_pd` goes into the reorder buffer. When the instruction commits, `old_pd` is freed: that is the `free_valid` port.",
+    "Read everything you output from the pre-edge state, then update RAT and free list with nonblocking assignments."
+  ],
+  "examples": [
+    {"check": "first renames", "title": "rename after reset", "input": "add r3, r1, r2 (has_rd)", "expected": "ps1 = 1, ps2 = 2, pd = 8, old_pd = 3"},
+    {"check": "dependency chain", "title": "RAW through RAT", "input": "then: sub r4, r3, r3", "expected": "ps1 = ps2 = 8, pd = 9"},
+    {"check": "free list exhaustion", "title": "stall", "input": "9 renames with rd, no frees", "expected": "the 9th: stall = 1, ren_ok = 0"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": 81, "title": "JTAG TAP Controller", "difficulty": "Hard", "category": "dft",
+  "tags": ["dft", "jtag", "ieee-1149.1", "fsm"], "top": "jtag_tap",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "tck",        "dir": "input",  "width": 1},
+    {"name": "trst",       "dir": "input",  "width": 1},
+    {"name": "tms",        "dir": "input",  "width": 1},
+    {"name": "state",      "dir": "output", "width": 4},
+    {"name": "shift_dr",   "dir": "output", "width": 1},
+    {"name": "shift_ir",   "dir": "output", "width": 1},
+    {"name": "capture_dr", "dir": "output", "width": 1},
+    {"name": "update_dr",  "dir": "output", "width": 1},
+    {"name": "tlr",        "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Implement the 16-state IEEE 1149.1 TAP state machine, clocked by the rising edge of `tck` and steered by `tms`.",
+    "Use the state encoding in the table (it is the standard's recommended assignment). `state` outputs it directly.",
+    "`trst` is a synchronous reset to Test-Logic-Reset (real TAPs reset asynchronously, simplified here).",
+    "Moore decodes: `shift_dr`, `shift_ir`, `capture_dr`, `update_dr` and `tlr` are 1 exactly in the states with those names. Must be synthesizable."
+  ],
+  "hints": [
+    "Write the transition table as a `case` on the state, with `tms ? next1 : next0` per state.",
+    "Key property: from **any** state, five consecutive `tms = 1` edges reach Test-Logic-Reset. Use it to sanity-check your table.",
+    "The DR and IR columns of the diagram are identical in shape. Only Select-IR-Scan's `tms = 1` exit (to Test-Logic-Reset) is different."
+  ],
+  "examples": [
+    {"check": "reset by TMS", "title": "five ones", "input": "tms = 1 for 5 edges from any state", "expected": "state = 4'hF (Test-Logic-Reset), tlr = 1"},
+    {"check": "DR scan path", "title": "shift a data register", "input": "from Run-Test/Idle: tms = 1, 0, 0", "expected": "Select-DR (7) → Capture-DR (6) → Shift-DR (2), shift_dr = 1"},
+    {"check": "IR scan path", "title": "shift the instruction register", "input": "from Run-Test/Idle: tms = 1, 1, 0, 0", "expected": "Shift-IR (A), shift_ir = 1"}
+  ]
+}

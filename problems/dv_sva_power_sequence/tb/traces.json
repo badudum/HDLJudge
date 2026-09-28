@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: full power cycle",
+  "violation": false
+ },
+ {
+  "name": "violation: power off before isolation",
+  "violation": true
+ },
+ {
+  "name": "violation: no save before power off",
+  "violation": true
+ },
+ {
+  "name": "violation: isolation released before restore",
+  "violation": true
+ }
+]

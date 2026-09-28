@@ -1,0 +1,86 @@
+{
+  "id": 175,
+  "title": "Spot the Clock Glitch",
+  "difficulty": "Easy",
+  "category": "lowpower",
+  "tags": [
+    "clock-gating",
+    "debug",
+    "glitch"
+  ],
+  "top": "gated_counter",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "gclk",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "count",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Intended behavior: `count` increments on every rising edge of `clk` while the (latched) enable is 1, via a **gated clock** `gclk`. `rst` is an asynchronous reset that clears `count`.",
+    "The enable may change at **any** time, including while `clk` is high. `gclk` must never glitch: it is `clk` masked by an enable that was stable during the whole high phase (latched while `clk` is low).",
+    "The starter code has **1 bug**. Keep the gated-clock architecture: fix it, don't replace it with a clock enable."
+  ],
+  "hints": [
+    "Submit the starter and look at the waveform around the first failing time: what happens to `gclk` when `en` rises while `clk` is high?",
+    "An AND gate on a clock is only safe if its other input can't change while the clock is high.",
+    "See the *Latch-Based Clock Gate* problem."
+  ],
+  "examples": [
+    {
+      "check": "gclk never glitches",
+      "title": "glitch",
+      "input": "en rises in the middle of a high phase",
+      "expected": "no extra gclk pulse"
+    },
+    {
+      "check": "count matches the enabled clock edges",
+      "title": "count",
+      "input": "random enable pattern",
+      "expected": "count = number of enabled rising edges"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "allow_latches": true,
+  "wave_windows": [
+    {
+      "from": 90,
+      "to": 150,
+      "step": 0.5,
+      "unit": 20,
+      "clock": "clk",
+      "signals": [
+        "clk",
+        "en",
+        "gclk",
+        "count"
+      ],
+      "title": "fixed design: enable toggling at arbitrary times",
+      "caption": "The latched enable only changes while clk is low, so gclk carries whole pulses and count increments once per enabled cycle."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": 243,
+  "title": "Exactly Two Bits Set",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks"
+  ],
+  "top": "two_hot",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "two",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`two = 1` exactly when `x` has **exactly two** bits set.",
+    "Purely combinational. No loops or generate, no `$countones` / `$onehot`, and no popcount adder tree (it works, but it isn't the trick)."
+  ],
+  "hints": [
+    "After clearing the lowest set bit, a two-hot value becomes one-hot.",
+    "`y = x & (x - 1)`. Then x is two-hot iff y ≠ 0 and y is a power of two: `(y & (y - 1)) == 0`.",
+    "The one-hot detector is the same trick applied once."
+  ],
+  "examples": [
+    {
+      "check": "two bits",
+      "title": "two",
+      "input": "x = 0x0081",
+      "expected": "two = 1"
+    },
+    {
+      "check": "other counts",
+      "title": "three",
+      "input": "x = 0x0007",
+      "expected": "two = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

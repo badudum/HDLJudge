@@ -1,0 +1,38 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "g",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "3",
+     "2",
+     "6",
+     "7",
+     "5",
+     "4"
+    ]
+   },
+   {
+    "name": "gn",
+    "kind": "bus",
+    "values": [
+     "1",
+     "3",
+     "2",
+     "6",
+     "7",
+     "5",
+     "4",
+     "C"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "full sequence"
+ }
+]

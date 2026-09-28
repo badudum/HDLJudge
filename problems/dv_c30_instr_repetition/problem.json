@@ -1,0 +1,47 @@
+{
+  "id": 136,
+  "title": "Constraint: Instruction Stream Rules",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "instr_stream",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "A stream of 20 opcodes: no opcode more than 5 times, LOAD is never immediately followed by STORE, no two NOPs in a row, and the last instruction is BR or JMP.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Count opcodes with `op.sum() with (int'(item == LOAD)) <= 5`, one line per opcode.",
+    "Sequence rules relate `op[i]` and `op[i+1]`. Guard the last index.",
+    "`inside {BR, JMP}` works with enum values."
+  ],
+  "examples": [
+    {
+      "check": "a LOAD is never directly followed by a STORE",
+      "title": "hazard",
+      "input": "…, LOAD, STORE, …",
+      "expected": "rejected"
+    },
+    {
+      "check": "no two consecutive NOPs",
+      "title": "nops",
+      "input": "…, NOP, NOP, …",
+      "expected": "rejected"
+    },
+    {
+      "check": "the stream ends with a branch or jump",
+      "title": "end",
+      "input": "op[19] = ADD",
+      "expected": "rejected"
+    }
+  ]
+}

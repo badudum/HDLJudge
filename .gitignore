@@ -1,0 +1,19 @@
+# local user data: submission history / solved problems (never commit)
+data/
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# simulation and build artifacts from manual runs
+obj_dir/
+*.vcd
+*.vvp
+*.fst
+# editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+# screenshots taken while developing the UI
+web/_shot_*

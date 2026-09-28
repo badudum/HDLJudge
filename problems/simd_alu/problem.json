@@ -1,0 +1,28 @@
+{
+  "id": 65, "title": "SIMD Execution Unit", "difficulty": "Hard", "category": "arch",
+  "tags": ["simd", "gpu", "arithmetic", "combinational"], "top": "simd_alu",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "a",    "dir": "input",  "width": 32},
+    {"name": "b",    "dir": "input",  "width": 32},
+    {"name": "mode", "dir": "input",  "width": 1},
+    {"name": "op",   "dir": "input",  "width": 2},
+    {"name": "y",    "dir": "output", "width": 32}
+  ],
+  "constraints": [
+    "`mode = 0`: four independent 8-bit lanes. `mode = 1`: two independent 16-bit lanes. Carries never cross lane boundaries.",
+    "`op` (per lane, unsigned): 00 add (wrapping), 01 subtract (wrapping), 10 saturating add (clamp to the lane maximum), 11 maximum.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Write a function for one lane of width W and call it per lane, or use generate loops.",
+    "Saturating add: compute in W+1 bits. If the top bit is set, output all ones.",
+    "A trick for the add: 16-bit lanes are pairs of 8-bit lanes where the carry out of the low byte is allowed into the high byte."
+  ],
+  "examples": [
+    {"check": "8-bit lanes: add", "title": "packed add", "input": "mode = 0, op = 00, a = 32'hFF010203, b = 32'h01010101", "expected": "y = 32'h00020304 (no carry across lanes)"},
+    {"check": "8-bit lanes: saturating add", "title": "saturate", "input": "mode = 0, op = 10, a = 32'hF0F00000, b = 32'h20010000", "expected": "y = 32'hFFF10000"},
+    {"check": "16-bit lanes: max", "title": "max", "input": "mode = 1, op = 11, a = 32'h1234FFFF, b = 32'h43210001", "expected": "y = 32'h4321FFFF"}
+  ]
+}

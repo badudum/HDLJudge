@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: toggles every 4 cycles",
+  "violation": false
+ },
+ {
+  "name": "violation: toggles after 3 cycles",
+  "violation": true
+ },
+ {
+  "name": "violation: toggles after 5 cycles",
+  "violation": true
+ },
+ {
+  "name": "legal: never starts toggling",
+  "violation": false
+ }
+]

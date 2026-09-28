@@ -1,0 +1,182 @@
+[
+ {
+  "unit": 2,
+  "length": 20,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "a",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "title": "legal: a then b",
+  "caption": "Legal trace: your checker must stay silent. Signals change at falling edges and are sampled at rising edges."
+ },
+ {
+  "unit": 2,
+  "length": 20,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "a",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "title": "violation: b before any a",
+  "caption": "VIOLATION: your checker must report an error on this trace. Signals change at falling edges and are sampled at rising edges."
+ }
+]

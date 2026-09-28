@@ -1,0 +1,47 @@
+{
+  "id": 117,
+  "title": "Constraint: 5 % Matching Lower Bits",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "low_match",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`a` and `b` are 8-bit. Their lower nibbles are equal in about **5 %** of the results (measured over 2000 calls, accepted 2.5 … 8 %).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Plain randomization gives 1/16 = 6.25 %. Close, but not what was asked.",
+    "Use a helper `rand bit same;` with `same dist {1 := 5, 0 := 95};`, and tie it to the data: `same == (a[3:0] == b[3:0]);`.",
+    "The equivalence (`==`) matters: an implication alone would let `same = 0` still produce matches."
+  ],
+  "examples": [
+    {
+      "check": "P(a[3:0] == b[3:0]) is about 5 %",
+      "title": "probability",
+      "input": "2000 calls",
+      "expected": "≈ 100 matching pairs"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "2000 calls",
+      "expected": "≥ 1500 different pairs"
+    },
+    {
+      "check": "randomize() succeeds",
+      "title": "solvable",
+      "input": "every call",
+      "expected": "randomize() returns 1"
+    }
+  ]
+}

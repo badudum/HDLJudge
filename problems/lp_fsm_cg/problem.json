@@ -1,0 +1,85 @@
+{
+  "id": 189,
+  "title": "FSM-Driven Clock Gating",
+  "difficulty": "Hard",
+  "category": "lowpower",
+  "tags": [
+    "clock-gating",
+    "fsm",
+    "idle-detection"
+  ],
+  "top": "cg_ctrl",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "force_on",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "cg_en",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "ready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "saved",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "A controller that gates the clock of a unit. There are three states. **OFF**: `cg_en = 0`, `ready = 0`. **WAKE**: `cg_en = 1`, `ready = 0`, and it lasts exactly one cycle while the unit's clock restarts. **ON**: `cg_en = 1`, `ready = 1`. Outputs depend on the state only.",
+    "OFF → WAKE on an edge with `req` or `force_on`. WAKE → ON always. In ON, an idle counter counts consecutive edges with `req = 0`. On the **3rd** consecutive idle edge the controller goes to OFF, unless `force_on = 1`, which holds it in ON and keeps the idle counter at 0. Any edge with `req = 1` clears the counter.",
+    "`saved` counts the edges on which the state was OFF (16-bit, wrapping): the clock cycles saved. Synchronous reset → OFF, counters 0."
+  ],
+  "hints": [
+    "Three states plus a 2-bit idle counter. Write the next-state logic as a `case` on the state.",
+    "The idle timeout (hysteresis) prevents thrashing when requests come in short bursts: waking costs a cycle each time.",
+    "`saved` increments whenever the *current* state is OFF, regardless of what happens on that edge."
+  ],
+  "examples": [
+    {
+      "check": "wakes on request",
+      "title": "wake",
+      "input": "req = 1 while OFF",
+      "expected": "WAKE for one cycle, then ON (ready = 1)"
+    },
+    {
+      "check": "gates after 3 idle cycles",
+      "title": "timeout",
+      "input": "req = 0 for 3 edges in ON",
+      "expected": "back to OFF"
+    },
+    {
+      "check": "force_on disables gating",
+      "title": "force",
+      "input": "force_on = 1",
+      "expected": "stays ON"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

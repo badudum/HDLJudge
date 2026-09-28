@@ -1,0 +1,3 @@
+#!/bin/sh
+# Convenience launcher: ./hwlc.sh [command] ...
+cd "$(dirname "$0")" && exec python3 -m hwlc "$@"

@@ -1,0 +1,102 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "5000707C8010903",
+     "1000000000000FF",
+     "FF00000000000000",
+     "807060504030201",
+     "901090904",
+     "7070707",
+     "303000000000000",
+     "504050305020501"
+    ]
+   },
+   {
+    "name": "max",
+    "kind": "bus",
+    "values": [
+     "C8",
+     "FF",
+     "FF",
+     "8",
+     "9",
+     "7",
+     "3",
+     "5"
+    ]
+   },
+   {
+    "name": "idx",
+    "kind": "bus",
+    "values": [
+     "3",
+     "0",
+     "7",
+     "7",
+     "1",
+     "0",
+     "6",
+     "1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "distinct values"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "0",
+     "5555555555555555",
+     "FFFFFFFFFFFFFFFF",
+     "4E54532B0BB2006D",
+     "FF8961867D9C80F6",
+     "49E82E6400204025",
+     "8000BD913DB2B02D",
+     "AF00FF58FFBF0000"
+    ]
+   },
+   {
+    "name": "max",
+    "kind": "bus",
+    "values": [
+     "0",
+     "55",
+     "FF",
+     "B2",
+     "FF",
+     "E8",
+     "BD",
+     "FF"
+    ]
+   },
+   {
+    "name": "idx",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "2",
+     "7",
+     "6",
+     "5",
+     "3"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "all equal"
+ }
+]

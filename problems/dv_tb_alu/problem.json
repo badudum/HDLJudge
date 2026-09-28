@@ -1,0 +1,80 @@
+{
+  "id": 212,
+  "title": "Write a Testbench: ALU",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "testbench",
+    "mutation-testing",
+    "alu",
+    "corner-cases"
+  ],
+  "top": "alu8",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "op",
+      "dir": "input",
+      "width": 3
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "carry",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "zero",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "neg",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Write a self-checking testbench: top module `tb`, instantiating `alu8` as `dut`. Report a detected bug with `$error(...)` and finish with `$finish`.",
+    "Specification of `alu8` (combinational): op 0 ADD (`carry` = carry out), 1 SUB (`carry` = borrow, a < b unsigned), 2 AND, 3 OR, 4 XOR, 5 SHL by `b[2:0]` (`carry` = last bit shifted out, 0 for a shift of 0), 6 SHR logical by `b[2:0]` (same carry rule), 7 SLT **signed** (`y` = 1 or 0). `carry = 0` for AND/OR/XOR/SLT. `zero = (y == 0)`, `neg = y[7]`.",
+    "Your testbench must stay silent on the correct ALU and report an error on each of **8** hidden buggy versions. It must finish within 10 s."
+  ],
+  "hints": [
+    "Write a reference model in the testbench (a task that computes y and the flags) and compare everything, every time.",
+    "Random stimulus alone rarely hits corners like shift-by-0, 0x80 vs 0x7F in SLT, or both MSBs set. Add a directed corner-value sweep.",
+    "Sweep all 8 shift amounts explicitly."
+  ],
+  "examples": [
+    {
+      "check": "correct design",
+      "title": "no false alarms",
+      "input": "your testbench + the correct ALU",
+      "expected": "no errors reported"
+    },
+    {
+      "check": "bug 2",
+      "title": "signed compare",
+      "input": "an ALU whose SLT compares unsigned",
+      "expected": "your testbench reports an error"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 10,
+  "kind": "testbench"
+}

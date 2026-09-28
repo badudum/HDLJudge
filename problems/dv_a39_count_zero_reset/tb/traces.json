@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: counter clears on reset",
+  "violation": false
+ },
+ {
+  "name": "violation: counter not cleared",
+  "violation": true
+ },
+ {
+  "name": "legal: counting after reset",
+  "violation": false
+ },
+ {
+  "name": "violation: reset in the middle is ignored",
+  "violation": true
+ }
+]

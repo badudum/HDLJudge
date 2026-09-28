@@ -1,0 +1,47 @@
+{
+  "id": 201,
+  "title": "UVM: Driver and Monitor",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "driver",
+    "monitor",
+    "valid-ready",
+    "analysis-port"
+  ],
+  "top": "stream_driver",
+  "ports": [],
+  "constraints": [
+    "Write `stream_driver` (extends `uvm_driver #(stream_item)`) and `stream_monitor` (extends `uvm_monitor`, with a public `uvm_analysis_port #(stream_item) ap`). Both get `virtual stream_if` from `uvm_config_db` with field name `\"vif\"`.",
+    "**Driver:** keep `valid = 0` during reset (`rst = 1`). For each item, drive `data` with `valid = 1` on a clock edge and hold both stable until the byte transfers (a rising edge with `valid && ready`). Back-to-back transfers are allowed.",
+    "**Monitor:** on every rising edge with `valid && ready` (outside reset), write a **new** `stream_item` holding the transferred byte to `ap`. It must see every transfer exactly once.",
+    "The DUT applies random backpressure. Your driver and monitor are graded separately."
+  ],
+  "hints": [
+    "Driver loop: `get_next_item`, drive with nonblocking assignments, `do @(posedge vif.clk); while (!vif.ready);`, drop valid, `item_done`.",
+    "Monitor: sample at `@(posedge vif.clk)`. The values you read there are the pre-edge values, which is exactly what the DUT saw.",
+    "A monitor that reuses a single item object corrupts every transaction already sent to subscribers: they all hold a handle to the same object."
+  ],
+  "examples": [
+    {
+      "check": "driver delivers every item in order",
+      "title": "driver",
+      "input": "300 random bytes with backpressure",
+      "expected": "the DUT receives the same 300 bytes"
+    },
+    {
+      "check": "monitor reports each transfer exactly once",
+      "title": "monitor",
+      "input": "the same traffic",
+      "expected": "300 analysis writes"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

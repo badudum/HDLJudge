@@ -1,0 +1,33 @@
+{
+  "id": 53, "title": "Pipeline Registers with Stall and Flush", "difficulty": "Hard", "category": "arch",
+  "tags": ["pipeline", "hazards", "sequential"], "top": "pipe3",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",       "dir": "input",  "width": 1},
+    {"name": "rst",       "dir": "input",  "width": 1},
+    {"name": "stall",     "dir": "input",  "width": 1},
+    {"name": "flush",     "dir": "input",  "width": 1},
+    {"name": "in_valid",  "dir": "input",  "width": 1},
+    {"name": "in_data",   "dir": "input",  "width": 16},
+    {"name": "out_valid", "dir": "output", "width": 1},
+    {"name": "out_data",  "dir": "output", "width": 16}
+  ],
+  "constraints": [
+    "Three stages S1 → S2 → S3, each holding (valid, data). The outputs are S3's contents.",
+    "Normal edge: S3 ← S2, S2 ← S1, S1 ← (in_valid, in_data).",
+    "`stall = 1`: every stage holds and the input is not accepted.",
+    "`flush = 1` (priority over stall): S3 ← S2 (the oldest instruction still completes), while S2 and S1 become invalid bubbles and the input is dropped.",
+    "Synchronous reset (priority over everything) clears all valid bits. `out_data` is don't-care when `out_valid = 0`. Must be synthesizable."
+  ],
+  "hints": [
+    "Keep a valid bit and a data register per stage, updated in one clocked block.",
+    "Order the if-chain by priority: rst, then flush, then stall, then normal shifting.",
+    "A flush is what a branch misprediction does to the younger instructions behind the branch."
+  ],
+  "examples": [
+    {"check": "latency 3", "title": "flow", "input": "in = A, B, C, … with in_valid = 1", "expected": "out = A three edges after it entered, then B, C, …"},
+    {"check": "stall", "title": "stall", "input": "stall = 1 for 2 cycles", "expected": "out holds, nothing is lost, flow resumes"},
+    {"check": "flush", "title": "flush", "input": "flush while A (S3), B (S2), C (S1) are in flight", "expected": "B comes out next, then two invalid cycles"}
+  ]
+}

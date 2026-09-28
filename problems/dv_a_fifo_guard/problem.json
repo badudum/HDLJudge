@@ -1,0 +1,73 @@
+{
+  "id": 229,
+  "title": "Assertion: FIFO Overflow / Underflow",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_fifo",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "push",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pop",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "full",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "empty",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule 1: no `push` while `full`, **unless** `pop` happens in the same cycle (the pop frees a slot).",
+    "Rule 2: no `pop` while `empty`.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Two simple same-cycle implications with `|->`.",
+    "`push && full |-> pop` expresses the exception directly."
+  ],
+  "examples": [
+    {
+      "check": "legal: push and pop while full",
+      "title": "exception",
+      "input": "push = pop = full = 1",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: push while full",
+      "title": "overflow",
+      "input": "push with full = 1",
+      "expected": "assertion fails"
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "tag",
+    "kind": "bus",
+    "values": [
+     "4ECC6",
+     "3ACA6",
+     "55200",
+     "EB954",
+     "DC0FA",
+     "276F6",
+     "CB0A7",
+     "B9E91"
+    ]
+   },
+   {
+    "name": "way_tags",
+    "kind": "bus",
+    "values": [
+     "2775893F50488E44ECC6",
+     "7BC71CED243ACA643FF8",
+     "F9ACE55200E2A09779B8",
+     "EB954CADB80A8A5E5919",
+     "DB8E6AA72C1799CDC0FA",
+     "BE3763D25276F62F7A4",
+     "E6453CB0A7A38CF3D4B3",
+     "B9E91CA615699790259E"
+    ]
+   },
+   {
+    "name": "way_valid",
+    "kind": "bus",
+    "values": [
+     "15",
+     "15",
+     "15",
+     "15",
+     "14",
+     "13",
+     "11",
+     "7"
+    ]
+   },
+   {
+    "name": "hit",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "hit_way",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "hit_onehot",
+    "kind": "bus",
+    "values": [
+     "1",
+     "2",
+     "4",
+     "8",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "multi_hit",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "hits in every way"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "tag",
+    "kind": "bus",
+    "values": [
+     "ABCDE",
+     "ABCDE",
+     "ABCDE",
+     "2170A",
+     "CFE98",
+     "F4421",
+     "20D3E",
+     "BB52D"
+    ]
+   },
+   {
+    "name": "way_tags",
+    "kind": "bus",
+    "values": [
+     "ABCDEABCDEABCDEABCDE",
+     "ABCDEABCDEABCDEABCDE",
+     "ABCDEABCDEABCDEABCDE",
+     "9FDF84E5F52170A2AB1D",
+     "99ADA0C5EB96C14CFE98",
+     "380E79119FF4421053F6",
+     "B503820D3E38F45F0F65",
+     "321D5DE3DCD46D9BB52D"
+    ]
+   },
+   {
+    "name": "way_valid",
+    "kind": "bus",
+    "values": [
+     "10",
+     "15",
+     "6",
+     "8",
+     "2",
+     "1",
+     "3",
+     "12"
+    ]
+   },
+   {
+    "name": "hit",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "hit_way",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "1",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "hit_onehot",
+    "kind": "bus",
+    "values": [
+     "10",
+     "15",
+     "6",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "multi_hit",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "multi-hit detection"
+ }
+]

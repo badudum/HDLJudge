@@ -1,0 +1,114 @@
+[
+ {
+  "unit": 2,
+  "length": 16,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "count",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "2",
+     "2",
+     "3",
+     "3",
+     "4",
+     "4",
+     "4",
+     "4"
+    ]
+   }
+  ],
+  "title": "legal: counter clears on reset",
+  "caption": "Legal trace: your checker must stay silent. Signals change at falling edges and are sampled at rising edges."
+ },
+ {
+  "unit": 2,
+  "length": 16,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "count",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "5",
+     "5",
+     "5",
+     "5",
+     "6",
+     "6",
+     "7",
+     "7",
+     "8",
+     "8",
+     "9",
+     "9",
+     "9",
+     "9"
+    ]
+   }
+  ],
+  "title": "violation: counter not cleared",
+  "caption": "VIOLATION: your checker must report an error on this trace. Signals change at falling edges and are sampled at rising edges."
+ }
+]

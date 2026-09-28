@@ -1,0 +1,85 @@
+{
+  "id": 92,
+  "title": "Debug: Req/Ack Handshake Receiver",
+  "difficulty": "Easy",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "handshake",
+    "4-phase"
+  ],
+  "top": "req_ack_rx",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data_in",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "ack",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "data_out",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "strobe",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Intended behavior: a **4-phase** receiver. IDLE: an edge sampling `req = 1` captures `data_in` into `data_out`, raises `ack` and pulses `strobe` for one cycle.",
+    "`ack` stays high until an edge samples `req = 0`. Then `ack` falls and the receiver returns to IDLE. Each req pulse delivers exactly one word, however long it lasts.",
+    "Registered outputs, synchronous reset (`ack = 0`, `data_out = 0`, `strobe = 0`). The starter has **2 bugs**."
+  ],
+  "hints": [
+    "Hold `req` high for 5 cycles. How many strobes do you get?",
+    "Which value of `data_in` ends up in `data_out`: the one present when req rose, or the one when it fell?",
+    "Draw the four phases: req↑, ack↑, req↓, ack↓."
+  ],
+  "examples": [
+    {
+      "check": "single transfer",
+      "title": "one word",
+      "input": "req high for 4 cycles with data 0x42",
+      "expected": "one strobe, data_out = 0x42, ack high until req falls"
+    },
+    {
+      "check": "data captured on req rise",
+      "title": "capture timing",
+      "input": "data_in changes while req is high",
+      "expected": "data_out keeps the value from the rising edge"
+    },
+    {
+      "check": "2000 cycles",
+      "title": "random",
+      "input": "random handshakes",
+      "expected": "one strobe per request"
+    }
+  ]
+}

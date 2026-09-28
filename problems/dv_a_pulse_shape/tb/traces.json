@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: well-spaced pulses",
+  "violation": false
+ },
+ {
+  "name": "violation: two-cycle pulse",
+  "violation": true
+ },
+ {
+  "name": "violation: pulses too close",
+  "violation": true
+ },
+ {
+  "name": "legal: long gaps",
+  "violation": false
+ }
+]

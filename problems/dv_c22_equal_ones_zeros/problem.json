@@ -1,0 +1,48 @@
+{
+  "id": 128,
+  "title": "Constraint: Balanced Word",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "balanced",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` (16 bits) has exactly 8 ones and 8 zeros, its MSB is 1, and it never contains four equal bits in a row (`1111` or `0000`).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Balanced count: `$countones(v) == 8`.",
+    "Four ones in a row: `v & (v >> 1) & (v >> 2) & (v >> 3)` (mask the top 3 bits, which the shifts fill with zeros).",
+    "Same for zeros with `~v`.",
+    "Verilator's constraint-to-SMT translation mis-sizes shift operators on vectors narrower than 32 bits (z3 then rejects the query and `randomize()` fails). Use part-selects and concatenation instead: `v >> 1` becomes `{1'b0, v[15:1]}`."
+  ],
+  "examples": [
+    {
+      "check": "eight ones and eight zeros",
+      "title": "balance",
+      "input": "any result",
+      "expected": "popcount = 8"
+    },
+    {
+      "check": "no run of four equal bits",
+      "title": "runs",
+      "input": "v contains 0000",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "≥ 250 values"
+    }
+  ]
+}

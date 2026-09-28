@@ -1,0 +1,37 @@
+{
+  "id": 64, "title": "Sequential Restoring Divider", "difficulty": "Hard", "category": "arch",
+  "tags": ["arithmetic", "multicycle", "division", "handshake"], "top": "seq_div",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",       "dir": "input",  "width": 1},
+    {"name": "rst",       "dir": "input",  "width": 1},
+    {"name": "start",     "dir": "input",  "width": 1},
+    {"name": "dividend",  "dir": "input",  "width": 16},
+    {"name": "divisor",   "dir": "input",  "width": 16},
+    {"name": "busy",      "dir": "output", "width": 1},
+    {"name": "done",      "dir": "output", "width": 1},
+    {"name": "quotient",  "dir": "output", "width": 16},
+    {"name": "remainder", "dir": "output", "width": 16}
+  ],
+  "forbidden": [
+    {"pattern": "(?<![/*])/(?![/*])|%", "message": "no / or % operators: build the restoring algorithm", "languages": ["verilog", "systemverilog"]},
+    {"pattern": "/(?!=)|\\bmod\\b|\\brem\\b", "message": "no /, mod or rem: build the restoring algorithm", "languages": ["vhdl"]}
+  ],
+  "constraints": [
+    "Unsigned 16 / 16 division, **one quotient bit per clock**, with exact timing: the edge E₀ sampling `start` while idle latches the operands. `busy = 1` after E₀ … E₁₅. After E₁₆: `busy = 0`, `done = 1` for one cycle, with `quotient` and `remainder` valid.",
+    "Division by zero (natural result of the restoring algorithm): `quotient = 16'hFFFF`, `remainder = dividend`.",
+    "`start` is ignored while busy. Results hold until the next division completes. Synchronous reset clears the outputs.",
+    "No `/`, `%`, `mod` or `rem`. Must be synthesizable."
+  ],
+  "hints": [
+    "Restoring division: shift the partial remainder left by one, bringing in the next dividend bit (MSB first). Try subtracting the divisor.",
+    "If the result is non-negative, keep it and shift a 1 into the quotient. Otherwise keep the old remainder and shift in a 0.",
+    "Use a 17-bit subtraction so you can see the sign of `rem - divisor` in the extra bit."
+  ],
+  "examples": [
+    {"check": "single division", "title": "100 / 7", "input": "dividend = 100, divisor = 7", "expected": "16 edges later: quotient = 14, remainder = 2"},
+    {"check": "divide by zero", "title": "x / 0", "input": "dividend = 1234, divisor = 0", "expected": "quotient = 0xFFFF, remainder = 1234"},
+    {"check": "edge cases", "title": "large", "input": "65535 / 1", "expected": "quotient = 65535, remainder = 0"}
+  ]
+}

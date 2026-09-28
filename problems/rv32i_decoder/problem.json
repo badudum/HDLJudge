@@ -1,0 +1,32 @@
+{
+  "id": 56, "title": "RV32I Instruction Decoder", "difficulty": "Medium", "category": "arch",
+  "tags": ["risc-v", "decoder", "immediates", "combinational"], "top": "rv32i_decode",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "instr",     "dir": "input",  "width": 32},
+    {"name": "fmt",       "dir": "output", "width": 3},
+    {"name": "imm",       "dir": "output", "width": 32},
+    {"name": "reg_write", "dir": "output", "width": 1},
+    {"name": "mem_read",  "dir": "output", "width": 1},
+    {"name": "mem_write", "dir": "output", "width": 1},
+    {"name": "branch",    "dir": "output", "width": 1},
+    {"name": "jump",      "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Decode by `opcode = instr[6:0]`. `fmt`: R = 0, I = 1, S = 2, B = 3, U = 4, J = 5, unknown opcode = 7.",
+    "`imm` is the sign-extended immediate of the instruction's format (0 for R-type and unknown opcodes).",
+    "Controls: `reg_write` for OP, OP-IMM, LOAD, LUI, AUIPC, JAL, JALR. `mem_read` for LOAD, `mem_write` for STORE, `branch` for BRANCH, `jump` for JAL and JALR. All 0 for unknown opcodes.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Opcodes: OP 0110011, OP-IMM 0010011, LOAD 0000011, STORE 0100011, BRANCH 1100011, JAL 1101111, JALR 1100111, LUI 0110111, AUIPC 0010111.",
+    "S-imm = `{instr[31:25], instr[11:7]}`. B-imm = `{instr[31], instr[7], instr[30:25], instr[11:8], 0}`. J-imm = `{instr[31], instr[19:12], instr[20], instr[30:21], 0}`. U-imm = `{instr[31:12], 12'b0}`.",
+    "Every immediate except U is sign-extended from `instr[31]`."
+  ],
+  "examples": [
+    {"check": "I-type", "title": "addi x1, x0, -1", "input": "instr = 32'hFFF00093", "expected": "fmt = 1, imm = 32'hFFFFFFFF, reg_write = 1"},
+    {"check": "B-type", "title": "beq x0, x0, -4", "input": "instr = 32'hFE000EE3", "expected": "fmt = 3, imm = 32'hFFFFFFFC, branch = 1"},
+    {"check": "U-type", "title": "lui x5, 0x12345", "input": "instr = 32'h123452B7", "expected": "fmt = 4, imm = 32'h12345000, reg_write = 1"}
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": 85, "title": "Debug: Delay Line", "difficulty": "Medium", "category": "debug",
+  "tags": ["debug", "blocking-vs-nonblocking", "shift-register"], "top": "delay4",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",  "dir": "input",  "width": 1},
+    {"name": "din",  "dir": "input",  "width": 8},
+    {"name": "taps", "dir": "output", "width": 32},
+    {"name": "dout", "dir": "output", "width": 8}
+  ],
+  "constraints": [
+    "Intended behavior: a 4-stage delay line. On each rising edge, stage 1 takes `din`, stage 2 takes stage 1, and so on. `dout` = stage 4 (so `din` appears on `dout` exactly 4 edges later).",
+    "`taps` = {stage4, stage3, stage2, stage1} (stage 1 in bits 7:0).",
+    "The starter code has **1 bug**, a classic one. The Verilog and VHDL versions show different symptoms of the same mistake."
+  ],
+  "hints": [
+    "Submit the starter and check `taps`: how many distinct stages do you actually see?",
+    "Verilog: what's the difference between `=` and `<=` inside `always @(posedge clk)`?",
+    "VHDL: a *variable* updates immediately, a *signal* only at the end of the process. What does that mean for the order of the assignments?"
+  ],
+  "examples": [
+    {"check": "latency 4", "title": "delay", "input": "din = 11, 22, 33, 44, 55, …", "expected": "dout = 11 four edges after it entered"},
+    {"check": "taps show every stage", "title": "taps", "input": "after 4 edges with 11, 22, 33, 44", "expected": "taps = {11, 22, 33, 44} (stage 4 … stage 1)"},
+    {"check": "random stream", "title": "random", "input": "random bytes", "expected": "every stage holds a different sample"}
+  ]
+}

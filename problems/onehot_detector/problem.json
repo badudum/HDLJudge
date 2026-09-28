@@ -1,0 +1,36 @@
+{
+  "id": 9,
+  "title": "One-Hot Detector (No Loops)",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "brain-teaser", "bit-tricks"],
+  "top": "onehot_check",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "x",       "dir": "input",  "width": 16},
+    {"name": "onehot",  "dir": "output", "width": 1},
+    {"name": "onehot0", "dir": "output", "width": 1}
+  ],
+  "forbidden": [
+    {"pattern": "\\$onehot0?|\\$countones", "message": "system functions that do the work for you ($onehot, $countones) are not allowed"},
+    {"pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bloop\\b|\\bgenerate\\b", "message": "no loops or generate blocks: solve it with a bit trick"}
+  ],
+  "constraints": [
+    "`x` is 16 bits wide.",
+    "Purely combinational, no flip-flops or latches.",
+    "No loops (`for`, `while`, `loop`, `generate`) and no `$onehot` / `$onehot0` / `$countones`: the judge rejects them.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "Subtracting 1 from a number flips its lowest set bit and every zero below it.",
+    "`x & (x - 1)` clears the lowest set bit. When is the result zero?",
+    "`onehot0` is true when `x & (x - 1) == 0`; `onehot` additionally needs `x != 0`."
+  ],
+  "examples": [
+    {"check": "single bit set", "title": "exactly one bit", "input": "x = 16'b0000_0100_0000_0000", "expected": "onehot = 1, onehot0 = 1"},
+    {"check": "zero input", "title": "no bit set", "input": "x = 16'h0000", "expected": "onehot = 0, onehot0 = 1"},
+    {"check": "two bits set", "title": "two bits", "input": "x = 16'b0000_0000_0001_0100", "expected": "onehot = 0, onehot0 = 0"}
+  ]
+}

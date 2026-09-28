@@ -1,0 +1,83 @@
+{
+  "id": 161,
+  "title": "Signed Multiplier Without *",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "arithmetic",
+    "combinational",
+    "signed",
+    "array-multiplier"
+  ],
+  "top": "smul8",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "p",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "`p = a × b` for **signed** (two's-complement) 8-bit operands, as a full 16-bit signed product, purely combinational.",
+    "No `*` operator: build it from partial products (shifts, ANDs and adds)."
+  ],
+  "hints": [
+    "Unsigned: p = Σ (b[i] ? a << i : 0) over the 8 bits of b.",
+    "Signed: sign-extend `a` to 16 bits, and remember that bit 7 of `b` has weight −2⁷. Its partial product must be **subtracted**.",
+    "Check the corner case (−128) × (−128) = +16384."
+  ],
+  "examples": [
+    {
+      "check": "signs",
+      "title": "negative × positive",
+      "input": "a = −3 (0xFD), b = 5",
+      "expected": "p = −15 (0xFFF1)"
+    },
+    {
+      "check": "corner cases",
+      "title": "most negative",
+      "input": "a = b = −128",
+      "expected": "p = 16384 (0x4000)"
+    },
+    {
+      "check": "4000 random",
+      "title": "random",
+      "input": "random operands",
+      "expected": "exact signed product"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "[\\w\\])]\\s*\\*\\s*[\\w(']",
+      "message": "no * operator: build the multiplier from shifts and adds",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "[\\w)]\\s*\\*\\s*[\\w(]",
+      "message": "no * operator: build the multiplier from shifts and adds",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

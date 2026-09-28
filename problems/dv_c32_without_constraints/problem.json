@@ -1,0 +1,54 @@
+{
+  "id": 138,
+  "title": "Randomization Without Constraints",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "perm10",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "After every `randomize()` call, `perm` holds a random permutation of 0 … 9.",
+    "**Not allowed:** `constraint` blocks, `randc`, `dist`, `unique` (the judge rejects them). Find another way.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "`post_randomize()` runs after every successful `randomize()` call. You can compute anything there.",
+    "Arrays have built-in ordering methods: `sort()`, `reverse()`, `shuffle()`.",
+    "Alternatively implement a Fisher–Yates shuffle with `$urandom_range`."
+  ],
+  "examples": [
+    {
+      "check": "perm is a permutation of 0..9",
+      "title": "permutation",
+      "input": "after randomize()",
+      "expected": "each of 0…9 exactly once"
+    },
+    {
+      "check": "every value appears in the first position",
+      "title": "uniformity",
+      "input": "200 calls",
+      "expected": "every value leads at least once"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 195 permutations"
+    }
+  ],
+  "forbidden": [
+    {
+      "pattern": "\\bconstraint\\b|\\brandc\\b|\\bdist\\b|\\bunique\\b",
+      "message": "no constraint blocks, randc, dist or unique in this problem"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "id": 227,
+  "title": "Debug: CRC-8",
+  "difficulty": "Medium",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "crc"
+  ],
+  "top": "crc8",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "init",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "crc",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "CRC-8 with polynomial x⁸ + x² + x + 1 (0x07), initial value 0x00, no reflection, no final XOR (CRC-8/SMBUS).",
+    "Each rising edge with `valid` processes one whole byte, MSB first. `init` (priority over `valid`) and the synchronous reset set the CRC to 0x00.",
+    "`crc` is the register value. For example the bytes of the ASCII string \"123456789\" give 0xF4.",
+    "The starter code has **2 bugs**."
+  ],
+  "hints": [
+    "Compute the check value of \"123456789\" by hand (or trust 0xF4) and compare the bit order.",
+    "What happens when `init` and `valid` are asserted on the same edge (the first byte of a new packet)?"
+  ],
+  "examples": [
+    {
+      "check": "check value 123456789",
+      "title": "check value",
+      "input": "bytes '1'…'9'",
+      "expected": "crc = 0xF4"
+    },
+    {
+      "check": "init restarts",
+      "title": "init",
+      "input": "init = 1",
+      "expected": "crc = 0x00"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

@@ -1,0 +1,66 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "FF",
+     "0",
+     "1",
+     "80",
+     "C8",
+     "E",
+     "A2",
+     "B"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "FF",
+     "0",
+     "1",
+     "80",
+     "0",
+     "53",
+     "CB",
+     "EB"
+    ]
+   },
+   {
+    "name": "c",
+    "kind": "bus",
+    "values": [
+     "FF",
+     "0",
+     "1",
+     "80",
+     "64",
+     "A3",
+     "95",
+     "FE"
+    ]
+   },
+   {
+    "name": "sum",
+    "kind": "bus",
+    "values": [
+     "2FD",
+     "0",
+     "3",
+     "180",
+     "12C",
+     "104",
+     "202",
+     "1F4"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

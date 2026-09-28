@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: full transaction",
+  "violation": false
+ },
+ {
+  "name": "legal: request withdrawn",
+  "violation": false
+ },
+ {
+  "name": "violation: IDLE to XFER",
+  "violation": true
+ },
+ {
+  "name": "violation: XFER held for two cycles",
+  "violation": true
+ },
+ {
+  "name": "violation: DONE to REQ",
+  "violation": true
+ }
+]

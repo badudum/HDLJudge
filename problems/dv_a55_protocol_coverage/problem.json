@@ -1,0 +1,75 @@
+{
+  "id": 146,
+  "title": "Assertion: Request-Grant-Done Protocol",
+  "difficulty": "Hard",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_proto",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "gnt",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "A transaction starts with a one-cycle `req`. `gnt` must follow 1 … 3 cycles later, then `done` 1 … 5 cycles after the grant.",
+    "No new `req` may start while a transaction is open (from `req` up to and including its `done` cycle).",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "The textbook form is one sequence: `req |-> ##[1:3] gnt ##[1:5] done`. Verilator does not report failures of chained range delays, so check the two windows separately: `req |-> ##[1:3] gnt` and `gnt |-> ##[1:5] done`.",
+    "For the no-overlap rule, keep a `busy` flag: set by `req`, cleared by `done`, and assert `req |-> !busy`.",
+    "Update `busy` with nonblocking assignments so the assertion sees the value from before the edge."
+  ],
+  "examples": [
+    {
+      "check": "legal: one transaction",
+      "title": "ok",
+      "input": "req, gnt 2 cycles later, done 3 cycles after gnt",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: grant too late",
+      "title": "late gnt",
+      "input": "gnt 4 cycles after req",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: overlapping request",
+      "title": "overlap",
+      "input": "new req before done",
+      "expected": "assertion fails"
+    }
+  ]
+}

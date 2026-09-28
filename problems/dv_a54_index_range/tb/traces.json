@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: accesses in range",
+  "violation": false
+ },
+ {
+  "name": "violation: write to 12",
+  "violation": true
+ },
+ {
+  "name": "violation: read of 15",
+  "violation": true
+ },
+ {
+  "name": "violation: read and write together",
+  "violation": true
+ },
+ {
+  "name": "legal: large address while idle",
+  "violation": false
+ }
+]

@@ -1,0 +1,34 @@
+{
+  "id": 43,
+  "title": "Write a Testbench: Counter",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "testbench",
+  "tags": ["testbench", "mutation-testing", "self-checking"],
+  "top": "counter",
+  "synthesis": "none",
+  "timeout_s": 10,
+  "languages": ["systemverilog"],
+  "ports": [
+    {"name": "clk",   "dir": "input",  "width": 1},
+    {"name": "rst",   "dir": "input",  "width": 1},
+    {"name": "en",    "dir": "input",  "width": 1},
+    {"name": "count", "dir": "output", "width": 4}
+  ],
+  "constraints": [
+    "Write a self-checking testbench: top module `tb`, instantiating `counter` as `dut`.",
+    "Report a detected bug with `$error(...)` (any output line starting with `ERROR`). Finish with `$finish`.",
+    "Your testbench runs against the correct counter (it must stay silent) and against 6 hidden buggy versions (it must report an error on each).",
+    "The testbench must finish within 10 s of wall time. Add a watchdog."
+  ],
+  "hints": [
+    "Keep a reference model in the testbench (`expected` count) and compare after every clock edge.",
+    "Cover the corners: reset value, reset while enabled, counting through 15 → 0, holding with en = 0.",
+    "Check that reset is synchronous: change `rst` between clock edges and verify that `count` does not change until the next rising edge."
+  ],
+  "examples": [
+    {"check": "correct design", "title": "no false alarms", "input": "your testbench + the correct counter", "expected": "no errors reported"},
+    {"check": "bug 2", "title": "saturating counter", "input": "your testbench + a counter that sticks at 15", "expected": "your testbench reports an error"},
+    {"check": "bug 3", "title": "enable ignored", "input": "your testbench + a counter that ignores en", "expected": "your testbench reports an error"}
+  ]
+}

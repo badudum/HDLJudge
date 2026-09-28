@@ -1,0 +1,27 @@
+{
+  "id": 84, "title": "Debug: FSM Sequence Detector", "difficulty": "Medium", "category": "debug",
+  "tags": ["debug", "fsm", "sensitivity-list", "overlap"], "top": "det1101",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",   "dir": "input",  "width": 1},
+    {"name": "rst",   "dir": "input",  "width": 1},
+    {"name": "din",   "dir": "input",  "width": 1},
+    {"name": "found", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Intended behavior: a Moore FSM detecting the **overlapping** pattern `1101` on `din` (oldest bit first). `found = 1` during the cycle after the edge that sampled the final 1.",
+    "Example: `din = 1101101` must report the pattern **twice** (the last `1` of the first match starts the second).",
+    "The starter code has **2 bugs**. One of them makes simulation disagree with synthesis."
+  ],
+  "hints": [
+    "Draw the state diagram and walk it with the input 1 1 0 1 1 0 1. Where does the FSM go after a successful match?",
+    "Look closely at the sensitivity list of the combinational next-state block. What happens when only `din` changes?",
+    "`always @(*)` (Verilog) / `process (all)` (VHDL-2008) prevents that class of bug."
+  ],
+  "examples": [
+    {"check": "single match", "title": "1101", "input": "din = 1 1 0 1", "expected": "found = 1 after the 4th bit"},
+    {"check": "overlapping matches", "title": "overlap", "input": "din = 1 1 0 1 1 0 1", "expected": "found twice"},
+    {"check": "1000 random bits", "title": "random", "input": "random stream", "expected": "matches the reference"}
+  ]
+}

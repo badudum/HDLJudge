@@ -1,0 +1,31 @@
+{
+  "id": 49, "title": "SIMT Thread Mask Logic", "difficulty": "Medium", "category": "arch",
+  "tags": ["gpu", "simt", "divergence", "combinational"], "top": "thread_mask",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "active",     "dir": "input",  "width": 8},
+    {"name": "cond",       "dir": "input",  "width": 8},
+    {"name": "taken",      "dir": "output", "width": 8},
+    {"name": "not_taken",  "dir": "output", "width": 8},
+    {"name": "divergent",  "dir": "output", "width": 1},
+    {"name": "first_lane", "dir": "output", "width": 3},
+    {"name": "any_active", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`taken = active & cond` and `not_taken = active & ~cond`. Inactive threads appear in neither.",
+    "`divergent = 1` when both `taken` and `not_taken` are non-zero, i.e. the warp must split.",
+    "`first_lane` is the index of the lowest set bit of `active` (0 if none). `any_active = |active`.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "The masks are two AND gates per lane.",
+    "Divergence is just two OR-reductions and an AND.",
+    "`first_lane` is a priority encoder that favours the *lowest* index: scan from lane 7 down to 0 and let the last hit win."
+  ],
+  "examples": [
+    {"check": "divergent branch", "title": "split", "input": "active = 8'b1111_0000, cond = 8'b1010_1010", "expected": "taken = 1010_0000, not_taken = 0101_0000, divergent = 1, first_lane = 4"},
+    {"check": "uniform branch", "title": "all agree", "input": "active = 8'hFF, cond = 8'hFF", "expected": "taken = FF, not_taken = 00, divergent = 0"},
+    {"check": "empty warp", "title": "no active threads", "input": "active = 0", "expected": "any_active = 0, divergent = 0, first_lane = 0"}
+  ]
+}

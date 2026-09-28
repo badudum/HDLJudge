@@ -1,0 +1,34 @@
+{
+  "id": 20,
+  "title": "Binary to BCD Without Division",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "brain-teaser", "double-dabble"],
+  "top": "bin2bcd",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "bin", "dir": "input",  "width": 8},
+    {"name": "bcd", "dir": "output", "width": 12}
+  ],
+  "forbidden": [
+    {"pattern": "(?<![/*])/(?![/*])|%", "message": "no division or modulo: use shift-and-add-3 (double dabble)", "languages": ["verilog", "systemverilog"]},
+    {"pattern": "/(?!=)|\\bmod\\b|\\brem\\b", "message": "no division, mod or rem: use shift-and-add-3 (double dabble)", "languages": ["vhdl"]}
+  ],
+  "constraints": [
+    "`bcd = {hundreds, tens, ones}`, each a 4-bit BCD digit (0 – 9).",
+    "No `/`, `%`, `mod` or `rem` anywhere in the design: the judge rejects them.",
+    "Purely combinational and synthesizable. Loops are allowed."
+  ],
+  "hints": [
+    "Double dabble: start with the BCD digits at 0 and shift the binary number in from the right, one bit at a time.",
+    "Before each shift, add 3 to every BCD digit that is 5 or more. After the shift it becomes ≥ 10 + carry, which is exactly the decimal carry.",
+    "8 input bits means 8 shift steps. A `for` loop over a 20-bit working register unrolls into a small adder network."
+  ],
+  "examples": [
+    {"check": "small values", "title": "single digit", "input": "bin = 7", "expected": "bcd = 12'h007"},
+    {"check": "decade boundaries", "title": "two digits", "input": "bin = 42", "expected": "bcd = 12'h042"},
+    {"check": "all 256 values", "title": "maximum", "input": "bin = 255", "expected": "bcd = 12'h255"}
+  ]
+}

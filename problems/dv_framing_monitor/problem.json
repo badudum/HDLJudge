@@ -1,0 +1,45 @@
+{
+  "id": 209,
+  "title": "Framing Monitor (AB CD … CA FE)",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "monitor",
+    "framing",
+    "protocol",
+    "fsm"
+  ],
+  "top": "framing_monitor",
+  "ports": [],
+  "constraints": [
+    "Write `class framing_monitor` with `function new(virtual byte_if vif)`, `task run()` (runs forever, sampling on `posedge vif.clk`) and public `frame frames[$]` and `int n_aborted`. Only bytes with `valid = 1` count, and invalid cycles can appear anywhere.",
+    "Outside a frame, a header is two consecutive valid bytes `AB CD`. Inside a frame, the frame ends at the first consecutive `CA FE`. The payload is everything between header and trailer (possibly empty). `AB`, `CD`, or a lone `CA` inside a payload are data.",
+    "If a payload grows beyond **32** bytes without a trailer, abort the frame (`n_aborted++`, nothing published) and hunt for a new header. Push each completed frame to `frames` when its `FE` is seen."
+  ],
+  "hints": [
+    "One byte of look-behind (`prev`) handles both two-byte markers: a `CA` becomes payload only once you know the next byte isn't `FE`.",
+    "After a header or a trailer, forget `prev`, so that `AB CD CA FE` … and `CD` bytes aren't reused.",
+    "Hunting for `AB CD` must restart on a repeated `AB`: in `AB AB CD`, the header is the second `AB`."
+  ],
+  "examples": [
+    {
+      "check": "publishes every frame",
+      "title": "frames",
+      "input": "60+ frames with noise and idle cycles",
+      "expected": "all frames, in order"
+    },
+    {
+      "check": "aborts frames longer than 32 bytes",
+      "title": "abort",
+      "input": "a header followed by 40 bytes without trailer",
+      "expected": "n_aborted increments"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 60,
+  "simulator": "verilator",
+  "kind": "component"
+}

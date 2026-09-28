@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: correct registered sum",
+  "violation": false
+ },
+ {
+  "name": "violation: wrong sum",
+  "violation": true
+ },
+ {
+  "name": "violation: carry dropped",
+  "violation": true
+ },
+ {
+  "name": "legal: zeros",
+  "violation": false
+ }
+]

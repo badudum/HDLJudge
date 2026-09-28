@@ -1,0 +1,90 @@
+{
+  "id": 268,
+  "title": "Fully Associative TLB",
+  "difficulty": "Hard",
+  "category": "arch",
+  "tags": [
+    "virtual-memory",
+    "tlb",
+    "cam",
+    "fifo-replacement"
+  ],
+  "top": "tlb4",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "vpn",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "hit",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "ppn",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "fill",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "fill_vpn",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "fill_ppn",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "flush",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "4 entries, each {valid, vpn, ppn}. **Lookup** (combinational): `hit` = some valid entry has `vpn`, and `ppn` = its ppn (0 on a miss).",
+    "**Fill** (rising edge with `fill`): if `fill_vpn` is already present, update that entry's ppn. Otherwise write the first invalid entry (lowest index), or, if all are valid, the entry pointed to by a round-robin **victim pointer** (FIFO order), which then advances.",
+    "`flush` invalidates everything (priority over `fill`). Synchronous reset = flush + victim pointer 0."
+  ],
+  "hints": [
+    "Lookup is a CAM: compare `vpn` against all 4 tags in parallel and OR the matches.",
+    "The victim pointer only advances when it was actually used (all entries valid, new vpn).",
+    "Never create duplicate entries for the same vpn: two matches would OR their ppns together."
+  ],
+  "examples": [
+    {
+      "check": "fill and hit",
+      "title": "basic",
+      "input": "fill 0x12→0xA0, look up 0x12",
+      "expected": "hit = 1, ppn = 0xA0"
+    },
+    {
+      "check": "FIFO replacement",
+      "title": "evict",
+      "input": "fill 5 different pages",
+      "expected": "the first page is evicted"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

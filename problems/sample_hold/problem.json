@@ -1,0 +1,33 @@
+{
+  "id": 31,
+  "title": "Sample-and-Hold with Droop",
+  "difficulty": "Medium",
+  "category": "modeling",
+  "tags": ["analog", "real-number-modeling", "data-converters"],
+  "top": "sample_hold",
+  "synthesis": "optional",
+  "languages": ["systemverilog", "vhdl"],
+  "params": [{"name": "DROOP", "type": "real", "default": "0.999"}],
+  "ports": [
+    {"name": "clk",   "dir": "input",  "width": 1},
+    {"name": "track", "dir": "input",  "width": 1},
+    {"name": "vin",   "dir": "input",  "width": 1, "type": "real"},
+    {"name": "vout",  "dir": "output", "width": 1, "type": "real"}
+  ],
+  "constraints": [
+    "Updated on each rising edge of `clk`: if `track = 1`, `vout = vin`; otherwise `vout = vout * DROOP`.",
+    "`DROOP` is a `real` parameter / generic (default 0.999). The judge uses `DROOP = 0.98`.",
+    "`vout` starts at 0.0. Compared with a 1e-9 V tolerance.",
+    "Behavioral model. Synthesis is informational."
+  ],
+  "hints": [
+    "It's one clocked process with an if/else on `track`.",
+    "The droop is multiplicative: after N hold cycles `vout = v_held · DROOPᴺ`, which models the hold capacitor leaking.",
+    "SystemVerilog: declare the output as `output real vout = 0.0` and assign it with a nonblocking assignment in `always @(posedge clk)`."
+  ],
+  "examples": [
+    {"check": "track mode", "title": "tracking", "input": "track = 1, vin = 0.3, 0.7, -0.2", "expected": "vout = 0.3, 0.7, -0.2 (one step behind the edges)"},
+    {"check": "hold with droop", "title": "holding", "input": "sample 1.0, then track = 0 for 3 edges", "expected": "vout = 1.0, 0.98, 0.9604, 0.941192"},
+    {"check": "re-acquire", "title": "re-acquire", "input": "track = 1 again with vin = 0.5", "expected": "vout jumps back to 0.5"}
+  ]
+}

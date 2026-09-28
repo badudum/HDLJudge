@@ -1,0 +1,103 @@
+{
+  "id": 179,
+  "title": "Asynchronous FIFO",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "cdc",
+    "fifo",
+    "gray-code",
+    "dual-clock"
+  ],
+  "top": "async_fifo",
+  "ports": [
+    {
+      "name": "wclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wrst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "winc",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "wfull",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rrst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rinc",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "rempty",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "8 entries × 8 bits, with independent, unrelated write and read clocks. Each side has its own synchronous reset (asserted together at start-up).",
+    "A write happens on a rising `wclk` edge with `winc && !wfull`. A read (pop) happens on a rising `rclk` edge with `rinc && !rempty`. Requests while full or empty are ignored.",
+    "`rdata` always shows the **oldest** entry while `rempty = 0` (first-word fall-through, combinational read of the memory).",
+    "Pointers cross domains through **2-flop synchronizers**: an entry may not become readable earlier than 2 `rclk` edges after it was written, and a freed slot may not be reused earlier than 2 `wclk` edges after the read. Flags are therefore pessimistic, but never wrong: no overflow, no underflow. With the reader idle, the FIFO must accept exactly 8 writes. Tested with a fast writer / slow reader and the reverse."
+  ],
+  "hints": [
+    "Keep 4-bit binary pointers (3 address bits + 1 wrap bit). Convert them to Gray code and pass the Gray pointer through a 2-flop synchronizer into the other domain.",
+    "Empty: the next read Gray pointer equals the synchronized write Gray pointer. Full: the next write Gray pointer equals the synchronized read Gray pointer with its **two MSBs inverted**.",
+    "Register the flags from the *next* pointer values so that they update in the same cycle as the pointers.",
+    "Why Gray? A pointer sampled mid-change is off by at most one, which is either the old or the new value, both safe."
+  ],
+  "examples": [
+    {
+      "check": "accepts exactly 8 writes",
+      "title": "full",
+      "input": "reader idle, writer always writing",
+      "expected": "8 writes accepted, then wfull = 1"
+    },
+    {
+      "check": "drains all entries in order",
+      "title": "drain",
+      "input": "reader always reading, writer idle",
+      "expected": "8 reads in order, then rempty = 1"
+    },
+    {
+      "check": "random traffic, fast writer",
+      "title": "random",
+      "input": "wclk 10 ns, rclk 17 ns",
+      "expected": "no overflow/underflow, data in order"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "timeout_s": 60
+}

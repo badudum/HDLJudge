@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: walking one",
+  "violation": false
+ },
+ {
+  "name": "violation: all zero",
+  "violation": true
+ },
+ {
+  "name": "violation: two bits set",
+  "violation": true
+ },
+ {
+  "name": "violation: all ones",
+  "violation": true
+ }
+]

@@ -1,0 +1,70 @@
+{
+  "id": 75,
+  "title": "1-Cycle Pulse Detector",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "sequential",
+    "pattern",
+    "edge"
+  ],
+  "top": "pulse_detect",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pulse",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Detect a **single-cycle high pulse**: the last three samples of `din` were 0, 1, 0 (oldest first).",
+    "`pulse` is registered: it is 1 during the cycle right after the edge that sampled the final 0.",
+    "Wider pulses (0110, 01110, …) must not be detected. Synchronous reset clears the history (all samples 0). Must be synthesizable."
+  ],
+  "hints": [
+    "Keep the last two samples in a 2-bit shift register.",
+    "At each edge: `pulse <= (hist == 2'b01) && !din`, where hist holds {older, newer} = {0, 1}.",
+    "Reset the history to 00. Then a first sample of 1 followed by 0 still counts as a pulse."
+  ],
+  "examples": [
+    {
+      "check": "single pulse",
+      "title": "010",
+      "input": "din samples: 0 1 0",
+      "expected": "pulse = 1 after the last 0"
+    },
+    {
+      "check": "wide pulses are ignored",
+      "title": "0110",
+      "input": "din samples: 0 1 1 0",
+      "expected": "pulse stays 0"
+    },
+    {
+      "check": "back-to-back pulses",
+      "title": "01010",
+      "input": "din samples: 0 1 0 1 0",
+      "expected": "two pulses"
+    }
+  ]
+}

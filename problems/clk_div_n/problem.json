@@ -1,0 +1,71 @@
+{
+  "id": 173,
+  "title": "Clock Divide by N",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "clocking",
+    "divider",
+    "parameterized"
+  ],
+  "top": "clk_div_n",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "clk_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Parameter `N` (2 ≤ N ≤ 16): `clk_out` has a period of exactly **N** `clk` periods. It is high for ⌊N/2⌋ periods and low for ⌈N/2⌉ (exactly 50 % for even N).",
+    "Use **rising-edge flops only**, and drive `clk_out` straight from a flop. All `clk_out` edges therefore line up with rising edges of `clk`.",
+    "Synchronous reset: `clk_out` = 0 while `rst` is held. The phase after reset is free.",
+    "The testbench instantiates N = 2, 3, 4, 5, 7, 8 and 16 side by side."
+  ],
+  "hints": [
+    "A counter 0 … N−1, and a registered output: `q <= (next_count < N/2)`, or toggle at the two boundaries.",
+    "Integer division rounds down, so `N/2` is ⌊N/2⌋ for free.",
+    "N = 2 must also work: the counter is then only one bit wide."
+  ],
+  "examples": [
+    {
+      "check": "N = 5",
+      "title": "odd N",
+      "input": "N = 5, clk = 10 ns",
+      "expected": "period 50 ns, high 20 ns"
+    },
+    {
+      "check": "N = 8",
+      "title": "even N",
+      "input": "N = 8",
+      "expected": "period 80 ns, high 40 ns"
+    },
+    {
+      "check": "N = 2",
+      "title": "smallest N",
+      "input": "N = 2",
+      "expected": "period 20 ns, high 10 ns"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "params": [
+    {
+      "name": "N",
+      "default": 5
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "id": 252,
+  "title": "Full Adder From NAND Gates Only",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "gates",
+    "brain-teaser",
+    "universal-gate",
+    "structural",
+    "adder"
+  ],
+  "top": "nand_fa",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "cin",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sum",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "cout",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "A full adder: `{cout, sum} = a + b + cin`.",
+    "Use **only** Verilog `nand` gate primitives (2 or 3 inputs). No `assign`, `always`, operators or other gates. The classic solution uses 9 two-input NANDs."
+  ],
+  "hints": [
+    "XOR from 4 NANDs: `t = NAND(a, b)`, `x = NAND(NAND(a, t), NAND(b, t))`.",
+    "Chain two XORs for the sum. The carry reuses the first NAND of each XOR: `cout = NAND(t1, t2)`.",
+    "Count your gates: 4 + 4 + 1 = 9."
+  ],
+  "examples": [
+    {
+      "check": "truth table",
+      "title": "1 + 1 + 1",
+      "input": "a = b = cin = 1",
+      "expected": "sum = 1, cout = 1"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bassign\\b|\\balways|\\binitial\\b|\\bprimitive\\b|\\b(and|or|xor|xnor|nor|not|buf|bufif[01]|notif[01])\\b|[&|^~+\\-*/?!%]|==",
+      "message": "only `nand` gate instances are allowed (no assign, always, operators or other gates)",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

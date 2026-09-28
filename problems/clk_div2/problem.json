@@ -1,0 +1,60 @@
+{
+  "id": 167,
+  "title": "Clock Divide by 2",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "clocking",
+    "divider",
+    "toggle-flop"
+  ],
+  "top": "clk_div2",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "clk_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`clk_out` toggles on every rising edge of `clk`, giving half the frequency with an exact 50 % duty cycle.",
+    "Synchronous reset holds `clk_out` at 0. The first rising edge after reset drives it to 1.",
+    "Exactly one flip-flop. `clk_out` must come straight from the flop output (no logic after it): logic on a generated clock creates glitches."
+  ],
+  "hints": [
+    "A T flip-flop: `q <= ~q`.",
+    "Because the output comes straight from a flop, the divided clock is glitch-free.",
+    "In a real chip you'd hand this net to the clock tree tool (a `create_generated_clock` constraint)."
+  ],
+  "examples": [
+    {
+      "check": "toggles every edge",
+      "title": "toggle",
+      "input": "reset, then 6 edges",
+      "expected": "clk_out = 1, 0, 1, 0, 1, 0"
+    },
+    {
+      "check": "reset",
+      "title": "reset",
+      "input": "rst in the middle",
+      "expected": "clk_out = 0 on the next edge"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 1
+}

@@ -1,0 +1,31 @@
+{
+  "id": 62, "title": "Functional Unit Busy Tracker", "difficulty": "Medium", "category": "arch",
+  "tags": ["scheduling", "counters", "issue-logic"], "top": "fu_tracker",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",      "dir": "input",  "width": 1},
+    {"name": "rst",      "dir": "input",  "width": 1},
+    {"name": "issue",    "dir": "input",  "width": 1},
+    {"name": "fu",       "dir": "input",  "width": 2},
+    {"name": "latency",  "dir": "input",  "width": 3},
+    {"name": "busy",     "dir": "output", "width": 4},
+    {"name": "accepted", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "4 functional units, each with a countdown of remaining busy cycles. `busy[i]` = countdown of unit i is non-zero.",
+    "On a rising edge with `issue = 1`: if unit `fu` is **not busy** (before the edge) and `latency` ≠ 0, it becomes busy for exactly `latency` cycles and `accepted` pulses 1. Otherwise the issue is rejected (`accepted = 0`).",
+    "Every busy unit's countdown decrements by 1 on each edge (a newly issued unit starts at `latency`).",
+    "Synchronous reset: all units idle, `accepted = 0`. Must be synthesizable."
+  ],
+  "hints": [
+    "One 3-bit down-counter per unit plus a registered `accepted` flag.",
+    "Decide acceptance from the *current* counter of the target unit, then load it or decrement it.",
+    "busy for exactly L cycles means: load L at the issue edge, and it reads 0 again L edges later."
+  ],
+  "examples": [
+    {"check": "issue and count down", "title": "latency 3", "input": "issue to FU 2 with latency 3", "expected": "busy[2] = 1 for 3 cycles, accepted = 1 in the first"},
+    {"check": "structural hazard", "title": "busy unit", "input": "issue to FU 2 again while busy", "expected": "accepted = 0, the countdown continues unchanged"},
+    {"check": "independent units", "title": "parallel", "input": "issue to FU 0 and later FU 1", "expected": "both count down independently"}
+  ]
+}

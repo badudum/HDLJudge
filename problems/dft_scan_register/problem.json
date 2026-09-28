@@ -1,0 +1,30 @@
+{
+  "id": 78, "title": "Scan Flip-Flop Register", "difficulty": "Easy", "category": "dft",
+  "tags": ["dft", "scan", "test"], "top": "scan_reg",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk", "dir": "input",  "width": 1},
+    {"name": "rst", "dir": "input",  "width": 1},
+    {"name": "d",   "dir": "input",  "width": 8},
+    {"name": "se",  "dir": "input",  "width": 1},
+    {"name": "si",  "dir": "input",  "width": 1},
+    {"name": "q",   "dir": "output", "width": 8},
+    {"name": "so",  "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Every flip-flop gets a **scan mux** in front of it. Functional mode (`se = 0`): `q <= d` on every rising edge.",
+    "Scan mode (`se = 1`): the 8 flops form a shift chain, `q <= {q[6:0], si}`. The chain output `so = q[7]` (straight from the last flop).",
+    "Synchronous reset clears q (in both modes). Must be synthesizable."
+  ],
+  "hints": [
+    "It's a register whose next-state is `se ? {q[6:0], si} : d`.",
+    "Scan chains are loaded and unloaded bit-serially: 8 shift cycles load a whole test pattern, and the next 8 unload the captured response while loading the next pattern.",
+    "Keep `so` a direct flop output (no logic after it): testers need clean timing on the scan-out pin."
+  ],
+  "examples": [
+    {"check": "functional capture", "title": "normal mode", "input": "se = 0, d = 8'h3C", "expected": "q = 8'h3C after the edge"},
+    {"check": "scan shift", "title": "shift a pattern in", "input": "se = 1, si = 1,0,1,1,0,0,1,0 (8 edges)", "expected": "q = 8'b1011_0010"},
+    {"check": "scan out", "title": "unload", "input": "8 more shift edges", "expected": "so shows the old contents MSB first"}
+  ]
+}

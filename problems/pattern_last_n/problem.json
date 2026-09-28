@@ -1,0 +1,28 @@
+{
+  "id": 76, "title": "Pattern in the Last N Samples", "difficulty": "Medium", "category": "digital",
+  "tags": ["sequential", "sliding-window", "counter"], "top": "last_n_ones",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",   "dir": "input",  "width": 1},
+    {"name": "rst",   "dir": "input",  "width": 1},
+    {"name": "din",   "dir": "input",  "width": 1},
+    {"name": "count", "dir": "output", "width": 4},
+    {"name": "alarm", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Consider the last **12** samples of `din` (including the one taken at the latest edge). Samples before reset count as 0.",
+    "`count` = number of 1s in that window. `alarm = 1` when `count ≥ 8`.",
+    "Update `count` **incrementally** (+ new sample − sample leaving the window). Don't re-count all 12 bits every cycle. Registered outputs, synchronous reset. Must be synthesizable."
+  ],
+  "hints": [
+    "A 12-bit shift register holds the window. The bit falling off the end is `window[11]`.",
+    "`count_next = count + din − window[11]`: an up/down counter.",
+    "`alarm` can be registered alongside, computed from `count_next`."
+  ],
+  "examples": [
+    {"check": "filling the window", "title": "all ones", "input": "din = 1 for 12 cycles", "expected": "count = 1, 2, …, 12; alarm from the 8th"},
+    {"check": "sliding out", "title": "window slides", "input": "then din = 0", "expected": "count decreases by 1 per cycle"},
+    {"check": "threshold", "title": "8 of 12", "input": "pattern with exactly 8 ones in the window", "expected": "alarm = 1"}
+  ]
+}

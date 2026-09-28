@@ -1,0 +1,79 @@
+{
+  "id": 220,
+  "title": "Sequential Integer Square Root",
+  "difficulty": "Hard",
+  "category": "arch",
+  "tags": [
+    "arithmetic",
+    "sequential",
+    "digit-recurrence"
+  ],
+  "top": "isqrt16",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "root",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "`root = ⌊√x⌋` for a 16-bit unsigned `x`, computed one result bit per cycle.",
+    "An edge with `start` while idle captures `x` and sets `busy`. The result is ready exactly **8** edges later: after that edge `busy = 0`, `done = 1` (for one cycle), and `root` holds the result until the next start. `start` while busy is ignored.",
+    "No `/` or `%`. A multiplier is allowed. Synchronous reset → idle, `done = 0`, `root = 0`."
+  ],
+  "hints": [
+    "Decide one bit per cycle, from bit 7 down to 0: `cand = root | (1 << i)`, and keep it if `cand * cand <= x`.",
+    "The non-restoring version avoids the multiplier: keep a remainder and subtract `(root << 2 | 1) << …`. Try it once the simple version passes.",
+    "`root` must be cleared at start (it is built up bit by bit)."
+  ],
+  "examples": [
+    {
+      "check": "perfect squares",
+      "title": "144",
+      "input": "x = 144",
+      "expected": "root = 12 after 8 cycles"
+    },
+    {
+      "check": "largest input",
+      "title": "65535",
+      "input": "x = 65535",
+      "expected": "root = 255"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

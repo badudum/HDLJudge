@@ -1,0 +1,46 @@
+{
+  "id": 141,
+  "title": "Constraint: Fixed Index Value",
+  "difficulty": "Easy",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "fixed_idx",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`arr[3]` must always be 42, `arr[7]` must be `arr[3] + 1`, and no other element may be 42. Everything else is random.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Index-specific constraints are plain equalities.",
+    "Exclude 42 elsewhere with a `foreach` that skips index 3."
+  ],
+  "examples": [
+    {
+      "check": "arr[3] is always 42",
+      "title": "fixed",
+      "input": "any result",
+      "expected": "arr[3] = 42"
+    },
+    {
+      "check": "arr[7] = arr[3] + 1",
+      "title": "linked",
+      "input": "any result",
+      "expected": "arr[7] = 43"
+    },
+    {
+      "check": "no other element is 42",
+      "title": "exclusion",
+      "input": "arr[5] = 42",
+      "expected": "rejected"
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7F",
+     "80",
+     "81",
+     "FF",
+     "40",
+     "C0"
+    ]
+   },
+   {
+    "name": "sub",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7F",
+     "80",
+     "81",
+     "FF",
+     "40",
+     "C0"
+    ]
+   },
+   {
+    "name": "carry",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "ovf",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "add: all corner pairs"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7F",
+     "80",
+     "81",
+     "FF",
+     "40",
+     "C0"
+    ]
+   },
+   {
+    "name": "sub",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "FF",
+     "81",
+     "80",
+     "7F",
+     "1",
+     "C0",
+     "40"
+    ]
+   },
+   {
+    "name": "carry",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "ovf",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "subtract: all corner pairs"
+ }
+]

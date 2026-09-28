@@ -1,0 +1,33 @@
+{
+  "id": 73, "title": "Shift Register with Parallel Load", "difficulty": "Medium", "category": "digital",
+  "tags": ["shift-register", "serializer", "sequential"], "top": "shift_reg",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",       "dir": "input",  "width": 1},
+    {"name": "rst",       "dir": "input",  "width": 1},
+    {"name": "load",      "dir": "input",  "width": 1},
+    {"name": "din",       "dir": "input",  "width": 8},
+    {"name": "shift",     "dir": "input",  "width": 1},
+    {"name": "dir",       "dir": "input",  "width": 1},
+    {"name": "serial_in", "dir": "input",  "width": 1},
+    {"name": "q",         "dir": "output", "width": 8},
+    {"name": "serial_out","dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Priority on each rising edge: `rst` (q = 0), then `load` (q = din), then `shift`, else hold.",
+    "`dir = 0`: shift **left**. q ← {q[6:0], serial_in}. `dir = 1`: shift **right**. q ← {serial_in, q[7:1]}.",
+    "`serial_out` is the bit that the next shift would push out: q[7] when `dir = 0`, q[0] when `dir = 1` (combinational from q and dir).",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "One register and a priority if/else chain.",
+    "Concatenation does all the work: `{q[6:0], serial_in}` and `{serial_in, q[7:1]}`.",
+    "Chaining `serial_out` into another register's `serial_in` builds longer registers: that's how scan chains and SPI shift registers work."
+  ],
+  "examples": [
+    {"check": "parallel load", "title": "load", "input": "load = 1, din = 8'hA5", "expected": "q = 8'hA5"},
+    {"check": "shift left", "title": "shift left", "input": "q = 8'hA5, shift, dir = 0, serial_in = 1", "expected": "q = 8'h4B"},
+    {"check": "shift right", "title": "shift right", "input": "q = 8'hA5, shift, dir = 1, serial_in = 0", "expected": "q = 8'h52"}
+  ]
+}

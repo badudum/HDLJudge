@@ -1,0 +1,92 @@
+{
+  "id": 262,
+  "title": "Three-Way Compare Without Comparators",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "branchless",
+    "signed"
+  ],
+  "top": "cmp3",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "r",
+      "dir": "output",
+      "width": 2
+    }
+  ],
+  "constraints": [
+    "Signed 8-bit a and b. `r` is a 2-bit signed result: −1 (`2'b11`) if a < b, 0 if a == b, +1 (`2'b01`) if a > b.",
+    "No `?:`, `if`, `case`, comparisons, `==` or `!=`."
+  ],
+  "hints": [
+    "Compute d = a − b in 9 bits (sign-extend both), so it can't overflow.",
+    "The sign bit d[8] says 'negative', and `|d` says 'non-zero'.",
+    "{negative, non-zero} is exactly the 2-bit encoding: 11, 00 or 01."
+  ],
+  "examples": [
+    {
+      "check": "corner cases",
+      "title": "less",
+      "input": "a = −1, b = 1",
+      "expected": "r = 2'b11"
+    },
+    {
+      "check": "corner cases",
+      "title": "equal",
+      "input": "a = b = −128",
+      "expected": "r = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\?|\\bif\\b|\\bcase[xz]?\\b",
+      "message": "branchless: no ?:, if or case",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bif\\b|\\bcase\\b|\\bwhen\\b|\\bselect\\b",
+      "message": "branchless: no if, case, when or select",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "(?<![<>])[<>](?![<>])",
+      "message": "no comparison operators (<, >, <=, >=): only shifts << >> >>> are allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "==|!=",
+      "message": "no == / != either: use reductions",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

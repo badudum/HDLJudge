@@ -1,0 +1,33 @@
+{
+  "id": 45,
+  "title": "ALU Control Decoder",
+  "difficulty": "Medium",
+  "category": "arch",
+  "tags": ["decoder", "risc-v", "control"],
+  "top": "alu_control",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "alu_op",   "dir": "input",  "width": 2},
+    {"name": "funct3",   "dir": "input",  "width": 3},
+    {"name": "funct7_5", "dir": "input",  "width": 1},
+    {"name": "alu_ctrl", "dir": "output", "width": 4}
+  ],
+  "constraints": [
+    "Output encoding matches the ALU problem: ADD 0, SUB 1, AND 2, OR 3, XOR 4, SLL 6, SRL 7, SRA 8, SLT 9, SLTU 10.",
+    "`alu_op` 00 (load/store) → ADD, 01 (branch) → SUB, 10 (R-type) and 11 (I-type) → decode `funct3` (and `funct7_5`).",
+    "R-type `funct3 = 000` uses `funct7_5` to pick SUB over ADD. I-type `000` is always ADD (there is no SUBI).",
+    "For shifts right (`funct3 = 101`), `funct7_5 = 1` selects SRA in both R- and I-type. Purely combinational."
+  ],
+  "hints": [
+    "A nested `case`: first on `alu_op`, then on `funct3`.",
+    "Only two funct3 values care about `funct7_5`: 000 (R-type only) and 101.",
+    "Give every branch an assignment. A default at the top of the block avoids latches."
+  ],
+  "examples": [
+    {"check": "load/store", "title": "lw / sw", "input": "alu_op = 00", "expected": "alu_ctrl = 0 (ADD)"},
+    {"check": "R-type", "title": "sub", "input": "alu_op = 10, funct3 = 000, funct7_5 = 1", "expected": "alu_ctrl = 1 (SUB)"},
+    {"check": "I-type", "title": "addi with bit 30 set", "input": "alu_op = 11, funct3 = 000, funct7_5 = 1", "expected": "alu_ctrl = 0 (ADD)"}
+  ]
+}

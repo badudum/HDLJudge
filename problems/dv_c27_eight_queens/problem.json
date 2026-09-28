@@ -1,0 +1,47 @@
+{
+  "id": 133,
+  "title": "Constraint: Eight Queens",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "queens",
+  "synthesis": "none",
+  "timeout_s": 200,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Place 8 queens on a chessboard, one per row (`col[r]` = column of the queen in row r), so that no two share a column or a diagonal. Different calls should find different solutions (92 exist).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "One queen per row is built into the representation. You only need columns and diagonals.",
+    "Two queens in rows i < j are on a diagonal when `|col[i] − col[j]| == j − i`. Write it as two inequalities with signed (`int'`) arithmetic.",
+    "Unsigned subtraction wraps: cast to `int` before subtracting."
+  ],
+  "examples": [
+    {
+      "check": "no two queens attack each other",
+      "title": "valid",
+      "input": "col = {0,4,7,5,2,6,1,3}",
+      "expected": "accepted"
+    },
+    {
+      "check": "no two queens attack each other",
+      "title": "diagonal",
+      "input": "col = {0,1,…}",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "24 calls",
+      "expected": "≥ 12 different solutions"
+    }
+  ]
+}

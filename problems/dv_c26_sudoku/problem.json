@@ -1,0 +1,48 @@
+{
+  "id": 132,
+  "title": "Constraint: 6 × 6 Sudoku",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "sudoku6",
+  "synthesis": "none",
+  "timeout_s": 240,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Fill a 6 × 6 grid with 1 … 6 so that every row, every column and every 2 × 3 box (2 rows × 3 columns) contains each digit exactly once.",
+    "Clues: `g[0][0] = 1` and `g[5][5] = 6`. Successive calls should produce different grids.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "\"Each digit exactly once\" in a group of six is the same as \"all six are different\".",
+    "Two cells conflict when they share a row, a column, or a box (`i/2 == k/2 && j/3 == l/3`). One pairwise constraint covers all three.",
+    "`unique {…}` would be elegant, but Verilator only supports it on 1-D arrays (watch the Compile stage for warnings). The classic 9 × 9 version is also out of reach of Verilator's solver interface in reasonable time."
+  ],
+  "examples": [
+    {
+      "check": "rows, columns and 2x3 boxes contain each value once",
+      "title": "valid grid",
+      "input": "a complete 6 × 6 grid",
+      "expected": "every row, column and box is a permutation of 1…6"
+    },
+    {
+      "check": "the given clues are respected",
+      "title": "clues",
+      "input": "g[5][5]",
+      "expected": "= 6"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "10 calls",
+      "expected": "≥ 7 different grids"
+    }
+  ]
+}

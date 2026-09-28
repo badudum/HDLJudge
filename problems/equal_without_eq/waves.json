@@ -1,0 +1,66 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "1234",
+     "1234",
+     "0",
+     "8000",
+     "7D25",
+     "750B",
+     "49C9",
+     "541B"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "1234",
+     "1236",
+     "FFFF",
+     "0",
+     "7D27",
+     "752B",
+     "F096",
+     "4997"
+    ]
+   },
+   {
+    "name": "eq",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "diff_mask",
+    "kind": "bus",
+    "values": [
+     "0",
+     "2",
+     "FFFF",
+     "8000",
+     "2",
+     "20",
+     "B95F",
+     "1D8C"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

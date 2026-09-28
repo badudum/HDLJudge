@@ -1,0 +1,47 @@
+{
+  "id": 121,
+  "title": "Constraint: Binary Matrix Row/Column Sums",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "bin_matrix",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "A 4 × 4 matrix of bits with exactly **two ones in every row and every column** (90 such matrices exist).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Sums of 1-bit values need a cast (`int'(m[i][0]) + …`), or the sum is evaluated in 1 bit.",
+    "Verilator ignores `m[i].sum() with (…)` on a row of a 2-D array (you'll see a warning), so write the four terms out.",
+    "Column sums: iterate `foreach (m[0][j])` and add `m[0][j] … m[3][j]`."
+  ],
+  "examples": [
+    {
+      "check": "every row has exactly two ones",
+      "title": "rows",
+      "input": "row {1,1,0,0}",
+      "expected": "valid"
+    },
+    {
+      "check": "every column has exactly two ones",
+      "title": "columns",
+      "input": "a column with 3 ones",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 60 of the 90 matrices"
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "id": 184,
+  "title": "AXI-Lite Read-Only Status",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "axi",
+    "status",
+    "read-only",
+    "slverr"
+  ],
+  "top": "axil_status",
+  "ports": [
+    {
+      "name": "aclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "aresetn",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awaddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "awvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "wstrb",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "wvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "bvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "araddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "arvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "arready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "rresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "rvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "status_in",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "event_in",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`0x00` ID: constant `0x48574C43`. `0x04` STATUS: the live value of `status_in`, captured on the AR handshake. `0x08` EVENTS: the number of rising `aclk` edges with `event_in = 1` since reset (32-bit).",
+    "Every **write** gets SLVERR (`2'b10`) and has no effect. Reads of `0x00`–`0x08` return OKAY. Reads of any other address return 0 with SLVERR.",
+    "AXI4-Lite handshake rules: a transfer happens on a rising edge where VALID and READY are both 1. Your slave must accept AW and W in **either order** (or together), must not assert BVALID before both have been accepted, nor RVALID before AR has been accepted, and must hold BVALID/RVALID and their payload stable until BREADY/RREADY. `aresetn` is an active-low synchronous reset."
+  ],
+  "hints": [
+    "Latch AW and W independently into holding registers (`aw_full`, `w_full`), then perform the write once both are full and raise BVALID.",
+    "Deassert AWREADY/WREADY while holding a transaction or while BVALID is waiting, so a second write can't overwrite the first.",
+    "The read channel is independent: `arready = !rvalid`, and register RDATA/RRESP on the AR handshake.",
+    "The write channel still has to complete the handshake, even though it only ever answers with an error."
+  ],
+  "examples": [
+    {
+      "check": "ID register",
+      "title": "id",
+      "input": "read 0x00",
+      "expected": "0x48574C43"
+    },
+    {
+      "check": "event counter",
+      "title": "events",
+      "input": "13 cycles with event_in = 1",
+      "expected": "EVENTS reads 13"
+    },
+    {
+      "check": "writes return SLVERR",
+      "title": "writes",
+      "input": "write anything",
+      "expected": "BRESP = SLVERR, nothing changes"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 40,
+      "to": 240,
+      "step": 5,
+      "clock": "aclk",
+      "signals": [
+        "aclk",
+        "awvalid",
+        "awready",
+        "awaddr",
+        "wvalid",
+        "wready",
+        "wdata",
+        "bvalid",
+        "bready",
+        "bresp",
+        "arvalid",
+        "arready",
+        "araddr",
+        "rvalid",
+        "rready",
+        "rdata",
+        "rresp"
+      ],
+      "title": "reading ID and STATUS",
+      "caption": "Each channel transfers on a rising edge where VALID and READY are both high. resp 0 = OKAY, 2 = SLVERR."
+    }
+  ]
+}

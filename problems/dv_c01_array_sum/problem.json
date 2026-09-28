@@ -1,0 +1,50 @@
+{
+  "id": 42,
+  "title": "Constraint: Array Sum",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization",
+    "systemverilog"
+  ],
+  "top": "sum_item",
+  "synthesis": "none",
+  "timeout_s": 60,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Write a class `sum_item` with `rand bit [7:0] arr[8];`.",
+    "Every call to `randomize()` must give: the 8 elements (as integers) sum to exactly **200**, every element is between **5 and 60** inclusive, and `arr[0]` is **even**.",
+    "Results must be genuinely random. Across 300 calls the testbench expects plenty of distinct arrays and a spread of values at every index.",
+    "Runs on Verilator, which needs the `z3` solver installed (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "`arr.sum() with (int'(item)) == 200`: casting each item to `int` guarantees a full-width sum. By the LRM, `sum()` of 8-bit elements is only 8 bits wide, and some simulators really do wrap.",
+    "`foreach (arr[i]) arr[i] inside {[5:60]};`",
+    "Evenness: `arr[0] % 2 == 0`, or `arr[0][0] == 0`."
+  ],
+  "examples": [
+    {
+      "check": "sum is exactly 200",
+      "title": "sum",
+      "input": "300 calls to randomize()",
+      "expected": "every array sums to 200"
+    },
+    {
+      "check": "element range",
+      "title": "range",
+      "input": "300 calls",
+      "expected": "every element in 5 … 60"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "at least 250 distinct arrays"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "id": 171,
+  "title": "2-Way Write-Back Cache with LRU",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "cache",
+    "write-back",
+    "lru",
+    "set-associative"
+  ],
+  "top": "wb_cache",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 6
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "mem_rdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "hit",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "wb_valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "wb_addr",
+      "dir": "output",
+      "width": 6
+    },
+    {
+      "name": "wb_data",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "4 sets × 2 ways, one byte per line. `set = addr[1:0]`, `tag = addr[5:2]`. Per way: valid, dirty, tag, data. Per set: one LRU bit (the way to evict next).",
+    "Every edge with `req` is one access, and its result is **registered**: `hit`, and `rdata` = the byte at `addr` after the access (for reads; don't-care for writes). Without `req`, `hit <= 0`.",
+    "**Hit:** a write updates the data and sets dirty. The hit way becomes MRU (LRU bit = the other way). **Miss:** the victim is an invalid way (way 0 first), otherwise the LRU way. It is refilled with `mem_rdata` for reads (clean) or `wdata` for writes (dirty, write-allocate), and becomes MRU.",
+    "If the victim was **valid and dirty**, it is written back: after that edge `wb_valid = 1` with `wb_addr = {victim tag, set}` and `wb_data` = its data, for exactly one cycle. `mem_rdata` is supplied by the memory for `addr` in the same cycle. Synchronous reset invalidates everything and clears the LRU bits."
+  ],
+  "hints": [
+    "Compute `hit0`, `hit1`, the victim way, and whether it needs a writeback combinationally, then do all updates in one clocked block.",
+    "Write-allocate means a write miss does not read memory: the line is completely overwritten (lines are one byte).",
+    "The testbench's memory model updates its copy on every `wb_valid`, so a lost writeback shows up later as a stale read."
+  ],
+  "examples": [
+    {
+      "check": "fills both ways of a set",
+      "title": "allocation",
+      "input": "reads 0x01, 0x05 (same set)",
+      "expected": "two misses, then both hit"
+    },
+    {
+      "check": "LRU victim selection",
+      "title": "lru",
+      "input": "touch 0x01, then read 0x09",
+      "expected": "0x05 (LRU) is evicted"
+    },
+    {
+      "check": "dirty eviction writes back",
+      "title": "writeback",
+      "input": "write 0x01, then evict it",
+      "expected": "wb_valid = 1, wb_addr = 0x01, wb_data = written byte"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

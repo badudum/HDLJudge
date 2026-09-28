@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "din",
+    "kind": "bus",
+    "values": [
+     "83",
+     "83",
+     "83",
+     "83",
+     "83",
+     "83",
+     "83",
+     "83"
+    ]
+   },
+   {
+    "name": "amt",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "dir",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "dout",
+    "kind": "bus",
+    "values": [
+     "83",
+     "7",
+     "E",
+     "1C",
+     "38",
+     "70",
+     "E0",
+     "C1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "rotate left"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "din",
+    "kind": "bus",
+    "values": [
+     "83",
+     "83",
+     "83",
+     "83",
+     "83",
+     "83",
+     "83",
+     "83"
+    ]
+   },
+   {
+    "name": "amt",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "dir",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "dout",
+    "kind": "bus",
+    "values": [
+     "83",
+     "C1",
+     "E0",
+     "70",
+     "38",
+     "1C",
+     "E",
+     "7"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "rotate right"
+ }
+]

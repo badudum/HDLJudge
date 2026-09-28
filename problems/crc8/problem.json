@@ -1,0 +1,74 @@
+{
+  "id": 215,
+  "title": "CRC-8 (Byte per Cycle)",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "crc",
+    "lfsr",
+    "error-detection"
+  ],
+  "top": "crc8",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "init",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "crc",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "CRC-8 with polynomial x⁸ + x² + x + 1 (0x07), initial value 0x00, no reflection, no final XOR (CRC-8/SMBUS).",
+    "Each rising edge with `valid` processes one whole byte, MSB first. `init` (priority over `valid`) and the synchronous reset set the CRC to 0x00.",
+    "`crc` is the register value. For example the bytes of the ASCII string \"123456789\" give 0xF4."
+  ],
+  "hints": [
+    "Write the bit-serial update as a loop over the 8 bits inside the clocked block: `fb = c[7] ^ d[i]; c = {c[6:0], 1'b0} ^ (fb ? 8'h07 : 0);`.",
+    "Synthesis unrolls the loop into an XOR network, giving a one-byte-per-cycle parallel CRC.",
+    "Use a blocking temporary variable for the loop, then assign the register once."
+  ],
+  "examples": [
+    {
+      "check": "check value 123456789",
+      "title": "check value",
+      "input": "bytes '1'…'9'",
+      "expected": "crc = 0xF4"
+    },
+    {
+      "check": "init restarts",
+      "title": "init",
+      "input": "init = 1",
+      "expected": "crc = 0x00"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

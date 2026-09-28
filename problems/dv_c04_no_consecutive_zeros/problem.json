@@ -1,0 +1,47 @@
+{
+  "id": 110,
+  "title": "Constraint: No Consecutive Zeros",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "no_zz",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` is 16 bits and must never contain two **adjacent** zero bits (the pattern `00` may not occur anywhere).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Bit-parallel formulation: position i has two adjacent zeros when both `v[i]` and `v[i+1]` are 0, i.e. `~(v | (v >> 1))` has a 1 there (mask off bit 15).",
+    "Verilator's constraint-to-SMT translation mis-sizes shift operators on vectors narrower than 32 bits (z3 then rejects the query and `randomize()` fails). Use part-selects and concatenation instead: `v >> 1` becomes `{1'b0, v[15:1]}`.",
+    "Fifteen explicit terms `!(v[i] == 0 && v[i+1] == 0)` also work."
+  ],
+  "examples": [
+    {
+      "check": "no two adjacent zero bits",
+      "title": "valid",
+      "input": "v = 16'b1101_0110_1101_1011",
+      "expected": "accepted"
+    },
+    {
+      "check": "no two adjacent zero bits",
+      "title": "invalid",
+      "input": "v = 16'b1100_1111_1111_1111",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "at least 250 different values (2584 valid values exist)"
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+[
+ {
+  "unit": 2,
+  "length": 20,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "3",
+     "3",
+     "A",
+     "A",
+     "C8",
+     "C8",
+     "FF",
+     "FF",
+     "FF",
+     "FF",
+     "FF",
+     "FF"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "4",
+     "4",
+     "14",
+     "14",
+     "64",
+     "64",
+     "FF",
+     "FF",
+     "FF",
+     "FF",
+     "FF",
+     "FF"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "7",
+     "7",
+     "1E",
+     "1E",
+     "12C",
+     "12C",
+     "1FE",
+     "1FE",
+     "1FE",
+     "1FE"
+    ]
+   }
+  ],
+  "title": "legal: correct registered sum",
+  "caption": "Legal trace: your checker must stay silent. Signals change at falling edges and are sampled at rising edges."
+ },
+ {
+  "unit": 2,
+  "length": 18,
+  "signals": [
+   {
+    "name": "clk",
+    "kind": "clk"
+   },
+   {
+    "name": "rst",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "3",
+     "3",
+     "A",
+     "A",
+     "7",
+     "7",
+     "7",
+     "7",
+     "7",
+     "7"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "4",
+     "4",
+     "14",
+     "14",
+     "7",
+     "7",
+     "7",
+     "7",
+     "7",
+     "7"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "7",
+     "7",
+     "1D",
+     "1D",
+     "E",
+     "E",
+     "E",
+     "E"
+    ]
+   }
+  ],
+  "title": "violation: wrong sum",
+  "caption": "VIOLATION: your checker must report an error on this trace. Signals change at falling edges and are sampled at rising edges."
+ }
+]

@@ -1,0 +1,89 @@
+{
+  "id": 242,
+  "title": "Lowest Set Bit Tricks",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks"
+  ],
+  "top": "lsb_tricks",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "iso",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "clr",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "tmask",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "`iso` keeps only the lowest set bit of `x`, and `clr` clears it. `tmask` has a 1 in each position **below** the lowest set bit (the trailing zeros of `x`). For `x = 0`: `iso = 0`, `clr = 0`, `tmask = 16'hFFFF`.",
+    "No loops or generate, no `$countones` / `$onehot`. Each output is a one-liner."
+  ],
+  "hints": [
+    "Two's complement: `-x = ~x + 1` flips every bit above the lowest 1.",
+    "`x - 1` flips the lowest 1 and every 0 below it.",
+    "`iso = x & -x`, `clr = x & (x - 1)`, `tmask = ~x & (x - 1)`."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "0b1011000",
+      "input": "x = 0x0058",
+      "expected": "iso = 0x0008, clr = 0x0050, tmask = 0x0007"
+    },
+    {
+      "check": "zero",
+      "title": "zero",
+      "input": "x = 0",
+      "expected": "iso = 0, clr = 0, tmask = 0xFFFF"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

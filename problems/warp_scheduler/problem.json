@@ -1,0 +1,29 @@
+{
+  "id": 68, "title": "Round-Robin Warp Scheduler", "difficulty": "Hard", "category": "arch",
+  "tags": ["gpu", "scheduling", "arbitration"], "top": "warp_sched",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",         "dir": "input",  "width": 1},
+    {"name": "rst",         "dir": "input",  "width": 1},
+    {"name": "ready",       "dir": "input",  "width": 4},
+    {"name": "issue_valid", "dir": "output", "width": 1},
+    {"name": "issue_warp",  "dir": "output", "width": 2}
+  ],
+  "constraints": [
+    "4 warps. A warp is **eligible** at an edge if `ready[w] = 1` and it did not issue at either of the two previous edges (a 2-cycle pipeline hazard window).",
+    "Among the eligible warps, pick the first one starting at a round-robin pointer (circular). The pointer then moves to the warp after the winner. With no eligible warp, nothing issues and the pointer stays.",
+    "Outputs are registered: `issue_valid` / `issue_warp` describe the decision made at the last edge (`issue_warp` is don't-care when `issue_valid = 0`).",
+    "Synchronous reset: pointer 0, no blocked warps, no issue. Must be synthesizable."
+  ],
+  "hints": [
+    "Keep a small countdown per warp: load 2 when it issues, decrement otherwise. A warp is eligible only when its counter was 0 before the edge.",
+    "Selection is the same rotate / priority-encode / rotate-back structure as a round-robin arbiter.",
+    "With all warps ready, the issue sequence is 0, 1, 2, 3, 0, … Each warp waits 3 cycles, which covers its window."
+  ],
+  "examples": [
+    {"check": "all ready", "title": "round robin", "input": "ready = 1111", "expected": "issue 0, 1, 2, 3, 0, 1, …"},
+    {"check": "hazard window", "title": "single warp", "input": "only warp 2 ready", "expected": "issues at most every third cycle: 2, -, -, 2, -, -"},
+    {"check": "no ready warps", "title": "idle", "input": "ready = 0000", "expected": "issue_valid = 0"}
+  ]
+}

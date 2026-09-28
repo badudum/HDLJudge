@@ -1,0 +1,119 @@
+{
+  "id": 34,
+  "title": "Multi-Cycle GCD Unit",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "datapath",
+    "handshake",
+    "sequential",
+    "algorithm"
+  ],
+  "top": "gcd16",
+  "synthesis": "required",
+  "timeout_s": 60,
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "result",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "A rising edge that samples `start = 1` while `busy = 0` captures `a` and `b`. The inputs may change right after.",
+    "From the next cycle until the answer is ready, `busy = 1`. `start` is ignored while busy.",
+    "When finished: `done = 1` for exactly one cycle, with `result = gcd(a, b)` and `busy = 0` in that cycle. `result` holds until the next computation finishes.",
+    "gcd(x, 0) = x and gcd(0, 0) = 0. Any latency up to 140 000 cycles is accepted.",
+    "Synchronous reset. Must be synthesizable (no `%` or `/` on variables: they don't make a sensible single-cycle circuit)."
+  ],
+  "hints": [
+    "Euclid by subtraction: while y ≠ 0, if x < y swap them, else x = x − y. When y = 0 the answer is x.",
+    "One subtraction or swap per clock: two 16-bit registers, a comparator and a subtractor.",
+    "Stein's binary GCD (halving even numbers with shifts) is much faster for lopsided inputs such as gcd(65535, 1)."
+  ],
+  "forbidden": [
+    {
+      "pattern": "%|(?<![/*])/(?![/*])",
+      "message": "no / or % operators: build the iteration from compare, subtract and shift",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bmod\\b|\\brem\\b|/(?!=)",
+      "message": "no /, mod or rem: build the iteration from compare, subtract and shift",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "check": "small pairs",
+      "title": "gcd(48, 18)",
+      "input": "start with a = 48, b = 18",
+      "expected": "a few cycles later: done = 1, result = 6"
+    },
+    {
+      "check": "zero operands",
+      "title": "zero",
+      "input": "a = 0, b = 25",
+      "expected": "result = 25"
+    },
+    {
+      "check": "start is ignored while busy",
+      "title": "busy",
+      "input": "a second start with other operands while busy",
+      "expected": "result still belongs to the first request"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 250,
+      "clock": "clk",
+      "title": "one GCD computation"
+    }
+  ]
+}

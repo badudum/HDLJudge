@@ -1,0 +1,28 @@
+{
+  "id": 77, "title": "Fibonacci Generator", "difficulty": "Medium", "category": "digital",
+  "tags": ["sequential", "datapath", "overflow"], "top": "fib_gen",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",      "dir": "input",  "width": 1},
+    {"name": "rst",      "dir": "input",  "width": 1},
+    {"name": "en",       "dir": "input",  "width": 1},
+    {"name": "fib",      "dir": "output", "width": 16},
+    {"name": "overflow", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "After reset `fib = 0` (F₀). Each enabled rising edge advances to the next Fibonacci number: 0, 1, 1, 2, 3, 5, 8, …",
+    "When the next value would not fit in 16 bits, raise `overflow = 1` and **stop**: `fib` keeps the last valid value (46368) and further enables are ignored until reset.",
+    "Registered outputs. Synchronous reset. Must be synthesizable."
+  ],
+  "hints": [
+    "Two registers: the current value and the previous one. Next = cur + prev, and the pair shifts.",
+    "Compute the sum in 17 bits. If bit 16 is set, that's the overflow.",
+    "Watch the start: F₀ = 0, F₁ = 1. Initialize prev = 1, cur = 0, so the first step gives 1."
+  ],
+  "examples": [
+    {"check": "sequence", "title": "first terms", "input": "reset, en = 1", "expected": "fib = 0, 1, 1, 2, 3, 5, 8, 13, …"},
+    {"check": "overflow", "title": "overflow", "input": "keep enabling past F₂₄ = 46368", "expected": "overflow = 1, fib stays 46368"},
+    {"check": "enable", "title": "pause", "input": "en = 0", "expected": "fib holds"}
+  ]
+}

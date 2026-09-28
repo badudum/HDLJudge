@@ -1,0 +1,32 @@
+{
+  "id": 33,
+  "title": "First-Order Sigma-Delta Modulator",
+  "difficulty": "Hard",
+  "category": "modeling",
+  "tags": ["analog", "mixed-signal", "data-converters", "real-number-modeling"],
+  "top": "sd_mod1",
+  "synthesis": "optional",
+  "languages": ["systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",     "dir": "input",  "width": 1},
+    {"name": "rst",     "dir": "input",  "width": 1},
+    {"name": "vin",     "dir": "input",  "width": 1, "type": "real"},
+    {"name": "bit_out", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Internal real state `integ`. On each rising edge (not in reset): `fb = +1.0` if the current `bit_out` is 1, else `−1.0`; then `integ = integ + vin − fb`; then `bit_out = (integ >= 0.0)`.",
+    "Synchronous reset: `integ = 0.0`, `bit_out = 0`.",
+    "`vin` is in [−1, 1]. The bit stream must match the recurrence exactly (the judge uses input values that are exact in floating point).",
+    "Behavioral model. Synthesis is informational."
+  ],
+  "hints": [
+    "The feedback uses the bit from **before** the edge, i.e. the value currently on `bit_out`.",
+    "Use a variable (blocking assignment) for the integrator so the comparison sees the updated value in the same edge.",
+    "Sanity check: with `vin = 0.5` the stream contains 75 % ones on average, and `vin = 0` gives 1010…"
+  ],
+  "examples": [
+    {"check": "zero input", "title": "vin = 0", "input": "reset, then vin = 0.0", "expected": "bit_out = 1, 1, 0, 1, 0, 1, 0, … (alternating after startup)"},
+    {"check": "positive dc", "title": "vin = 0.5", "input": "vin = 0.5", "expected": "on average 3 ones for every 4 bits"},
+    {"check": "reset", "title": "reset", "input": "rst = 1", "expected": "bit_out = 0 and the integrator restarts at 0"}
+  ]
+}

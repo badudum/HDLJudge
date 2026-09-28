@@ -1,0 +1,85 @@
+{
+  "id": 164,
+  "title": "Async-FIFO Read Pointer (Gray)",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "cdc",
+    "gray-code",
+    "fifo"
+  ],
+  "top": "rd_ptr_gray",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rd_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wr_gray_sync",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "rd_gray",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "rd_addr",
+      "dir": "output",
+      "width": 3
+    },
+    {
+      "name": "empty",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "The read side of an 8-entry asynchronous FIFO. It keeps a 4-bit binary read pointer (one extra bit) and publishes it as a **registered** Gray code `rd_gray`.",
+    "`wr_gray_sync` is the write pointer (Gray) already synchronized into this clock domain. `empty = (rd_gray == wr_gray_sync)` (combinational).",
+    "A rising edge with `rd_en && !empty` advances the pointer by one. `rd_addr` = the low 3 bits of the binary pointer. Synchronous reset → pointer 0."
+  ],
+  "hints": [
+    "Keep `rd_bin` (4 bits). On a pop, register both `rd_bin + 1` and its Gray code `(n >> 1) ^ n`.",
+    "Comparing Gray codes for equality works directly: equal binary ⇔ equal Gray.",
+    "Why Gray? `rd_gray` crosses into the write domain through a 2-flop synchronizer, and a Gray count changes only one bit per step."
+  ],
+  "examples": [
+    {
+      "check": "empty until data arrives",
+      "title": "empty",
+      "input": "wr_gray_sync = 0",
+      "expected": "empty = 1, no pop"
+    },
+    {
+      "check": "pops follow the write pointer",
+      "title": "pops",
+      "input": "wr_gray_sync = gray(3), rd_en = 1",
+      "expected": "three pops, then empty"
+    },
+    {
+      "check": "wrap-around",
+      "title": "wrap",
+      "input": "pointer passes 15 → 0",
+      "expected": "Gray code wraps with one bit change"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

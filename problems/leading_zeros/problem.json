@@ -1,0 +1,30 @@
+{
+  "id": 15,
+  "title": "Count Leading Zeros",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "normalization", "bit-tricks"],
+  "top": "clz16",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "x", "dir": "input",  "width": 16},
+    {"name": "n", "dir": "output", "width": 5}
+  ],
+  "constraints": [
+    "`n` is the number of zero bits above the most significant `1` in `x`.",
+    "`x == 0` gives `n = 16`.",
+    "Purely combinational and synthesizable."
+  ],
+  "hints": [
+    "This is a priority encoder on the highest set bit, followed by `15 - index`.",
+    "A loop from bit 0 upward that overwrites `n` whenever it sees a `1` ends with the highest one.",
+    "For a logarithmic-depth circuit: if the top 8 bits are zero, add 8 and shift left by 8, then repeat with 4, 2 and 1 (binary search)."
+  ],
+  "examples": [
+    {"check": "zero input", "title": "zero", "input": "x = 16'h0000", "expected": "n = 16"},
+    {"check": "powers of two", "title": "one bit", "input": "x = 16'h0100", "expected": "n = 7"},
+    {"check": "3000 random", "title": "MSB set", "input": "x = 16'h8123", "expected": "n = 0"}
+  ]
+}

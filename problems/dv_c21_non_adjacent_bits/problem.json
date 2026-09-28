@@ -1,0 +1,47 @@
+{
+  "id": 127,
+  "title": "Constraint: Five Non-Adjacent Bits",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "sparse5",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` (16 bits) has exactly 5 ones, and no two of them are neighbours (792 such values exist).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Adjacent ones show up in `v & (v >> 1)`.",
+    "Combine with `$countones(v) == 5`.",
+    "Verilator's constraint-to-SMT translation mis-sizes shift operators on vectors narrower than 32 bits (z3 then rejects the query and `randomize()` fails). Use part-selects and concatenation instead: `v >> 1` becomes `{1'b0, v[15:1]}`."
+  ],
+  "examples": [
+    {
+      "check": "exactly 5 bits set",
+      "title": "count",
+      "input": "any result",
+      "expected": "5 ones"
+    },
+    {
+      "check": "no two set bits are adjacent",
+      "title": "sparse",
+      "input": "v = 1010_1000_1010_0010",
+      "expected": "accepted"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "≥ 250 values"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "1",
+     "4",
+     "10",
+     "40",
+     "100",
+     "400",
+     "1000",
+     "4000"
+    ]
+   },
+   {
+    "name": "p4",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "powers of four"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "2",
+     "8",
+     "20",
+     "80",
+     "200",
+     "800",
+     "2000",
+     "8000"
+    ]
+   },
+   {
+    "name": "p4",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "other powers of two"
+ }
+]

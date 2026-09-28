@@ -1,0 +1,34 @@
+{
+  "id": 54, "title": "Hazard Detection Unit", "difficulty": "Hard", "category": "arch",
+  "tags": ["pipeline", "hazards", "risc-v", "combinational"], "top": "hazard_unit",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "id_rs1",         "dir": "input",  "width": 5},
+    {"name": "id_rs2",         "dir": "input",  "width": 5},
+    {"name": "id_uses_rs1",    "dir": "input",  "width": 1},
+    {"name": "id_uses_rs2",    "dir": "input",  "width": 1},
+    {"name": "ex_rd",          "dir": "input",  "width": 5},
+    {"name": "ex_mem_read",    "dir": "input",  "width": 1},
+    {"name": "ex_branch_taken","dir": "input",  "width": 1},
+    {"name": "stall",          "dir": "output", "width": 1},
+    {"name": "id_ex_bubble",   "dir": "output", "width": 1},
+    {"name": "if_id_flush",    "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "**Load-use hazard:** the instruction in EX is a load (`ex_mem_read`) whose `ex_rd` (≠ x0) matches a source register that the ID instruction actually uses.",
+    "**Taken branch** in EX: the instructions in IF and ID are on the wrong path.",
+    "`stall = load_use && !ex_branch_taken`: freeze PC and IF/ID. No point stalling a wrong-path instruction.",
+    "`id_ex_bubble = load_use || ex_branch_taken` (insert a NOP into ID/EX). `if_id_flush = ex_branch_taken`. Purely combinational."
+  ],
+  "hints": [
+    "Write the load-use condition as one Boolean expression. Don't forget the `ex_rd != 0` term: nothing ever depends on x0.",
+    "Only compare a source register if the instruction uses it. An `addi` has no rs2, for example.",
+    "The branch outranks the stall: squashing the ID instruction resolves the load-use hazard too."
+  ],
+  "examples": [
+    {"check": "load-use stall", "title": "load-use", "input": "EX: lw x5; ID: add x6, x5, x7 (uses rs1 = x5)", "expected": "stall = 1, id_ex_bubble = 1, if_id_flush = 0"},
+    {"check": "no hazard", "title": "x0", "input": "EX: lw x0 (rd = 0); ID uses x0", "expected": "no stall"},
+    {"check": "taken branch", "title": "branch wins", "input": "load-use hazard and ex_branch_taken = 1", "expected": "stall = 0, id_ex_bubble = 1, if_id_flush = 1"}
+  ]
+}

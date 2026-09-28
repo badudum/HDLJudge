@@ -1,0 +1,47 @@
+{
+  "id": 130,
+  "title": "Constraint: Last Four Values Unique",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "window4",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Across **successive calls** of `randomize()` on the same object, no value may repeat within any 4 consecutive results (each result differs from the previous three).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Constraints can refer to **non-random** class members: keep a history queue.",
+    "Update the history in `post_randomize()`, which runs after every successful randomization.",
+    "`foreach (prev[i]) val != prev[i];` keeps working as the queue grows from 0 to 3 entries."
+  ],
+  "examples": [
+    {
+      "check": "each value differs from the previous three",
+      "title": "window",
+      "input": "…, 5, 9, 2, then 5",
+      "expected": "accepted (5 was 4 draws ago)"
+    },
+    {
+      "check": "each value differs from the previous three",
+      "title": "repeat",
+      "input": "…, 5, 9, then 5",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "all 16 values appear"
+    }
+  ]
+}

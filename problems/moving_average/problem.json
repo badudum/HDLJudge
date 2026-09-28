@@ -1,0 +1,33 @@
+{
+  "id": 29,
+  "title": "Moving-Average Filter",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["dsp", "sequential", "filter"],
+  "top": "mavg4",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",      "dir": "input",  "width": 1},
+    {"name": "rst",      "dir": "input",  "width": 1},
+    {"name": "valid_in", "dir": "input",  "width": 1},
+    {"name": "din",      "dir": "input",  "width": 8},
+    {"name": "dout",     "dir": "output", "width": 8}
+  ],
+  "constraints": [
+    "`dout = floor((x[n] + x[n-1] + x[n-2] + x[n-3]) / 4)` over the last 4 **accepted** samples (unsigned 8-bit).",
+    "A sample is accepted on a rising edge with `valid_in = 1`. That same edge updates `dout`, including the new sample.",
+    "Without `valid_in`, both the window and `dout` hold.",
+    "Synchronous reset: window full of zeros, `dout = 0`. Must be synthesizable."
+  ],
+  "hints": [
+    "Keep a 4-entry shift register of samples.",
+    "The sum of four 8-bit values needs 10 bits. Dividing by 4 is just dropping the two LSBs.",
+    "A running sum (`sum + new − oldest`) avoids re-adding all taps. It is a nice optimization for long windows."
+  ],
+  "examples": [
+    {"check": "step response", "title": "step input", "input": "reset, then din = 100 with valid_in = 1 for 5 cycles", "expected": "dout = 25, 50, 75, 100, 100"},
+    {"check": "holds without valid", "title": "gaps", "input": "valid_in = 0 while din changes", "expected": "dout and the window do not change"},
+    {"check": "rounding down", "title": "truncation", "input": "samples 1, 2, 2, 2", "expected": "dout = 1  (7 / 4 rounded down)"}
+  ]
+}

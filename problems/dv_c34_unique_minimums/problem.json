@@ -1,0 +1,47 @@
+{
+  "id": 140,
+  "title": "Constraint: Two Matrices, Unique Minimums",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "two_mins",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`a` and `b` are 3 × 3 matrices of 5-bit values. In each matrix the minimum value occurs **exactly once**, and the minimum of `a` is smaller than the minimum of `b`.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Helper variables `ma`, `mb` for the minima: every element ≥ helper, at least one equals it.",
+    "\"Exactly once\": no two cells both equal the minimum (pairwise).",
+    "Then relate the helpers: `ma < mb`."
+  ],
+  "examples": [
+    {
+      "check": "each matrix has a unique minimum",
+      "title": "valid",
+      "input": "a's minimum 2 appears once",
+      "expected": "accepted"
+    },
+    {
+      "check": "each matrix has a unique minimum",
+      "title": "duplicate",
+      "input": "two cells equal to the minimum",
+      "expected": "rejected"
+    },
+    {
+      "check": "min(a) < min(b)",
+      "title": "ordering",
+      "input": "min(a) = 7, min(b) = 3",
+      "expected": "rejected"
+    }
+  ]
+}

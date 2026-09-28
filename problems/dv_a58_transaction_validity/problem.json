@@ -1,0 +1,81 @@
+{
+  "id": 149,
+  "title": "Assertion: Packet Validity",
+  "difficulty": "Hard",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_packet",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "parity",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "last",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule 1: every valid beat carries even parity: `parity == ^data`.",
+    "Rule 2: `last` may only be high together with `valid`.",
+    "Rule 3: a packet is at most 8 beats: after 8 valid beats without `last`, the 8th must have had `last`.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Rule 1 is combinational: `valid |-> parity == ^data`.",
+    "Rule 3 needs a beat counter in the checker: count valid beats, reset it on `last`, and assert `valid && beats == 7 |-> last`.",
+    "(X-checks with `$isunknown` are common here too, but Verilator is a 2-state simulator, so it can't show X values.)"
+  ],
+  "examples": [
+    {
+      "check": "legal: 3-beat packet",
+      "title": "ok",
+      "input": "3 beats with correct parity, last on the 3rd",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: bad parity",
+      "title": "parity",
+      "input": "a beat with the wrong parity bit",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: packet too long",
+      "title": "too long",
+      "input": "9 beats without last",
+      "expected": "assertion fails"
+    }
+  ]
+}

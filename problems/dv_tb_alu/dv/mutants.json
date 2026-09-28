@@ -1,0 +1,42 @@
+[
+ {
+  "file": "m1_sub_borrow.v",
+  "hint": "SUB borrow flag",
+  "desc": "carry after SUB is inverted (a >= b instead of a < b)"
+ },
+ {
+  "file": "m2_slt_unsigned.v",
+  "hint": "SLT with negative numbers",
+  "desc": "SLT compares unsigned"
+ },
+ {
+  "file": "m3_shl_amount.v",
+  "hint": "large shift amounts",
+  "desc": "SHL only uses b[1:0] as the shift amount"
+ },
+ {
+  "file": "m4_zero_flag.v",
+  "hint": "zero flag",
+  "desc": "zero ignores bit 7 of the result"
+ },
+ {
+  "file": "m5_add_carry.v",
+  "hint": "ADD carry out",
+  "desc": "ADD never sets carry"
+ },
+ {
+  "file": "m6_xor_msb.v",
+  "hint": "XOR corner case",
+  "desc": "XOR returns 1 in bit 7 when both MSBs are 1"
+ },
+ {
+  "file": "m7_shr_arith.v",
+  "hint": "SHR of negative values",
+  "desc": "SHR is arithmetic instead of logical"
+ },
+ {
+  "file": "m8_shr_carry0.v",
+  "hint": "shift by zero",
+  "desc": "SHR by 0 sets carry to a[0]"
+ }
+]

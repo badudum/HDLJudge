@@ -1,0 +1,175 @@
+{
+  "id": 182,
+  "title": "AXI-Lite Register File",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "axi",
+    "amba",
+    "register-file",
+    "slverr"
+  ],
+  "top": "axil_regfile",
+  "ports": [
+    {
+      "name": "aclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "aresetn",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awaddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "awvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "wstrb",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "wvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "bvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "araddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "arvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "arready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "rresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "rvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rready",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Eight 32-bit read/write registers at `0x00, 0x04, …, 0x1C` (the register index is `addr[4:2]`, and `addr[1:0]` is ignored). Reset value 0. Writes honor `wstrb`.",
+    "Addresses `0x20` and above: **SLVERR** (`2'b10`). Writes have no effect and reads return 0. Everything else responds OKAY.",
+    "AXI4-Lite handshake rules: a transfer happens on a rising edge where VALID and READY are both 1. Your slave must accept AW and W in **either order** (or together), must not assert BVALID before both have been accepted, nor RVALID before AR has been accepted, and must hold BVALID/RVALID and their payload stable until BREADY/RREADY. `aresetn` is an active-low synchronous reset. Reads and writes may be in flight at the same time."
+  ],
+  "hints": [
+    "Latch AW and W independently into holding registers (`aw_full`, `w_full`), then perform the write once both are full and raise BVALID.",
+    "Deassert AWREADY/WREADY while holding a transaction or while BVALID is waiting, so a second write can't overwrite the first.",
+    "The read channel is independent: `arready = !rvalid`, and register RDATA/RRESP on the AR handshake.",
+    "Decode the error once: `wire werr = wa >= 8'h20;`."
+  ],
+  "examples": [
+    {
+      "check": "all eight registers",
+      "title": "map",
+      "input": "write distinct values to 0x00…0x1C",
+      "expected": "each reads back its own value"
+    },
+    {
+      "check": "SLVERR above 0x1C",
+      "title": "error",
+      "input": "access 0x20",
+      "expected": "SLVERR, no side effects"
+    },
+    {
+      "check": "read and write in parallel",
+      "title": "concurrency",
+      "input": "a read of reg 1 during a write to reg 2",
+      "expected": "both complete correctly"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 40,
+      "to": 240,
+      "step": 5,
+      "clock": "aclk",
+      "signals": [
+        "aclk",
+        "awvalid",
+        "awready",
+        "awaddr",
+        "wvalid",
+        "wready",
+        "wdata",
+        "bvalid",
+        "bready",
+        "bresp",
+        "arvalid",
+        "arready",
+        "araddr",
+        "rvalid",
+        "rready",
+        "rdata",
+        "rresp"
+      ],
+      "title": "reset-value reads, then writes",
+      "caption": "Each channel transfers on a rising edge where VALID and READY are both high. resp 0 = OKAY, 2 = SLVERR."
+    }
+  ]
+}

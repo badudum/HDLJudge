@@ -1,0 +1,74 @@
+{
+  "id": 187,
+  "title": "Data-Gated Pipeline",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "clock-enable",
+    "pipeline",
+    "data-gating"
+  ],
+  "top": "gated_pipe",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "in_valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "in_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "out_valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "out_data",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Three pipeline stages. Stage 1 registers `in_data ^ 8'h5A`, stage 2 registers `s1 + 1`, stage 3 registers `s2` rotated left by one bit. The valid bits always advance, one stage per cycle.",
+    "**Data gating:** a stage's data register loads **only** when the valid bit entering it is 1. Otherwise it keeps its old value, so a bubble never toggles the data flops (and synthesis can turn these enables into clock gates).",
+    "So during bubbles `out_data` holds the last valid result. Synchronous reset clears the valid bits **and** the data registers."
+  ],
+  "hints": [
+    "Each data register gets `if (v_prev) d <= f(d_prev);`, which is a clock enable.",
+    "The valid bits are cheap (1 bit each) and always clocked. The wide data registers are the ones worth gating.",
+    "`{s2[6:0], s2[7]}` rotates left by one."
+  ],
+  "examples": [
+    {
+      "check": "results after 3 cycles",
+      "title": "latency",
+      "input": "in_data = 0x00 valid",
+      "expected": "out_data = rotl(0x5B) = 0xB6 three edges later"
+    },
+    {
+      "check": "bubbles don't toggle data",
+      "title": "hold",
+      "input": "a bubble follows a valid item",
+      "expected": "out_data holds the last result"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

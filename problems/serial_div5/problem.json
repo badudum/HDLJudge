@@ -1,0 +1,70 @@
+{
+  "id": 253,
+  "title": "Serial Divisible-by-5 (3 Flip-Flops)",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "fsm",
+    "brain-teaser",
+    "modular-arithmetic",
+    "serial"
+  ],
+  "top": "sdiv5",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "bit_in",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "d5",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Bits of an arbitrarily long binary number arrive **MSB first**, one per rising edge with `valid`. After each edge, `d5 = 1` when the number received so far is divisible by 5 (combinational from the state). Synchronous reset starts a new number (the empty number is 0, so `d5 = 1`).",
+    "At most **3 flip-flops**: you can't store the number."
+  ],
+  "hints": [
+    "Appending a bit b to a number n gives 2n + b. Only n mod 5 matters for the next remainder.",
+    "Keep r = n mod 5 (5 states → 3 flops): `r <= (2r + b) mod 5`, as a 5 × 2 table.",
+    "`d5 = (r == 0)`."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "1010",
+      "input": "bits 1, 0, 1, 0 (= 10)",
+      "expected": "d5 = 0, 0, 1 (5), 1 (10)"
+    },
+    {
+      "check": "long numbers",
+      "title": "long",
+      "input": "1000 random bits",
+      "expected": "d5 tracks the running value mod 5"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 3
+}

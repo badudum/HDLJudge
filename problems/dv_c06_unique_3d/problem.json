@@ -1,0 +1,47 @@
+{
+  "id": 112,
+  "title": "Constraint: 3-D Array All Unique",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "unique3d",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "All 27 elements of the 3 × 3 × 3 array must be distinct (values 0 … 63).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "The LRM says `unique {cube};` works on any array, but **Verilator ignores it on multi-dimensional arrays** (the Compile stage will warn you). Test your code on the tools you have!",
+    "Portable alternative: compare every pair of elements once, using the flattened index `a*9 + b*3 + c` to order them.",
+    "`foreach (cube[a, b, c])` iterates over all three dimensions at once."
+  ],
+  "examples": [
+    {
+      "check": "all 27 elements are different",
+      "title": "unique",
+      "input": "one randomization",
+      "expected": "27 distinct values"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "60 calls",
+      "expected": "≥ 55 different cubes"
+    },
+    {
+      "check": "randomize() succeeds",
+      "title": "solvable",
+      "input": "every call",
+      "expected": "randomize() returns 1"
+    }
+  ]
+}

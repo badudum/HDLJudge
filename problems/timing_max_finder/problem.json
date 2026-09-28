@@ -1,0 +1,33 @@
+{
+  "id": 38,
+  "title": "Timing: Maximum of Eight",
+  "difficulty": "Medium",
+  "category": "timing",
+  "tags": ["timing", "critical-path", "comparator-tree"],
+  "top": "max8",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "max_logic_depth": 40,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "x",   "dir": "input",  "width": 64},
+    {"name": "max", "dir": "output", "width": 8},
+    {"name": "idx", "dir": "output", "width": 3}
+  ],
+  "constraints": [
+    "`x` packs eight unsigned 8-bit values: element i is `x[8*i+7 : 8*i]`.",
+    "`max` is the largest element and `idx` its index. On ties, the **lowest** index wins.",
+    "Timing budget: at most **40 logic levels**. A linear scan takes about 84.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "A running-maximum loop puts 7 compare-and-select stages in series.",
+    "Compare in pairs: 4 winners, then 2, then 1. That is 3 stages instead of 7.",
+    "Carry the index along with each winner, and prefer the left (lower-index) operand when values are equal."
+  ],
+  "examples": [
+    {"check": "distinct values", "title": "clear winner", "input": "elements = 3, 9, 1, 200, 7, 7, 0, 5", "expected": "max = 200, idx = 3"},
+    {"check": "ties", "title": "tie", "input": "elements = 4, 9, 9, 1, 9, 0, 0, 0", "expected": "max = 9, idx = 1 (lowest index wins)"},
+    {"check": "all equal", "title": "all equal", "input": "all elements = 0x55", "expected": "max = 0x55, idx = 0"}
+  ]
+}

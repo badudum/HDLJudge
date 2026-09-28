@@ -1,0 +1,102 @@
+{
+  "id": 225,
+  "title": "Radix-2 Booth Multiplier",
+  "difficulty": "Hard",
+  "category": "arch",
+  "tags": [
+    "arithmetic",
+    "booth",
+    "signed",
+    "sequential"
+  ],
+  "top": "booth8",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "p",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "Signed 8 × 8 → 16-bit product using **radix-2 Booth recoding**, one multiplier bit per cycle.",
+    "An edge with `start` while idle captures `a` (multiplicand) and `b` (multiplier). The product is ready exactly **8** edges later: `busy = 0`, `done = 1` for one cycle, and `p` holds the product until the next start. `start` while busy is ignored. Synchronous reset → idle, `p = 0`.",
+    "No `*` operator."
+  ],
+  "hints": [
+    "Classic register layout: A (8 bits, accumulator) : Q (8 bits, the multiplier) : Q₋₁ (1 bit). Each step looks at {Q[0], Q₋₁}: 01 → A += M, 10 → A −= M, then arithmetic-shift {A, Q, Q₋₁} right by one.",
+    "Use 9-bit arithmetic for A to avoid overflow with −128, or observe that the shift discards the extra bit safely.",
+    "Booth handles negative multipliers without any correction step, which is why it's used everywhere."
+  ],
+  "examples": [
+    {
+      "check": "signs",
+      "title": "negative × positive",
+      "input": "a = −3, b = 5",
+      "expected": "p = −15 (0xFFF1)"
+    },
+    {
+      "check": "corner cases",
+      "title": "most negative",
+      "input": "a = b = −128",
+      "expected": "p = 16384"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "forbidden": [
+    {
+      "pattern": "[\\w\\])]\\s*\\*\\s*[\\w(']",
+      "message": "no * operator: use Booth's add/subtract/shift steps",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "[\\w)]\\s*\\*\\s*[\\w(]",
+      "message": "no * operator: use Booth's add/subtract/shift steps",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

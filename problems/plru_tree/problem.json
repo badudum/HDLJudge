@@ -1,0 +1,30 @@
+{
+  "id": 58, "title": "Tree-Based Pseudo-LRU (8-way)", "difficulty": "Hard", "category": "arch",
+  "tags": ["cache", "replacement", "plru", "sequential"], "top": "plru8",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",    "dir": "input",  "width": 1},
+    {"name": "rst",    "dir": "input",  "width": 1},
+    {"name": "touch",  "dir": "input",  "width": 1},
+    {"name": "way",    "dir": "input",  "width": 3},
+    {"name": "victim", "dir": "output", "width": 3},
+    {"name": "bits",   "dir": "output", "width": 7}
+  ],
+  "constraints": [
+    "7 tree bits in heap order: `bits[0]` is the root. Node n has children 2n+1 (left) and 2n+2 (right). Nodes 3–6 each choose between two adjacent ways (node 3: ways 0/1, …, node 6: ways 6/7).",
+    "**Victim:** walk from the root. At each node, bit 0 means go left and bit 1 means go right.",
+    "**Update** (rising edge with `touch = 1`): set every node on the path to `way` so that it points **away** from `way` (1 if `way` is in the left subtree, 0 if in the right).",
+    "Synchronous reset clears all bits (so `victim = 0`). `bits` exposes the state. Must be synthesizable."
+  ],
+  "hints": [
+    "The three bits of `way` are exactly the path: `way[2]` picks the root's side, `way[1]` the next level, `way[0]` the last.",
+    "Path nodes for way w: root 0, then `1 + w[2]`, then `3 + w[2:1]`.",
+    "Each node on the path gets the **inverse** of the direction taken: `bits[0] <= !w[2]`, and so on."
+  ],
+  "examples": [
+    {"check": "reset", "title": "after reset", "input": "rst", "expected": "bits = 0, victim = 0"},
+    {"check": "single touch", "title": "touch way 0", "input": "touch = 1, way = 0", "expected": "bits[0] = 1, bits[1] = 1, bits[3] = 1 → victim = 4"},
+    {"check": "fill all ways", "title": "round robin fill", "input": "touch ways in victim order 8 times", "expected": "every way is chosen exactly once"}
+  ]
+}

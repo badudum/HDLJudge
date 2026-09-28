@@ -1,0 +1,47 @@
+{
+  "id": 115,
+  "title": "Constraint: Interleaved Sorted Arrays",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "interleave",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`a[0] < b[0] < a[1] < b[1] < … < a[5] < b[5]`: both arrays ascending, and each b element lies between consecutive a elements.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Two chained inequalities per index are enough.",
+    "`foreach (a[i]) { a[i] < b[i]; if (i < 5) b[i] < a[i+1]; }`",
+    "Both arrays are then automatically sorted. You don't need separate sorting constraints."
+  ],
+  "examples": [
+    {
+      "check": "a[i] < b[i]",
+      "title": "valid",
+      "input": "a = {1,20,40,…}, b = {5,30,41,…}",
+      "expected": "accepted"
+    },
+    {
+      "check": "b[i] < a[i+1]",
+      "title": "overlap",
+      "input": "b[0] = 25 > a[1] = 20",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 190 different pairs"
+    }
+  ]
+}

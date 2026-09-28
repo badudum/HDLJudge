@@ -1,0 +1,91 @@
+{
+  "id": 199,
+  "title": "Bus-Invert Coding",
+  "difficulty": "Hard",
+  "category": "lowpower",
+  "tags": [
+    "bus-encoding",
+    "switching-activity",
+    "popcount"
+  ],
+  "top": "bus_invert",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "bus_q",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "inv",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "dout",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "toggles",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "Encoder: on a rising edge with `valid`, compare `din` with the **current** bus value. If their Hamming distance is **greater than 4**, drive `bus_q <= ~din` and `inv <= 1`, otherwise `bus_q <= din` and `inv <= 0`. Without `valid` the bus holds (no toggles).",
+    "Decoder (combinational): `dout = inv ? ~bus_q : bus_q`, which always recovers the last transmitted word.",
+    "`toggles` accumulates the number of bus wires that changed on each update, **including** the `inv` wire (16-bit). This is the switching activity the coding minimizes.",
+    "Synchronous reset: `bus = 0`, `inv = 0`, `toggles = 0`."
+  ],
+  "hints": [
+    "Hamming distance = popcount(din ^ bus_q). A popcount of 8 bits fits in a small adder tree.",
+    "Coding bounds the data-wire toggles per transfer at 4 (instead of 8). Count the `inv` wire when it toggles too.",
+    "New toggles = popcount(new_bus ^ bus) + (new_inv ^ inv)."
+  ],
+  "examples": [
+    {
+      "check": "inverts when more than half the bits flip",
+      "title": "invert",
+      "input": "bus_q = 0x00, din = 0xFE (7 flips)",
+      "expected": "bus_q = 0x01, inv = 1"
+    },
+    {
+      "check": "no inversion at exactly 4",
+      "title": "tie",
+      "input": "bus_q = 0x00, din = 0x0F",
+      "expected": "bus_q = 0x0F, inv = 0"
+    },
+    {
+      "check": "decoder recovers data",
+      "title": "decode",
+      "input": "any sequence",
+      "expected": "dout = last din"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

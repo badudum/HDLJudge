@@ -1,0 +1,108 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "iso_en",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "pd_data",
+    "kind": "bus",
+    "values": [
+     "A5",
+     "0",
+     "FF",
+     "3C",
+     "A5",
+     "0",
+     "FF",
+     "3C"
+    ]
+   },
+   {
+    "name": "pd_valid",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0
+    ]
+   },
+   {
+    "name": "pd_req_n",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1,
+     0
+    ]
+   },
+   {
+    "name": "ao_data",
+    "kind": "bus",
+    "values": [
+     "A5",
+     "0",
+     "FF",
+     "3C",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "ao_valid",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "ao_req_n",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "pass-through when not isolated"
+ }
+]

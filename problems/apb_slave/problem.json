@@ -1,0 +1,107 @@
+{
+  "id": 169,
+  "title": "APB4 Slave Peripheral",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "apb",
+    "amba",
+    "bus",
+    "registers"
+  ],
+  "top": "apb_slave",
+  "ports": [
+    {
+      "name": "pclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "presetn",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "psel",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "penable",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pwrite",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "paddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "pwdata",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "pstrb",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "prdata",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "pready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "pslverr",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Registers: `0x00` CTRL (RW), `0x04` DATA (RW), `0x08` ID (RO, reads `0xA9B00001`), `0x0C` WCOUNT (RO: number of successful writes, 32-bit wrapping).",
+    "A transfer completes in its access phase (`psel && penable`). `pready` is always 1 (no wait states). A write updates the register on that rising edge, byte-lane-wise according to `pstrb`.",
+    "`pslverr = 1` during an access phase that is an error: unaligned address (`paddr[1:0] != 0`), an address above `0x0C`, or a **write** to a read-only register. Errored writes have no effect and are not counted. `pslverr = 0` outside access phases.",
+    "`prdata` = the addressed register whenever `psel && !pwrite` (0 for unmapped or unaligned addresses), otherwise 0. Combinational. `presetn` is an active-low synchronous reset that clears CTRL, DATA and WCOUNT."
+  ],
+  "hints": [
+    "Decode once: `wire access = psel & penable;` and a `valid_addr` / `ro_reg` decode on `paddr`.",
+    "Byte strobes: `for (i = 0; i < 4; i++) if (pstrb[i]) ctrl[8*i +: 8] <= pwdata[8*i +: 8];`",
+    "WCOUNT counts only successful writes. An errored write must leave every register unchanged."
+  ],
+  "examples": [
+    {
+      "check": "write and read back",
+      "title": "rw",
+      "input": "write 0x12345678 to 0x04, read 0x04",
+      "expected": "prdata = 0x12345678"
+    },
+    {
+      "check": "byte strobes",
+      "title": "pstrb",
+      "input": "write 0xFFFFFFFF with pstrb = 0101",
+      "expected": "only bytes 0 and 2 change"
+    },
+    {
+      "check": "error responses",
+      "title": "slverr",
+      "input": "write to 0x08 (ID) or read 0x10",
+      "expected": "pslverr = 1, nothing changes"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

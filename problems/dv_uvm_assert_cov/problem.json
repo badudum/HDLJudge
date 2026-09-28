@@ -1,0 +1,72 @@
+{
+  "id": 206,
+  "title": "UVM: Assertions + Coverage Integration",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "sva",
+    "assertions",
+    "cover-property"
+  ],
+  "top": "hs_sva",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "gnt",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "id",
+      "dir": "input",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Write `module hs_sva(input logic clk, rst, req, gnt, input logic [3:0] id)` with concurrent assertions (disabled during `rst`) that report failures through **UVM** with these message IDs: `gnt |-> req` → `HS_GNT_NO_REQ`; `req && !gnt |=> req` → `HS_REQ_DROP`; `req && !gnt |=> $stable(id)` → `HS_ID_CHANGE`; `$rose(req) |-> ##[1:4] gnt` → `HS_TIMEOUT`.",
+    "Report with `` `uvm_error(\"<ID>\", \"message\") `` in each assertion's else-branch, so that failures reach the UVM report server (the test counts them per ID, and each failure must be reported exactly once).",
+    "Two cover properties with counters `int cov_b2b` (`gnt ##1 gnt`) and `int cov_max_wait` (`$rose(req) ##4 gnt`), incremented in the cover statements' pass actions."
+  ],
+  "hints": [
+    "`a: assert property (@(posedge clk) disable iff (rst) p) else `uvm_error(\"ID\", \"msg\")`.",
+    "`c: cover property (@(posedge clk) disable iff (rst) s) cnt++;` runs the statement on every match.",
+    "Routing SVA failures into UVM gives one pass/fail summary, and lets tests demote or expect specific IDs with report catchers."
+  ],
+  "examples": [
+    {
+      "check": "late grant reported as HS_TIMEOUT",
+      "title": "timeout",
+      "input": "gnt 6 cycles after req",
+      "expected": "one HS_TIMEOUT error"
+    },
+    {
+      "check": "cover: back-to-back grants",
+      "title": "cover",
+      "input": "two grants in consecutive cycles",
+      "expected": "cov_b2b increments"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true,
+  "coverage": true
+}

@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: values in range",
+  "violation": false
+ },
+ {
+  "name": "violation: too high",
+  "violation": true
+ },
+ {
+  "name": "violation: too low",
+  "violation": true
+ },
+ {
+  "name": "legal: out-of-range while invalid",
+  "violation": false
+ }
+]

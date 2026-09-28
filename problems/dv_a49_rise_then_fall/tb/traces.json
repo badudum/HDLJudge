@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: 3-cycle pulse",
+  "violation": false
+ },
+ {
+  "name": "violation: 1-cycle pulse",
+  "violation": true
+ },
+ {
+  "name": "violation: 5-cycle pulse",
+  "violation": true
+ },
+ {
+  "name": "legal: 2- and 4-cycle pulses",
+  "violation": false
+ }
+]

@@ -1,0 +1,73 @@
+{
+  "id": 219,
+  "title": "Manchester Encoder",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "line-coding",
+    "serializer",
+    "fsm"
+  ],
+  "top": "manchester_tx",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "load",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "tx",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Each data bit takes 2 clock cycles (two half-bits). IEEE 802.3 convention: a **1** is sent as low-then-high (0, 1), a **0** as high-then-low (1, 0). Bits go MSB first.",
+    "On an edge with `load` while not busy: capture `data`, set `busy`, and drive the first half-bit of bit 7 immediately (registered `tx`). Each following edge drives the next half-bit. The edge after the 16th half-bit returns to idle: `busy = 0`, `tx = 0`.",
+    "`load` while busy is ignored. Synchronous reset → idle."
+  ],
+  "hints": [
+    "A 4-bit half-bit counter k: `tx = (k[0] == 0) ? ~bit : bit`, with `bit = shreg[7 - k/2]`.",
+    "Manchester coding guarantees a transition in every bit period, so the receiver can recover the clock, and the signal has no DC component."
+  ],
+  "examples": [
+    {
+      "check": "encodes one byte",
+      "title": "0xA5",
+      "input": "load 0xA5",
+      "expected": "tx = 01 10 01 10 10 01 10 01"
+    },
+    {
+      "check": "load while busy is ignored",
+      "title": "busy",
+      "input": "a second load during a transfer",
+      "expected": "ignored"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

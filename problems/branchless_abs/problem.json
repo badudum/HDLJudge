@@ -1,0 +1,79 @@
+{
+  "id": 246,
+  "title": "Branchless Absolute Value",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "branchless",
+    "twos-complement"
+  ],
+  "top": "babs",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "`y = |x|` for a signed 8-bit `x`, as an unsigned 8-bit result (|−128| = 128 = 0x80).",
+    "**Branchless:** no `?:`, `if` or `case`, and no comparison operators (`<`, `>`, `<=`, `>=`)."
+  ],
+  "hints": [
+    "Make a mask from the sign bit: all ones for negative numbers, all zeros otherwise.",
+    "`(x ^ m) - m`: XOR with all-ones is `~x`, and subtracting −1 adds 1. That's two's-complement negation, applied conditionally.",
+    "`m = {8{x[7]}}`."
+  ],
+  "examples": [
+    {
+      "check": "all 256 values",
+      "title": "negative",
+      "input": "x = −5 (0xFB)",
+      "expected": "y = 5"
+    },
+    {
+      "check": "all 256 values",
+      "title": "most negative",
+      "input": "x = −128",
+      "expected": "y = 0x80"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\?|\\bif\\b|\\bcase[xz]?\\b",
+      "message": "branchless: no ?:, if or case",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bif\\b|\\bcase\\b|\\bwhen\\b|\\bselect\\b",
+      "message": "branchless: no if, case, when or select",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "(?<![<>])[<>](?![<>])",
+      "message": "no comparison operators (<, >, <=, >=): only shifts << >> >>> are allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

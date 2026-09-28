@@ -1,0 +1,78 @@
+{
+  "id": 2,
+  "title": "4-bit Counter with Enable",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "sequential",
+    "counter"
+  ],
+  "top": "counter",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "count",
+      "dir": "output",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "`count` is 4 bits wide and wraps from 15 to 0.",
+    "`rst` is synchronous and active-high, and has priority over `en`.",
+    "`count` may only change on a rising edge of `clk`.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "A single clocked block is enough: `always @(posedge clk)`, `always_ff @(posedge clk)` or a `rising_edge(clk)` process.",
+    "Test `rst` inside the clocked block. Putting it in the sensitivity list (`or posedge rst`) makes the reset asynchronous — the testbench checks for that.",
+    "In VHDL keep the value in an `unsigned(3 downto 0)` signal; `cnt + 1` then wraps from 15 to 0 by itself."
+  ],
+  "examples": [
+    {
+      "check": "reset clears",
+      "title": "reset",
+      "input": "rst = 1 for one clock edge, then rst = 0, en = 0",
+      "expected": "count = 0 and stays 0"
+    },
+    {
+      "check": "counts up and wraps",
+      "title": "count and wrap",
+      "input": "rst = 0, en = 1 for 20 clock edges",
+      "expected": "count = 1, 2, … 15, 0, 1, 2, 3, 4"
+    },
+    {
+      "check": "reset is synchronous",
+      "title": "synchronous reset",
+      "input": "count = 5, raise rst between two clock edges",
+      "expected": "count stays 5 until the next rising edge, then becomes 0"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 160,
+      "clock": "clk",
+      "title": "reset, then counting"
+    }
+  ]
+}

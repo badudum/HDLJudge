@@ -1,0 +1,242 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "ex_rs1",
+    "kind": "bus",
+    "values": [
+     "3",
+     "9",
+     "3",
+     "3",
+     "9",
+     "3",
+     "4",
+     "4"
+    ]
+   },
+   {
+    "name": "ex_rs2",
+    "kind": "bus",
+    "values": [
+     "9",
+     "3",
+     "3",
+     "9",
+     "3",
+     "9",
+     "4",
+     "1"
+    ]
+   },
+   {
+    "name": "mem_rd",
+    "kind": "bus",
+    "values": [
+     "3",
+     "3",
+     "3",
+     "8",
+     "8",
+     "3",
+     "4",
+     "4"
+    ]
+   },
+   {
+    "name": "mem_reg_write",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "wb_rd",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "7",
+     "3",
+     "3",
+     "3",
+     "4",
+     "4"
+    ]
+   },
+   {
+    "name": "wb_reg_write",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "fwd_a",
+    "kind": "bus",
+    "values": [
+     "2",
+     "0",
+     "2",
+     "1",
+     "0",
+     "1",
+     "2",
+     "2"
+    ]
+   },
+   {
+    "name": "fwd_b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "2",
+     "2",
+     "0",
+     "1",
+     "0",
+     "2",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "EX/MEM forwarding"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "ex_rs1",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "6",
+     "1",
+     "3",
+     "0",
+     "1",
+     "1"
+    ]
+   },
+   {
+    "name": "ex_rs2",
+    "kind": "bus",
+    "values": [
+     "0",
+     "5",
+     "7",
+     "2",
+     "3",
+     "2",
+     "3",
+     "1"
+    ]
+   },
+   {
+    "name": "mem_rd",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "6",
+     "0",
+     "C",
+     "1",
+     "0",
+     "2"
+    ]
+   },
+   {
+    "name": "mem_reg_write",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     0,
+     1,
+     0,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "wb_rd",
+    "kind": "bus",
+    "values": [
+     "0",
+     "5",
+     "7",
+     "2",
+     "3",
+     "0",
+     "3",
+     "0"
+    ]
+   },
+   {
+    "name": "wb_reg_write",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "fwd_a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "fwd_b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "never forward x0 or non-writing stages"
+ }
+]

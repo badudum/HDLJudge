@@ -1,0 +1,47 @@
+{
+  "id": 131,
+  "title": "Constraint: No Repeat in the Next 3 Draws",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "draws5",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Values come from the tiny domain 0 … 4. Once drawn, a value may not appear again in the next 3 draws.",
+    "With only 5 values, every draw has at most 2 choices. The stream must still be random, not a fixed rotation.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Same history technique as the previous problem, but the domain is so small that the solver has at most two choices each time.",
+    "If you \"solve\" it with a counter (0, 1, 2, 3, 4, 0, …), the transition statistics give you away."
+  ],
+  "examples": [
+    {
+      "check": "a drawn value does not reappear",
+      "title": "window",
+      "input": "…, 0, 3, 1, then 0",
+      "expected": "rejected"
+    },
+    {
+      "check": "values are 0..4",
+      "title": "domain",
+      "input": "any draw",
+      "expected": "0 … 4"
+    },
+    {
+      "check": "the sequence is not a fixed rotation",
+      "title": "randomness",
+      "input": "400 draws",
+      "expected": "many different (previous, next) pairs"
+    }
+  ]
+}

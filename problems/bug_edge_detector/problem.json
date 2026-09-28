@@ -1,0 +1,81 @@
+{
+  "id": 90,
+  "title": "Debug: Synchronized Edge Detector",
+  "difficulty": "Medium",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "synchronizer",
+    "edge-detect",
+    "metastability"
+  ],
+  "top": "sync_edge",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "level",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rise",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "fall",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Intended behavior: `din` is asynchronous. It passes through a **2-flop synchronizer** (s1 ← din, s2 ← s1), then a third flop s3 ← s2 delays it once more.",
+    "`level = s2`, `rise = s2 & ~s3`, `fall = ~s2 & s3`. All are combinational from the flops, so a change on `din` shows up on `level`/`rise` two edges later.",
+    "Nothing may use `s1` except `s2`: it may be metastable. Synchronous reset clears all flops. The starter has **2 bugs**."
+  ],
+  "hints": [
+    "Count the edges between a `din` change and the `rise` pulse. The spec says 2.",
+    "Toggle `din` slowly: 0 → 1 → 0. How many pulses appear on `fall`, and when?",
+    "Reading the first synchronizer stage anywhere else is a real metastability bug, even if it looks faster in simulation."
+  ],
+  "examples": [
+    {
+      "check": "rising edge",
+      "title": "rise",
+      "input": "din goes 0 → 1",
+      "expected": "level = 1 and a one-cycle rise pulse, two edges later"
+    },
+    {
+      "check": "falling edge",
+      "title": "fall",
+      "input": "din goes 1 → 0",
+      "expected": "one-cycle fall pulse, two edges later"
+    },
+    {
+      "check": "1500 random",
+      "title": "random",
+      "input": "random din",
+      "expected": "matches the reference"
+    }
+  ]
+}

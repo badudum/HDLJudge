@@ -1,0 +1,56 @@
+{
+  "id": 254,
+  "title": "Timing: Fast Gray → Binary",
+  "difficulty": "Medium",
+  "category": "timing",
+  "tags": [
+    "timing",
+    "brain-teaser",
+    "gray-code",
+    "prefix"
+  ],
+  "top": "g2b32",
+  "ports": [
+    {
+      "name": "g",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "b",
+      "dir": "output",
+      "width": 32
+    }
+  ],
+  "constraints": [
+    "Convert a 32-bit Gray code to binary: `b[i] = g[31] ^ g[30] ^ … ^ g[i]`. Purely combinational.",
+    "Timing budget: at most **8 logic levels**. The obvious chain `b[i] = b[i+1] ^ g[i]` is 31 levels deep."
+  ],
+  "hints": [
+    "Each b[i] is a suffix XOR, so this is a *prefix computation* (a scan).",
+    "Doubling trick: `t = g ^ (g >> 1); t = t ^ (t >> 2); t = t ^ (t >> 4); t = t ^ (t >> 8); t = t ^ (t >> 16);`. That's 5 XOR levels.",
+    "The same log-depth scan structure gives fast adders (Kogge-Stone)."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "gray 1 1 0",
+      "input": "g = 0b110",
+      "expected": "b = 0b100"
+    },
+    {
+      "check": "3000 random",
+      "title": "random",
+      "input": "random 32-bit values",
+      "expected": "exact conversion"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "max_logic_depth": 8
+}

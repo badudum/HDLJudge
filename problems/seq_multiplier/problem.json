@@ -1,0 +1,36 @@
+{
+  "id": 63, "title": "Multicycle Shift-Add Multiplier", "difficulty": "Hard", "category": "arch",
+  "tags": ["arithmetic", "multicycle", "datapath", "handshake"], "top": "seq_mult",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",     "dir": "input",  "width": 1},
+    {"name": "rst",     "dir": "input",  "width": 1},
+    {"name": "start",   "dir": "input",  "width": 1},
+    {"name": "a",       "dir": "input",  "width": 8},
+    {"name": "b",       "dir": "input",  "width": 8},
+    {"name": "busy",    "dir": "output", "width": 1},
+    {"name": "done",    "dir": "output", "width": 1},
+    {"name": "product", "dir": "output", "width": 16}
+  ],
+  "forbidden": [
+    {"pattern": "[\\w\\])]\\s*\\*\\s*[\\w(']", "message": "no * operator: build the product with shifts and adds", "languages": ["verilog", "systemverilog"]},
+    {"pattern": "[\\w)]\\s*\\*\\s*[\\w(]", "message": "no * operator: build the product with shifts and adds", "languages": ["vhdl"]}
+  ],
+  "constraints": [
+    "Unsigned 8×8 → 16-bit multiplication, **one multiplier bit per clock**, with **exact timing**:",
+    "The edge E₀ that samples `start = 1` while idle latches `a` and `b`. After E₀ through E₇: `busy = 1`. After E₈: `busy = 0`, `done = 1` (for that one cycle) and `product = a·b`.",
+    "`start` is ignored while busy. `product` holds its value until the next result. Synchronous reset: idle, `done = 0`, `product = 0`.",
+    "No `*` operator. Must be synthesizable."
+  ],
+  "hints": [
+    "Registers: accumulator (16 bits), multiplicand (shifted left each step), multiplier (shifted right each step), step counter.",
+    "Each step: if the multiplier's LSB is 1, add the multiplicand to the accumulator. Then shift both.",
+    "Count 8 steps. The 8th step's edge writes `product` and raises `done`. Draw the timeline to get the off-by-one right."
+  ],
+  "examples": [
+    {"check": "single multiplication", "title": "7 × 6", "input": "start with a = 7, b = 6", "expected": "8 edges later: done = 1, product = 42"},
+    {"check": "extremes", "title": "255 × 255", "input": "a = b = 255", "expected": "product = 65025"},
+    {"check": "start ignored while busy", "title": "busy", "input": "a second start during the computation", "expected": "ignored"}
+  ]
+}

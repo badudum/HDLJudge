@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "vin",
+    "kind": "real",
+    "values": [
+     0.0,
+     0.2,
+     0.5,
+     0.8,
+     0.3,
+     0.0,
+     0.0,
+     0.4
+    ]
+   },
+   {
+    "name": "vddl",
+    "kind": "real",
+    "values": [
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8
+    ]
+   },
+   {
+    "name": "vddh",
+    "kind": "real",
+    "values": [
+     1.2,
+     1.2,
+     1.2,
+     1.2,
+     1.2,
+     1.2,
+     1.2,
+     1.2
+    ]
+   },
+   {
+    "name": "vout",
+    "kind": "real",
+    "values": [
+     0.0,
+     0.0,
+     1.2,
+     1.2,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "switches at the thresholds"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "vin",
+    "kind": "real",
+    "values": [
+     0.8,
+     0.8,
+     0.0,
+     0.4,
+     0.6,
+     0.5,
+     0.35,
+     0.35
+    ]
+   },
+   {
+    "name": "vddl",
+    "kind": "real",
+    "values": [
+     0.8,
+     0.0,
+     0.0,
+     0.8,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "name": "vddh",
+    "kind": "real",
+    "values": [
+     1.2,
+     1.2,
+     1.2,
+     1.2,
+     1.8,
+     1.8,
+     1.8,
+     3.3
+    ]
+   },
+   {
+    "name": "vout",
+    "kind": "real",
+    "values": [
+     1.2,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "isolated when vddl is off"
+ }
+]

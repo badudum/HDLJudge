@@ -1,0 +1,37 @@
+{
+  "id": 69, "title": "Reorder Buffer", "difficulty": "Hard", "category": "arch",
+  "tags": ["out-of-order", "rob", "in-order-commit", "circular-buffer"], "top": "rob8",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",           "dir": "input",  "width": 1},
+    {"name": "rst",           "dir": "input",  "width": 1},
+    {"name": "alloc_valid",   "dir": "input",  "width": 1},
+    {"name": "alloc_rd",      "dir": "input",  "width": 5},
+    {"name": "complete_valid","dir": "input",  "width": 1},
+    {"name": "complete_tag",  "dir": "input",  "width": 3},
+    {"name": "complete_data", "dir": "input",  "width": 16},
+    {"name": "alloc_ok",      "dir": "output", "width": 1},
+    {"name": "alloc_tag",     "dir": "output", "width": 3},
+    {"name": "commit_valid",  "dir": "output", "width": 1},
+    {"name": "commit_rd",     "dir": "output", "width": 5},
+    {"name": "commit_data",   "dir": "output", "width": 16},
+    {"name": "count",         "dir": "output", "width": 4}
+  ],
+  "constraints": [
+    "8 entries in a circular buffer. Allocation happens at the tail (tags 0, 1, …, 7, 0, …) and commit at the head, strictly in order.",
+    "Each rising edge, using the state **before** the edge: (1) if the head entry is valid and done, commit it (`commit_valid = 1` with its rd and data, pop the head); (2) `complete_valid` marks entry `complete_tag` done and stores `complete_data`; (3) `alloc_valid` allocates the tail entry if the ROB was not full (`count < 8` before the edge): `alloc_ok = 1`, `alloc_tag` = that entry.",
+    "A completion takes effect for commit at the earliest on the next edge. `count` = number of valid entries. All outputs registered. Don't-care fields: `alloc_tag` when not ok, `commit_rd`/`commit_data` when not committing.",
+    "Synchronous reset empties the ROB. Must be synthesizable."
+  ],
+  "hints": [
+    "Per entry: valid, done, rd, data. Plus head, tail and count registers.",
+    "Compute `commit = valid[head] && done[head]` from the current state, then do all three updates in one clocked block.",
+    "count_next = count − commit + (alloc accepted)."
+  ],
+  "examples": [
+    {"check": "allocate", "title": "allocation", "input": "3 allocations after reset", "expected": "alloc_tag = 0, 1, 2 and count = 1, 2, 3"},
+    {"check": "in-order commit", "title": "out-of-order completion", "input": "complete tag 2, then tag 0, then tag 1", "expected": "commits: 0, then 1 and 2 on consecutive edges (in order)"},
+    {"check": "full", "title": "full ROB", "input": "a 9th allocation with nothing committed", "expected": "alloc_ok = 0"}
+  ]
+}

@@ -1,0 +1,38 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "6",
+     "38",
+     "1",
+     "7FFF",
+     "5555",
+     "F0",
+     "8000",
+     "F000"
+    ]
+   },
+   {
+    "name": "nxt",
+    "kind": "bus",
+    "values": [
+     "9",
+     "43",
+     "2",
+     "BFFF",
+     "5556",
+     "107",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

@@ -1,0 +1,24 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity dac8 is
+    generic (
+        VREF : real := 1.0
+    );
+    port (
+        clk  : in  std_logic;
+        code : in  std_logic_vector(7 downto 0);
+        vout : out real := 0.0
+    );
+end entity;
+
+architecture behavioral of dac8 is
+begin
+    process (clk)
+    begin
+        if rising_edge(clk) then
+            vout <= real(to_integer(unsigned(code))) / 256.0 * VREF;
+        end if;
+    end process;
+end architecture;

@@ -1,0 +1,31 @@
+{
+  "id": 60, "title": "Cache Tag Comparison (4-way)", "difficulty": "Medium", "category": "arch",
+  "tags": ["cache", "comparator", "combinational"], "top": "tag_compare",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "tag",        "dir": "input",  "width": 20},
+    {"name": "way_tags",   "dir": "input",  "width": 80},
+    {"name": "way_valid",  "dir": "input",  "width": 4},
+    {"name": "hit",        "dir": "output", "width": 1},
+    {"name": "hit_way",    "dir": "output", "width": 2},
+    {"name": "hit_onehot", "dir": "output", "width": 4},
+    {"name": "multi_hit",  "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Way i's stored tag is `way_tags[20i+19 : 20i]`. A way hits when it is valid **and** its tag equals `tag`.",
+    "`hit_onehot[i]` = way i hits. `hit` = any way hits. `hit_way` = index of the lowest hitting way (0 on a miss).",
+    "`multi_hit` = more than one way hits (a corrupted set, which should never happen and is reported for error checking).",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Four 20-bit equality comparators, each ANDed with its valid bit.",
+    "`hit_way` is a small priority encoder on `hit_onehot`.",
+    "More than one bit set: `(v & (v - 1)) != 0`."
+  ],
+  "examples": [
+    {"check": "hits", "title": "hit in way 2", "input": "tag matches way 2 (valid)", "expected": "hit = 1, hit_way = 2, hit_onehot = 0100"},
+    {"check": "invalid ways never hit", "title": "invalid", "input": "tag matches way 1 but way_valid[1] = 0", "expected": "hit = 0"},
+    {"check": "multi-hit detection", "title": "duplicate tags", "input": "ways 1 and 3 both valid with the same tag", "expected": "hit_way = 1, multi_hit = 1"}
+  ]
+}

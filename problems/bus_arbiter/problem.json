@@ -1,0 +1,85 @@
+{
+  "id": 165,
+  "title": "Bus Arbiter with Lock",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "arbitration",
+    "bus",
+    "locking"
+  ],
+  "top": "bus_arb",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 3
+    },
+    {
+      "name": "lock",
+      "dir": "input",
+      "width": 3
+    },
+    {
+      "name": "gnt",
+      "dir": "output",
+      "width": 3
+    },
+    {
+      "name": "owner",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Three masters, fixed priority (master 0 highest). Registered one-hot grant.",
+    "Each rising edge: if the current owner still requests **and** asserts its `lock` bit, it keeps the bus. Otherwise the highest-priority requester gets it. With no requests, `gnt = 0`.",
+    "`owner` = index of the granted master (0 when none). `busy = |gnt`. Synchronous reset: nobody owns the bus."
+  ],
+  "hints": [
+    "Keep the grant register. The locked case is `gnt[i] && req[i] && lock[i]` for the current owner i.",
+    "Otherwise it's a plain fixed-priority encoder on `req`.",
+    "Lock is how a master performs atomic read-modify-write sequences on a shared bus."
+  ],
+  "examples": [
+    {
+      "check": "fixed priority",
+      "title": "priority",
+      "input": "req = 111",
+      "expected": "gnt = 001 (master 0)"
+    },
+    {
+      "check": "lock holds the bus",
+      "title": "lock",
+      "input": "master 2 owns the bus with lock, master 0 requests",
+      "expected": "master 2 keeps it"
+    },
+    {
+      "check": "release",
+      "title": "unlock",
+      "input": "master 2 drops lock",
+      "expected": "master 0 gets the bus"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

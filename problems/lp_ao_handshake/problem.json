@@ -1,0 +1,86 @@
+{
+  "id": 192,
+  "title": "Always-On Wake Handshake",
+  "difficulty": "Hard",
+  "category": "lowpower",
+  "tags": [
+    "handshake",
+    "power-management",
+    "fsm",
+    "interrupts"
+  ],
+  "top": "ao_ctrl",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sleep_req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wake_irq",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pmu_ack",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pmu_req",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "asleep",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "irq_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "An always-on controller talks to the PMU with a **4-phase** handshake: raise `pmu_req` to request power-off, and the PMU raises `pmu_ack` once the domain is off. Drop `pmu_req` to request power-on, and the PMU drops `pmu_ack` once the domain is back. `pmu_req` may only change when `pmu_ack == pmu_req`.",
+    "States: RUN (`pmu_req = 0`), REQ_OFF (`pmu_req = 1`, waiting for ack), SLEEP (`pmu_req = 1`, `asleep = 1`), REQ_ON (`pmu_req = 0`, waiting for ack to drop). RUN → REQ_OFF on `sleep_req && !wake_irq`. REQ_OFF → SLEEP when `pmu_ack`, or → REQ_ON if a wake arrived meanwhile. SLEEP → REQ_ON on `wake_irq`. REQ_ON → RUN when `!pmu_ack`.",
+    "Wake interrupts must never be lost. In RUN, `wake_irq` produces a one-cycle `irq_out` pulse on the next cycle. In any other state it is remembered (several merge into one) and delivered as a one-cycle `irq_out` pulse when REQ_ON → RUN happens. The trip to SLEEP itself is triggered by `sleep_req`, not by an interrupt.",
+    "`irq_out` is registered and 0 otherwise. Synchronous reset → RUN, nothing pending."
+  ],
+  "hints": [
+    "A wake during REQ_OFF can't abort the request (the 4-phase protocol forbids dropping `pmu_req` before the ack), so set a `pending` flag and go straight to REQ_ON once the ack arrives.",
+    "SLEEP → REQ_ON is caused by an interrupt, so it's pending too. Deliver `irq_out` when you finally reach RUN.",
+    "Draw the handshake waveform first: req ↑, ack ↑, req ↓, ack ↓."
+  ],
+  "examples": [
+    {
+      "check": "sleep and wake round trip",
+      "title": "round trip",
+      "input": "sleep_req, ack, wake_irq, ack drops",
+      "expected": "SLEEP, then RUN with one irq_out pulse"
+    },
+    {
+      "check": "wake during power-down is not lost",
+      "title": "race",
+      "input": "wake_irq while REQ_OFF waits for ack",
+      "expected": "completes the handshake, powers straight back up, irq_out delivered"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

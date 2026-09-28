@@ -1,0 +1,69 @@
+{
+  "id": 151,
+  "title": "Assertion: Fair Arbiter Grants",
+  "difficulty": "Hard",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_arb_fair",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "gnt",
+      "dir": "input",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Rule 1: `gnt` is one-hot or zero. Rule 2: only requesting masters are granted (`gnt & ~req == 0`).",
+    "Rule 3 (fairness): a master granted in one cycle must not be granted again in the next cycle if any **other** master is requesting in that next cycle.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`$onehot0(gnt)` and `(gnt & ~req) == 0` are invariants.",
+    "Fairness per master i: `$past(gnt[i]) && (req & ~(4'b1 << i)) != 0 |-> !gnt[i]`. A `generate for` loop creates one assertion per master."
+  ],
+  "examples": [
+    {
+      "check": "legal: rotating grants",
+      "title": "fair",
+      "input": "req = 1111, gnt rotates",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: two grants",
+      "title": "not one-hot",
+      "input": "gnt = 0011",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: back-to-back grant while others wait",
+      "title": "unfair",
+      "input": "master 0 granted twice in a row, master 2 waiting",
+      "expected": "assertion fails"
+    }
+  ]
+}

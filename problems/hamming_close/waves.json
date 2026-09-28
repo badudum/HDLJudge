@@ -1,0 +1,52 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "F0",
+     "F0",
+     "5",
+     "0",
+     "FFFF",
+     "8000",
+     "A756",
+     "32B3"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "F8",
+     "F3",
+     "5",
+     "8000",
+     "0",
+     "1",
+     "8756",
+     "1032"
+    ]
+   },
+   {
+    "name": "close",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

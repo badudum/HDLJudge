@@ -1,0 +1,102 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "req",
+    "kind": "bus",
+    "values": [
+     "1",
+     "2",
+     "4",
+     "8",
+     "10",
+     "20",
+     "40",
+     "80"
+    ]
+   },
+   {
+    "name": "idx",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "valid",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "single request"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "req",
+    "kind": "bus",
+    "values": [
+     "46",
+     "FF",
+     "81",
+     "3",
+     "7E",
+     "2C",
+     "0",
+     "1"
+    ]
+   },
+   {
+    "name": "idx",
+    "kind": "bus",
+    "values": [
+     "6",
+     "7",
+     "7",
+     "1",
+     "6",
+     "5",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "valid",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "highest wins"
+ }
+]

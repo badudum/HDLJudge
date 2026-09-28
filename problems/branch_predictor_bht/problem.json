@@ -1,0 +1,84 @@
+{
+  "id": 265,
+  "title": "Branch History Table (2-Bit Counters)",
+  "difficulty": "Medium",
+  "category": "arch",
+  "tags": [
+    "branch-prediction",
+    "saturating-counter",
+    "cpu"
+  ],
+  "top": "bht",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pc",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "update",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "upd_pc",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "taken",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pred",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "ctr",
+      "dir": "output",
+      "width": 2
+    }
+  ],
+  "constraints": [
+    "16 two-bit saturating counters indexed by `pc[5:2]` (instructions are 4-byte aligned). Reset sets every counter to 01 (weakly not-taken).",
+    "Prediction (combinational): `ctr` = the counter for `pc`, and `pred = ctr[1]` (taken when the counter is 2 or 3).",
+    "On a rising edge with `update`, the counter for `upd_pc` moves toward the outcome: +1 if `taken` (saturating at 3), −1 if not (saturating at 0)."
+  ],
+  "hints": [
+    "An array of 2-bit registers, one read port (prediction) and one write port (update).",
+    "Saturation: only increment when the counter isn't already 3, and only decrement when it isn't 0.",
+    "Why two bits? A loop branch mispredicts only once per loop exit instead of twice (hysteresis)."
+  ],
+  "examples": [
+    {
+      "check": "learns a taken branch",
+      "title": "training",
+      "input": "update the branch at 0x40 as taken 4 times",
+      "expected": "ctr saturates at 3, pred = 1"
+    },
+    {
+      "check": "hysteresis: one mispredict does not flip",
+      "title": "hysteresis",
+      "input": "one not-taken outcome in a taken loop",
+      "expected": "pred stays 1"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

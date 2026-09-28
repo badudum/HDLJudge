@@ -1,0 +1,84 @@
+{
+  "id": 190,
+  "title": "Retention Register",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "retention",
+    "power-gating",
+    "save-restore"
+  ],
+  "top": "ret_reg",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pwr_on",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "save",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "restore",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "d",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "q_out",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "An 8-bit register `q` in a switchable power domain, plus an always-on **shadow** register.",
+    "Each rising edge: while `pwr_on = 0`, `q` is lost (modelled as cleared to 0). Otherwise `restore` loads `q` from the shadow. Otherwise `en` loads `q` from `d`. Separately, `save && pwr_on` copies the **current** (pre-edge) `q` into the shadow. The shadow is never lost.",
+    "`q_out = pwr_on ? q : 0` (isolation). `rst` is an always-on synchronous reset that clears both `q` and the shadow."
+  ],
+  "hints": [
+    "Two registers with different rules: the shadow only changes on `save`, while `q` is also destroyed when power is off.",
+    "Priority for `q`: power off > restore > enable.",
+    "Real retention flops put the shadow latch (balloon latch) on the always-on supply, and control it with SAVE/RESTORE pins driven by the power controller."
+  ],
+  "examples": [
+    {
+      "check": "save, power off, restore",
+      "title": "retention",
+      "input": "q = 0x5A, save, pwr_on = 0, then pwr_on = 1 and restore",
+      "expected": "q_out = 0x5A again"
+    },
+    {
+      "check": "state is lost without retention",
+      "title": "no save",
+      "input": "power cycle without save/restore",
+      "expected": "q_out = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

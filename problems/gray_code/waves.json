@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "bin",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "gray_in",
+    "kind": "bus",
+    "values": [
+     "79",
+     "44",
+     "A8",
+     "87",
+     "AA",
+     "59",
+     "24",
+     "61"
+    ]
+   },
+   {
+    "name": "gray",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "3",
+     "2",
+     "6",
+     "7",
+     "5",
+     "4"
+    ]
+   },
+   {
+    "name": "bin_out",
+    "kind": "bus",
+    "values": [
+     "51",
+     "78",
+     "CF",
+     "FA",
+     "CC",
+     "6E",
+     "38",
+     "41"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "binary to Gray (all 256 values)"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "bin",
+    "kind": "bus",
+    "values": [
+     "6B",
+     "23",
+     "3D",
+     "33",
+     "6F",
+     "78",
+     "FA",
+     "F"
+    ]
+   },
+   {
+    "name": "gray_in",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "gray",
+    "kind": "bus",
+    "values": [
+     "5E",
+     "32",
+     "23",
+     "2A",
+     "58",
+     "44",
+     "87",
+     "8"
+    ]
+   },
+   {
+    "name": "bin_out",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "3",
+     "2",
+     "7",
+     "6",
+     "4",
+     "5"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "Gray to binary (all 256 values)"
+ }
+]

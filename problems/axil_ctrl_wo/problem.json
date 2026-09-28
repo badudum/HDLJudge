@@ -1,0 +1,187 @@
+{
+  "id": 185,
+  "title": "AXI-Lite Write-Only Control",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "axi",
+    "control",
+    "write-only",
+    "pulse"
+  ],
+  "top": "axil_ctrl",
+  "ports": [
+    {
+      "name": "aclk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "aresetn",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awaddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "awvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "wstrb",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "wvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "bvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "bready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "araddr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "arvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "arready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "rresp",
+      "dir": "output",
+      "width": 2
+    },
+    {
+      "name": "rvalid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "ctrl_out",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "pulse_out",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "`0x00` CTRL: write-only 32-bit register driving `ctrl_out` (reset 0), honoring `wstrb`. `0x04` PULSE: writing sets `pulse_out[i]` for exactly **one** `aclk` cycle for each bit i = 1 in `wdata[7:0]` (only if `wstrb[0]`).",
+    "Writes to other addresses: SLVERR (`2'b10`), no effect. **Every read** returns 0 with SLVERR.",
+    "AXI4-Lite handshake rules: a transfer happens on a rising edge where VALID and READY are both 1. Your slave must accept AW and W in **either order** (or together), must not assert BVALID before both have been accepted, nor RVALID before AR has been accepted, and must hold BVALID/RVALID and their payload stable until BREADY/RREADY. `aresetn` is an active-low synchronous reset."
+  ],
+  "hints": [
+    "Latch AW and W independently into holding registers (`aw_full`, `w_full`), then perform the write once both are full and raise BVALID.",
+    "Deassert AWREADY/WREADY while holding a transaction or while BVALID is waiting, so a second write can't overwrite the first.",
+    "The read channel is independent: `arready = !rvalid`, and register RDATA/RRESP on the AR handshake.",
+    "`pulse_out` is a register that is loaded on the write and cleared on every other cycle."
+  ],
+  "examples": [
+    {
+      "check": "CTRL drives ctrl_out",
+      "title": "ctrl",
+      "input": "write 0x0000ABCD to 0x00",
+      "expected": "ctrl_out = 0x0000ABCD"
+    },
+    {
+      "check": "PULSE bits fire for one cycle",
+      "title": "pulse",
+      "input": "write 0x05 to 0x04",
+      "expected": "pulse_out[0] and [2] high for one cycle"
+    },
+    {
+      "check": "reads return SLVERR",
+      "title": "reads",
+      "input": "read 0x00",
+      "expected": "RRESP = SLVERR, RDATA = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 40,
+      "to": 240,
+      "step": 5,
+      "clock": "aclk",
+      "signals": [
+        "aclk",
+        "awvalid",
+        "awready",
+        "awaddr",
+        "wvalid",
+        "wready",
+        "wdata",
+        "bvalid",
+        "bready",
+        "bresp",
+        "arvalid",
+        "arready",
+        "araddr",
+        "rvalid",
+        "rready",
+        "rdata",
+        "rresp",
+        "ctrl_out",
+        "pulse_out"
+      ],
+      "title": "writes to CTRL (reads return SLVERR)",
+      "caption": "Each channel transfers on a rising edge where VALID and READY are both high. resp 0 = OKAY, 2 = SLVERR."
+    }
+  ]
+}

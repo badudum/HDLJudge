@@ -1,0 +1,57 @@
+{
+  "id": 228,
+  "title": "Assertion: One-Hot State Register",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_onehot",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "state",
+      "dir": "input",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Rule: outside reset, `state` must be one-hot (exactly one bit set) at every rising edge.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`$onehot(state)` is true when exactly one bit is 1. `$onehot0` also allows all-zero.",
+    "`assert property (@(posedge clk) disable iff (rst) $onehot(state));`"
+  ],
+  "examples": [
+    {
+      "check": "legal: walking one",
+      "title": "legal",
+      "input": "state = 1, 2, 4, 8",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: two bits set",
+      "title": "two-hot",
+      "input": "state = 3",
+      "expected": "assertion fails"
+    }
+  ]
+}

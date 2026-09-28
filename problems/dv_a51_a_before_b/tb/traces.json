@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: a then b",
+  "violation": false
+ },
+ {
+  "name": "violation: b before any a",
+  "violation": true
+ },
+ {
+  "name": "violation: a and b in the same cycle",
+  "violation": true
+ },
+ {
+  "name": "legal: reset, then a again before b",
+  "violation": false
+ }
+]

@@ -1,0 +1,101 @@
+{
+  "id": 222,
+  "title": "SPI Master (Mode 0)",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "spi",
+    "serial",
+    "fsm",
+    "full-duplex"
+  ],
+  "top": "spi_master",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "tx_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "miso",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sclk",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "mosi",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "cs_n",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "busy",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rx_data",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "SPI mode 0 (CPOL = 0, CPHA = 0), MSB first, one full-duplex byte per transfer. `sclk` runs at clk/4. All outputs are registered.",
+    "Idle: `cs_n = 1`, `sclk = 0`, `mosi = 0`, `busy = 0`. An edge with `start` while idle: `cs_n <= 0`, `busy <= 1`, `mosi <= tx_data[7]`, and a cycle counter c starts at 0 (it counts the edges since start).",
+    "When the counter reaches c % 4 == 2: `sclk <= 1` and sample `miso` (shift it into the receive register). When it reaches c % 4 == 0 (c > 0): `sclk <= 0`, and if c < 32, `mosi <=` the next bit. At c == 32: `cs_n <= 1`, `busy <= 0`, `mosi <= 0`, `done <= 1` for one cycle, and `rx_data <=` the 8 received bits.",
+    "`start` while busy is ignored. Synchronous reset → idle, `rx_data = 0`."
+  ],
+  "hints": [
+    "A 6-bit counter c and two shift registers (tx and rx) are all the state you need.",
+    "In mode 0 both sides change data on the falling edge of sclk and sample on the rising edge. The slave shifts its next bit out after each sclk falling edge.",
+    "Write the counter as the edge count after the update: compute `cn = c + 1` and decide on `cn % 4`."
+  ],
+  "examples": [
+    {
+      "check": "full-duplex byte",
+      "title": "exchange",
+      "input": "tx_data = 0xA5 while the slave sends 0x3C",
+      "expected": "mosi carries A5, rx_data = 0x3C after 32 cycles"
+    },
+    {
+      "check": "start while busy is ignored",
+      "title": "busy",
+      "input": "start during a transfer",
+      "expected": "ignored"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

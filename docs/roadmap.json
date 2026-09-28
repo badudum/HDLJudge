@@ -1,0 +1,1374 @@
+{
+ "Computer Architecture": [
+  {
+   "title": "LRU Replacement Policy",
+   "difficulty": "Hard",
+   "slug": "lru_4way"
+  },
+  {
+   "title": "Pseudo-LRU Tree-Based",
+   "difficulty": "Hard",
+   "slug": "plru_tree"
+  },
+  {
+   "title": "LFU Cache Design",
+   "difficulty": "Hard",
+   "slug": "lfu_cache"
+  },
+  {
+   "title": "Cache Tag Comparison",
+   "difficulty": "Medium",
+   "slug": "cache_tag_compare"
+  },
+  {
+   "title": "Write-Back Dirty Bit Management",
+   "difficulty": "Medium",
+   "slug": "dirty_bit_tracker"
+  },
+  {
+   "title": "Cache Line Refill FSM",
+   "difficulty": "Hard",
+   "slug": "cache_refill_fsm"
+  },
+  {
+   "title": "MSHR Implementation",
+   "difficulty": "Hard",
+   "slug": "mshr"
+  },
+  {
+   "title": "Parameterized ALU",
+   "difficulty": "Medium",
+   "slug": "alu"
+  },
+  {
+   "title": "ALU Control Decoder",
+   "difficulty": "Medium",
+   "slug": "alu_control"
+  },
+  {
+   "title": "Overflow Detection",
+   "difficulty": "Easy",
+   "slug": "overflow_detect"
+  },
+  {
+   "title": "Barrel Shifter",
+   "difficulty": "Hard",
+   "slug": "barrel_shifter"
+  },
+  {
+   "title": "Multicycle Multiplier",
+   "difficulty": "Hard",
+   "slug": "seq_multiplier"
+  },
+  {
+   "title": "Sequential Divider",
+   "difficulty": "Hard",
+   "slug": "seq_divider"
+  },
+  {
+   "title": "Pipeline Registers",
+   "difficulty": "Hard",
+   "slug": "pipeline_regs"
+  },
+  {
+   "title": "Hazard Detection Unit",
+   "difficulty": "Hard",
+   "slug": "hazard_unit"
+  },
+  {
+   "title": "Data Forwarding Logic",
+   "difficulty": "Hard",
+   "slug": "forwarding_unit"
+  },
+  {
+   "title": "Branch Comparator",
+   "difficulty": "Medium",
+   "slug": "branch_comparator"
+  },
+  {
+   "title": "Instruction Decode",
+   "difficulty": "Medium",
+   "slug": "rv32i_decoder"
+  },
+  {
+   "title": "2-Read 1-Write Register File",
+   "difficulty": "Medium",
+   "slug": "regfile_2r1w"
+  },
+  {
+   "title": "Register Renaming",
+   "difficulty": "Hard",
+   "slug": "register_rename"
+  },
+  {
+   "title": "Scoreboard",
+   "difficulty": "Hard",
+   "slug": "scoreboard_issue"
+  },
+  {
+   "title": "Warp Scheduler",
+   "difficulty": "Hard",
+   "slug": "warp_scheduler"
+  },
+  {
+   "title": "SIMD Execution Unit",
+   "difficulty": "Hard",
+   "slug": "simd_alu"
+  },
+  {
+   "title": "Thread Mask Logic",
+   "difficulty": "Medium",
+   "slug": "thread_mask"
+  },
+  {
+   "title": "Bank Conflict Detector",
+   "difficulty": "Hard",
+   "slug": "bank_conflict"
+  },
+  {
+   "title": "N-to-2^N Decoder",
+   "difficulty": "Medium",
+   "slug": "decoder_n"
+  },
+  {
+   "title": "Priority Encoder",
+   "difficulty": "Medium",
+   "slug": "priority_encoder"
+  },
+  {
+   "title": "Round-Robin Arbiter",
+   "difficulty": "Hard",
+   "slug": "round_robin_arbiter"
+  },
+  {
+   "title": "Reorder Buffer Entry",
+   "difficulty": "Hard",
+   "slug": "rob"
+  },
+  {
+   "title": "Functional Unit Tracker",
+   "difficulty": "Medium",
+   "slug": "fu_tracker"
+  }
+ ],
+ "RTL Design": [
+  {
+   "title": "Synchronous FIFO with Flags",
+   "difficulty": "Hard",
+   "slug": "sync_fifo"
+  },
+  {
+   "title": "Asynchronous FIFO",
+   "difficulty": "Hard",
+   "slug": "async_fifo"
+  },
+  {
+   "title": "FIFO with Width Conversion",
+   "difficulty": "Hard",
+   "slug": "fifo_width_conv"
+  },
+  {
+   "title": "Sequence Detector (1011)",
+   "difficulty": "Medium",
+   "slug": "sequence_detector"
+  },
+  {
+   "title": "Traffic Light Controller",
+   "difficulty": "Medium",
+   "slug": "traffic_light"
+  },
+  {
+   "title": "Vending Machine FSM",
+   "difficulty": "Hard",
+   "slug": "vending_machine"
+  },
+  {
+   "title": "Single-Port Synchronous RAM",
+   "difficulty": "Medium",
+   "slug": "sp_ram"
+  },
+  {
+   "title": "Dual-Port RAM",
+   "difficulty": "Medium",
+   "slug": "dp_ram"
+  },
+  {
+   "title": "Direct-Mapped Cache",
+   "difficulty": "Hard",
+   "slug": "dm_cache"
+  },
+  {
+   "title": "Write-Back Cache with Replacement",
+   "difficulty": "Hard",
+   "slug": "wb_cache_2way"
+  },
+  {
+   "title": "N-bit Synchronous Counter",
+   "difficulty": "Easy",
+   "slug": "counter"
+  },
+  {
+   "title": "Gray-Code Counter",
+   "difficulty": "Medium",
+   "slug": "gray_counter"
+  },
+  {
+   "title": "Shift Register with Parallel Load",
+   "difficulty": "Medium",
+   "slug": "shift_reg_load"
+  },
+  {
+   "title": "Parameterizable Barrel Shifter",
+   "difficulty": "Hard",
+   "slug": "barrel_shifter"
+  },
+  {
+   "title": "Pipelined ALU",
+   "difficulty": "Hard",
+   "slug": "pipelined_alu"
+  },
+  {
+   "title": "Pipeline Registers with Flush/Stall",
+   "difficulty": "Medium",
+   "slug": "pipeline_regs"
+  },
+  {
+   "title": "Priority Encoder",
+   "difficulty": "Medium",
+   "slug": "priority_encoder"
+  },
+  {
+   "title": "N-bit Adder/Subtractor",
+   "difficulty": "Medium",
+   "slug": "add_sub"
+  },
+  {
+   "title": "Multiplier",
+   "difficulty": "Hard",
+   "slug": "shift_add_multiplier"
+  },
+  {
+   "title": "Sequential Divider",
+   "difficulty": "Hard",
+   "slug": "seq_divider"
+  },
+  {
+   "title": "Memory-Mapped GPIO",
+   "difficulty": "Medium",
+   "slug": "mmio_gpio"
+  },
+  {
+   "title": "APB Slave Peripheral",
+   "difficulty": "Hard",
+   "slug": "apb_slave"
+  },
+  {
+   "title": "AXI-Lite Single Register",
+   "difficulty": "Medium",
+   "slug": "axil_reg"
+  },
+  {
+   "title": "AXI GPIO",
+   "difficulty": "Medium",
+   "slug": "axil_gpio"
+  },
+  {
+   "title": "AXI Register File",
+   "difficulty": "Medium",
+   "slug": "axil_regfile"
+  },
+  {
+   "title": "AXI Read-Only Status",
+   "difficulty": "Easy",
+   "slug": "axil_status_ro"
+  },
+  {
+   "title": "AXI Write-Only Control",
+   "difficulty": "Easy",
+   "slug": "axil_ctrl_wo"
+  },
+  {
+   "title": "Bus Arbiter",
+   "difficulty": "Hard",
+   "slug": "bus_arbiter"
+  },
+  {
+   "title": "Edge / Toggle Detector",
+   "difficulty": "Easy",
+   "slug": "edge_detector"
+  },
+  {
+   "title": "1-Cycle Pulse Detector",
+   "difficulty": "Easy",
+   "slug": "pulse_detector"
+  },
+  {
+   "title": "Sequence Detector FSM",
+   "difficulty": "Medium",
+   "slug": "sequence_detector"
+  },
+  {
+   "title": "Pattern in Last N",
+   "difficulty": "Medium",
+   "slug": "pattern_last_n"
+  },
+  {
+   "title": "Debounce + Sync",
+   "difficulty": "Medium",
+   "slug": "debouncer"
+  },
+  {
+   "title": "Binary to Gray",
+   "difficulty": "Easy",
+   "slug": "gray_code"
+  },
+  {
+   "title": "Divisible by 3",
+   "difficulty": "Medium",
+   "slug": "divisible_by_3"
+  },
+  {
+   "title": "Fibonacci Generator",
+   "difficulty": "Medium",
+   "slug": "fibonacci"
+  },
+  {
+   "title": "ms to sec/min/hr",
+   "difficulty": "Easy",
+   "slug": "time_counter"
+  },
+  {
+   "title": "Clock Divide by 2",
+   "difficulty": "Easy",
+   "slug": "clk_div2"
+  },
+  {
+   "title": "Clock Divide by 3 (50%)",
+   "difficulty": "Hard",
+   "slug": "clk_div3"
+  },
+  {
+   "title": "Clock Divide by N",
+   "difficulty": "Medium",
+   "slug": "clk_div_n"
+  },
+  {
+   "title": "Glitch-Free Clock Gate",
+   "difficulty": "Medium",
+   "slug": "clock_gate_icg"
+  },
+  {
+   "title": "Reset Sync",
+   "difficulty": "Medium",
+   "slug": "reset_sync"
+  },
+  {
+   "title": "CDC Slow→Fast (1-bit)",
+   "difficulty": "Medium",
+   "slug": "cdc_slow_to_fast"
+  },
+  {
+   "title": "CDC Fast→Slow Handshake",
+   "difficulty": "Hard",
+   "slug": "cdc_handshake"
+  },
+  {
+   "title": "Gray Pointer for CDC",
+   "difficulty": "Medium",
+   "slug": "gray_pointer"
+  },
+  {
+   "title": "Edge Detector",
+   "difficulty": "Easy",
+   "slug": "edge_detector"
+  },
+  {
+   "title": "Top-K or Max-Value Tracker",
+   "difficulty": "Hard",
+   "slug": "topk_tracker"
+  },
+  {
+   "title": "Sliding Window Min/Max",
+   "difficulty": "Hard",
+   "slug": "sliding_minmax"
+  },
+  {
+   "title": "PWM Generator",
+   "difficulty": "Medium",
+   "slug": "pwm"
+  }
+ ],
+ "Design Verification": [
+  {
+   "title": "Array Sum Constraint",
+   "difficulty": "Medium",
+   "slug": "dv_c01_array_sum",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Exactly 3 Same Values",
+   "difficulty": "Hard",
+   "slug": "dv_c02_three_same",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Dynamic Array with Repetition Rules",
+   "difficulty": "Hard",
+   "slug": "dv_c03_repetition_rules",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "No Consecutive Zeros",
+   "difficulty": "Hard",
+   "slug": "dv_c04_no_consecutive_zeros",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Even-Odd Index Constraint",
+   "difficulty": "Medium",
+   "slug": "dv_c05_even_odd_index",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "3D Array All Unique",
+   "difficulty": "Medium",
+   "slug": "dv_c06_unique_3d",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Divide into Three Unique Queues",
+   "difficulty": "Hard",
+   "slug": "dv_c07_three_queues",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Map to N Non-Empty Queues",
+   "difficulty": "Hard",
+   "slug": "dv_c08_n_queues",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Two Arrays with Sorted Relationship",
+   "difficulty": "Hard",
+   "slug": "dv_c09_sorted_arrays",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Conditional Probability Constraint",
+   "difficulty": "Hard",
+   "slug": "dv_c10_conditional_prob",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "5% Probability for Lower Bits Same",
+   "difficulty": "Medium",
+   "slug": "dv_c11_lower_bits_prob",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Uniform Distribution by Bit Count",
+   "difficulty": "Hard",
+   "slug": "dv_c12_bitcount_uniform",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "5 Bits Set with Consecutive Probability",
+   "difficulty": "Hard",
+   "slug": "dv_c13_five_bits_consecutive",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Exactly 5 Consecutive Bits",
+   "difficulty": "Hard",
+   "slug": "dv_c14_five_consecutive",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Binary Matrix with Sum Constraint",
+   "difficulty": "Medium",
+   "slug": "dv_c15_matrix_sum",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Adjacent Elements Distinct",
+   "difficulty": "Hard",
+   "slug": "dv_c16_adjacent_distinct",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Unique Row Maximums",
+   "difficulty": "Hard",
+   "slug": "dv_c17_unique_row_max",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Sub-Square Maximum Constraint",
+   "difficulty": "Hard",
+   "slug": "dv_c18_subsquare_max",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Matrix 90° Rotation",
+   "difficulty": "Medium",
+   "slug": "dv_c19_matrix_rotation",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Grouped 1s in Binary",
+   "difficulty": "Medium",
+   "slug": "dv_c20_grouped_ones",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "5 Non-Adjacent Set Bits",
+   "difficulty": "Hard",
+   "slug": "dv_c21_non_adjacent_bits",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Equal 1s and 0s",
+   "difficulty": "Medium",
+   "slug": "dv_c22_equal_ones_zeros",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Power of 4",
+   "difficulty": "Easy",
+   "slug": "dv_c23_power_of_4",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Last 4 Values Unique",
+   "difficulty": "Medium",
+   "slug": "dv_c24_last4_unique",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "No Repeat in Next 3 Draws",
+   "difficulty": "Hard",
+   "slug": "dv_c25_no_repeat_3",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Sudoku Puzzle Constraints",
+   "difficulty": "Hard",
+   "slug": "dv_c26_sudoku",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "8 Queens Problem",
+   "difficulty": "Hard",
+   "slug": "dv_c27_eight_queens",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Knight's Tour Problem",
+   "difficulty": "Hard",
+   "slug": "dv_c28_knights_tour",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Magic Square",
+   "difficulty": "Hard",
+   "slug": "dv_c29_magic_square",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Instruction Repetition Constraints",
+   "difficulty": "Hard",
+   "slug": "dv_c30_instr_repetition",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "No Overlapping Instructions",
+   "difficulty": "Hard",
+   "slug": "dv_c31_no_overlap_instr",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Achieve Without Constraints",
+   "difficulty": "Hard",
+   "slug": "dv_c32_without_constraints",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Tic-Tac-Toe Constraints",
+   "difficulty": "Medium",
+   "slug": "dv_c33_tic_tac_toe",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Two Matrices Unique Minimums",
+   "difficulty": "Medium",
+   "slug": "dv_c34_unique_minimums",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Fixed Index Value",
+   "difficulty": "Easy",
+   "slug": "dv_c35_fixed_index",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Queue with Size-Based Range",
+   "difficulty": "Medium",
+   "slug": "dv_c36_queue_size_range",
+   "note": "SystemVerilog constraint randomization (Verilator + z3)"
+  },
+  {
+   "title": "Signal High When Valid",
+   "difficulty": "Easy",
+   "slug": "dv_a37_high_when_valid",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Data Stable for One Cycle",
+   "difficulty": "Easy",
+   "slug": "dv_a38_data_stable",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Count Zero on Reset",
+   "difficulty": "Easy",
+   "slug": "dv_a39_count_zero_reset",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Detect Rising Edge",
+   "difficulty": "Easy",
+   "slug": "dv_a40_rising_edge",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Output Equals Sum",
+   "difficulty": "Easy",
+   "slug": "dv_a41_output_sum",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Signal Always High",
+   "difficulty": "Medium",
+   "slug": "dv_a42_always_high",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Event Within 5 Cycles",
+   "difficulty": "Medium",
+   "slug": "dv_a43_within_5",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "High for 3 Consecutive Cycles",
+   "difficulty": "Easy",
+   "slug": "dv_a44_high_3_cycles",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Counter Zero After Reset",
+   "difficulty": "Medium",
+   "slug": "dv_a45_counter_after_reset",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "No Signal Overlap",
+   "difficulty": "Medium",
+   "slug": "dv_a46_no_overlap",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Event Precedence by 10 Cycles",
+   "difficulty": "Medium",
+   "slug": "dv_a47_precedence_10",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Signal Toggles Every 4 Cycles",
+   "difficulty": "Medium",
+   "slug": "dv_a48_toggle_4",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Rising Then Falling Edge",
+   "difficulty": "Medium",
+   "slug": "dv_a49_rise_then_fall",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Data Consistent After Enable",
+   "difficulty": "Medium",
+   "slug": "dv_a50_consistent_after_enable",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Sequence A Before B",
+   "difficulty": "Easy",
+   "slug": "dv_a51_a_before_b",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "FSM State Transition Coverage",
+   "difficulty": "Hard",
+   "slug": "dv_a52_fsm_coverage",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Signal Within Range",
+   "difficulty": "Medium",
+   "slug": "dv_a53_within_range",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Array Index Valid Range",
+   "difficulty": "Medium",
+   "slug": "dv_a54_index_range",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Protocol Event Sequence Coverage",
+   "difficulty": "Hard",
+   "slug": "dv_a55_protocol_coverage",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Signal Pattern Match",
+   "difficulty": "Medium",
+   "slug": "dv_a56_pattern_match",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Bus Protocol Address Alignment",
+   "difficulty": "Hard",
+   "slug": "dv_a57_address_alignment",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "Transaction Data Validity",
+   "difficulty": "Hard",
+   "slug": "dv_a58_transaction_validity",
+   "note": "assertion / checker (SVA on Verilator, or procedural checks)"
+  },
+  {
+   "title": "UVM Assertion Coverage Integration",
+   "difficulty": "Hard",
+   "slug": "dv_uvm_assert_cov",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "UVM RAL Register Access",
+   "difficulty": "Hard",
+   "slug": "dv_uvm_ral",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "Driver-Monitor Communication",
+   "difficulty": "Hard",
+   "slug": "dv_uvm_driver_monitor",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "FIFO Full and Empty Flags",
+   "difficulty": "Medium",
+   "slug": "dv_a62_fifo_flags",
+   "note": "assertion / checker"
+  },
+  {
+   "title": "Arbiter Fair Granting",
+   "difficulty": "Hard",
+   "slug": "dv_a63_arbiter_fair",
+   "note": "assertion / checker"
+  },
+  {
+   "title": "No Starvation in Arbiter",
+   "difficulty": "Hard",
+   "slug": "dv_a64_no_starvation",
+   "note": "assertion / checker"
+  },
+  {
+   "title": "Mutual Exclusion Verification",
+   "difficulty": "Hard",
+   "slug": "dv_a65_mutex",
+   "note": "assertion / checker"
+  },
+  {
+   "title": "Ready-Valid Handshaking",
+   "difficulty": "Medium",
+   "slug": "dv_a66_ready_valid",
+   "note": "assertion / checker"
+  },
+  {
+   "title": "Out-of-Order Scoreboard",
+   "difficulty": "Hard",
+   "slug": "dv_ooo_scoreboard"
+  },
+  {
+   "title": "OOO Router Scoreboard",
+   "difficulty": "Hard",
+   "slug": "dv_ooo_router_scoreboard"
+  },
+  {
+   "title": "Framing Monitor ABCD→CAFE",
+   "difficulty": "Hard",
+   "slug": "dv_framing_monitor"
+  },
+  {
+   "title": "Split-Beat Driver",
+   "difficulty": "Medium",
+   "slug": "dv_split_beat_driver"
+  },
+  {
+   "title": "Split-Beat Monitor Reassembly",
+   "difficulty": "Hard",
+   "slug": "dv_split_beat_monitor"
+  },
+  {
+   "title": "Functional Coverage Subscriber",
+   "difficulty": "Medium",
+   "slug": "dv_uvm_coverage_subscriber",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "Coverage Placement in Env",
+   "difficulty": "Medium",
+   "slug": "dv_uvm_coverage_env",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "Analysis FIFO Scoreboard",
+   "difficulty": "Hard",
+   "slug": "dv_uvm_analysis_fifo",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "Driver Response Path",
+   "difficulty": "Medium",
+   "slug": "dv_uvm_driver_response",
+   "note": "needs the UVM library, which is not installed"
+  },
+  {
+   "title": "Protocol Assertion Monitor",
+   "difficulty": "Hard",
+   "slug": "dv_a76_protocol_monitor"
+  }
+ ],
+ "Debug (Bug Fixing)": [
+  {
+   "title": "FSM Sequence Detector",
+   "difficulty": "Medium",
+   "slug": "bug_seq_detector"
+  },
+  {
+   "title": "Synchronous FIFO",
+   "difficulty": "Hard",
+   "slug": "bug_sync_fifo"
+  },
+  {
+   "title": "Valid/Ready Handshake",
+   "difficulty": "Medium",
+   "slug": "bug_valid_ready"
+  },
+  {
+   "title": "Counter",
+   "difficulty": "Easy",
+   "slug": "bug_counter"
+  },
+  {
+   "title": "Shift Register",
+   "difficulty": "Medium",
+   "slug": "bug_shift_register"
+  },
+  {
+   "title": "Arbiter",
+   "difficulty": "Hard",
+   "slug": "bug_arbiter"
+  },
+  {
+   "title": "APB Slave",
+   "difficulty": "Medium",
+   "slug": "bug_apb_slave"
+  },
+  {
+   "title": "Edge Detector",
+   "difficulty": "Medium",
+   "slug": "bug_edge_detector"
+  },
+  {
+   "title": "Single-Port RAM",
+   "difficulty": "Medium",
+   "slug": "bug_sp_ram"
+  },
+  {
+   "title": "Req/Ack Handshake",
+   "difficulty": "Easy",
+   "slug": "bug_req_ack"
+  },
+  {
+   "title": "One-Hot FSM",
+   "difficulty": "Medium",
+   "slug": "bug_onehot_fsm"
+  }
+ ],
+ "Low Power": [
+  {
+   "title": "Latch-based ICG",
+   "difficulty": "Easy",
+   "slug": "clock_gate_icg"
+  },
+  {
+   "title": "Spot the Glitch",
+   "difficulty": "Easy",
+   "slug": "lp_spot_glitch"
+  },
+  {
+   "title": "Enable Pipelining",
+   "difficulty": "Medium",
+   "slug": "lp_enable_pipeline"
+  },
+  {
+   "title": "Byte-level Reg File CG",
+   "difficulty": "Medium",
+   "slug": "lp_byte_cg_regfile"
+  },
+  {
+   "title": "FSM-driven CG",
+   "difficulty": "Hard",
+   "slug": "lp_fsm_cg"
+  },
+  {
+   "title": "Isolation Cell",
+   "difficulty": "Easy",
+   "slug": "lp_isolation_cell"
+  },
+  {
+   "title": "Retention Flop",
+   "difficulty": "Medium",
+   "slug": "lp_retention_flop"
+  },
+  {
+   "title": "Power Sequencer FSM",
+   "difficulty": "Medium",
+   "slug": "lp_power_sequencer"
+  },
+  {
+   "title": "Always-On Handshake",
+   "difficulty": "Hard",
+   "slug": "lp_ao_handshake"
+  },
+  {
+   "title": "Level Shifter",
+   "difficulty": "Easy",
+   "slug": "lp_level_shifter"
+  },
+  {
+   "title": "Glitch-free Freq Divider",
+   "difficulty": "Medium",
+   "slug": "lp_glitchfree_divider"
+  },
+  {
+   "title": "Cross-Voltage Async FIFO",
+   "difficulty": "Hard",
+   "slug": "async_fifo"
+  },
+  {
+   "title": "SVA Power Sequencing",
+   "difficulty": "Medium",
+   "slug": "dv_sva_power_sequence"
+  },
+  {
+   "title": "UPF Coverage",
+   "difficulty": "Hard",
+   "slug": "lp_upf_coverage",
+   "status": "unsupported",
+   "note": "no open-source UPF / power-aware simulator"
+  },
+  {
+   "title": "Retention Bug Hunt",
+   "difficulty": "Hard",
+   "slug": "lp_retention_bug"
+  },
+  {
+   "title": "Drowsy Cache Line",
+   "difficulty": "Medium",
+   "slug": "lp_drowsy_cache"
+  },
+  {
+   "title": "Way-Predict",
+   "difficulty": "Medium",
+   "slug": "lp_way_predict"
+  },
+  {
+   "title": "Operand Isolation",
+   "difficulty": "Medium",
+   "slug": "lp_operand_isolation"
+  },
+  {
+   "title": "Glitch-free MUX Tree",
+   "difficulty": "Medium",
+   "slug": "lp_glitchfree_clkmux"
+  },
+  {
+   "title": "Bus Invert Coding",
+   "difficulty": "Hard",
+   "slug": "lp_bus_invert"
+  }
+ ],
+ "DFT (additional)": [
+  {
+   "title": "Scan Flip-Flop Register",
+   "difficulty": "Easy",
+   "slug": "dft_scan_register"
+  },
+  {
+   "title": "Scan-Inserted Counter",
+   "difficulty": "Medium",
+   "slug": "dft_scan_counter"
+  },
+  {
+   "title": "MISR Signature Register",
+   "difficulty": "Medium",
+   "slug": "dft_misr"
+  },
+  {
+   "title": "JTAG TAP Controller",
+   "difficulty": "Hard",
+   "slug": "dft_jtag_tap"
+  },
+  {
+   "title": "Memory BIST (March C-)",
+   "difficulty": "Hard",
+   "slug": "dft_mbist"
+  }
+ ],
+ "Timing (additional)": [
+  {
+   "title": "Shorten the Parity Path",
+   "difficulty": "Easy",
+   "slug": "timing_parity_tree"
+  },
+  {
+   "title": "Maximum of Eight",
+   "difficulty": "Medium",
+   "slug": "timing_max_finder"
+  },
+  {
+   "title": "Parallel-Prefix Adder",
+   "difficulty": "Hard",
+   "slug": "timing_fast_adder"
+  },
+  {
+   "title": "Pipeline the Multiply-Add",
+   "difficulty": "Medium",
+   "slug": "timing_pipelined_mac"
+  }
+ ],
+ "Verification by mutation (additional)": [
+  {
+   "title": "Write a Testbench: Counter",
+   "difficulty": "Easy",
+   "slug": "dv_tb_counter"
+  },
+  {
+   "title": "Write a Testbench: ALU",
+   "difficulty": "Medium",
+   "slug": "dv_tb_alu"
+  },
+  {
+   "title": "Write a Testbench: FIFO",
+   "difficulty": "Hard",
+   "slug": "dv_tb_fifo"
+  }
+ ],
+ "More problems (additional)": [
+  {
+   "title": "BCD Digit Adder",
+   "difficulty": "Easy",
+   "slug": "bcd_adder"
+  },
+  {
+   "title": "CRC-8 (Byte per Cycle)",
+   "difficulty": "Medium",
+   "slug": "crc8"
+  },
+  {
+   "title": "Skid Buffer (Registered Ready)",
+   "difficulty": "Medium",
+   "slug": "skid_buffer"
+  },
+  {
+   "title": "Sorting Network (4 Inputs)",
+   "difficulty": "Medium",
+   "slug": "sort4"
+  },
+  {
+   "title": "4-Tap FIR Filter",
+   "difficulty": "Medium",
+   "slug": "fir4"
+  },
+  {
+   "title": "Manchester Encoder",
+   "difficulty": "Medium",
+   "slug": "manchester_tx"
+  },
+  {
+   "title": "Sequential Integer Square Root",
+   "difficulty": "Hard",
+   "slug": "int_sqrt"
+  },
+  {
+   "title": "Interrupt Controller",
+   "difficulty": "Hard",
+   "slug": "irq_ctrl"
+  },
+  {
+   "title": "SPI Master (Mode 0)",
+   "difficulty": "Hard",
+   "slug": "spi_master"
+  },
+  {
+   "title": "Weighted Round-Robin Arbiter",
+   "difficulty": "Hard",
+   "slug": "wrr_arbiter"
+  },
+  {
+   "title": "Credit-Based Flow Control",
+   "difficulty": "Medium",
+   "slug": "credit_tx"
+  },
+  {
+   "title": "Radix-2 Booth Multiplier",
+   "difficulty": "Hard",
+   "slug": "booth_multiplier"
+  },
+  {
+   "title": "Debug: Skid Buffer",
+   "difficulty": "Hard",
+   "slug": "bug_skid_buffer"
+  },
+  {
+   "title": "Debug: CRC-8",
+   "difficulty": "Medium",
+   "slug": "bug_crc8"
+  },
+  {
+   "title": "Assertion: One-Hot State Register",
+   "difficulty": "Easy",
+   "slug": "dv_a_onehot_state"
+  },
+  {
+   "title": "Assertion: FIFO Overflow / Underflow",
+   "difficulty": "Easy",
+   "slug": "dv_a_fifo_guard"
+  },
+  {
+   "title": "Assertion: At Most 2 Outstanding",
+   "difficulty": "Medium",
+   "slug": "dv_a_max_outstanding"
+  },
+  {
+   "title": "Assertion: Gray-Code Counter Steps",
+   "difficulty": "Easy",
+   "slug": "dv_a_gray_step"
+  },
+  {
+   "title": "Assertion: Strobe Pulse Shape",
+   "difficulty": "Medium",
+   "slug": "dv_a_pulse_shape"
+  },
+  {
+   "title": "UVM: Virtual Sequence",
+   "difficulty": "Medium",
+   "slug": "dv_uvm_virtual_sequence"
+  },
+  {
+   "title": "UVM: Report Catcher (Waivers)",
+   "difficulty": "Medium",
+   "slug": "dv_uvm_report_catcher"
+  },
+  {
+   "title": "UVM: Factory Override + Config Object",
+   "difficulty": "Medium",
+   "slug": "dv_uvm_factory_config"
+  },
+  {
+   "title": "Timing: 32-Bit Priority Encoder",
+   "difficulty": "Medium",
+   "slug": "timing_priority_enc32"
+  },
+  {
+   "title": "Boundary-Scan Register (4 Cells)",
+   "difficulty": "Medium",
+   "slug": "dft_boundary_scan"
+  },
+  {
+   "title": "LBIST Pattern Generator (PRPG + Phase Shifter)",
+   "difficulty": "Medium",
+   "slug": "dft_prpg"
+  },
+  {
+   "title": "Constraint: Private IPv4 Address",
+   "difficulty": "Easy",
+   "slug": "dv_c37_private_ip"
+  },
+  {
+   "title": "Constraint: Weighted Packet Mix",
+   "difficulty": "Medium",
+   "slug": "dv_c38_packet_mix"
+  },
+  {
+   "title": "Constraint: AXI Burst Within a 4 KB Page",
+   "difficulty": "Hard",
+   "slug": "dv_c39_axi_4k"
+  },
+  {
+   "title": "Branch History Table (2-Bit Counters)",
+   "difficulty": "Medium",
+   "slug": "branch_predictor_bht"
+  },
+  {
+   "title": "Debug: Branch Predictor",
+   "difficulty": "Medium",
+   "slug": "bug_branch_predictor"
+  },
+  {
+   "title": "Return Address Stack",
+   "difficulty": "Medium",
+   "slug": "return_address_stack"
+  },
+  {
+   "title": "Fully Associative TLB",
+   "difficulty": "Hard",
+   "slug": "tlb4"
+  },
+  {
+   "title": "Switching-Activity Monitor",
+   "difficulty": "Medium",
+   "slug": "lp_toggle_monitor"
+  },
+  {
+   "title": "Checkerboard Memory BIST",
+   "difficulty": "Medium",
+   "slug": "dft_checkerboard_bist"
+  },
+  {
+   "title": "Saturating Integrator Model",
+   "difficulty": "Easy",
+   "slug": "integrator_model"
+  }
+ ],
+ "Brain teasers (additional)": [
+  {
+   "title": "Lowest Set Bit Tricks",
+   "difficulty": "Easy",
+   "slug": "lowest_set_bit_tricks"
+  },
+  {
+   "title": "Exactly Two Bits Set",
+   "difficulty": "Medium",
+   "slug": "exactly_two_hot"
+  },
+  {
+   "title": "Power of Four",
+   "difficulty": "Easy",
+   "slug": "power_of_four"
+  },
+  {
+   "title": "Three in a Row, All Alone",
+   "difficulty": "Easy",
+   "slug": "runs_of_ones"
+  },
+  {
+   "title": "Branchless Absolute Value",
+   "difficulty": "Easy",
+   "slug": "branchless_abs"
+  },
+  {
+   "title": "Branchless Signed Min / Max",
+   "difficulty": "Medium",
+   "slug": "branchless_minmax"
+  },
+  {
+   "title": "Divisible by 5 Without Dividing",
+   "difficulty": "Medium",
+   "slug": "divisible_by_5"
+  },
+  {
+   "title": "Next Number With the Same Popcount",
+   "difficulty": "Hard",
+   "slug": "next_same_popcount"
+  },
+  {
+   "title": "Variable-Width Sign Extension",
+   "difficulty": "Hard",
+   "slug": "sign_extend_var"
+  },
+  {
+   "title": "2:1 Mux From NAND Gates Only",
+   "difficulty": "Easy",
+   "slug": "nand_only_mux"
+  },
+  {
+   "title": "Full Adder From NAND Gates Only",
+   "difficulty": "Medium",
+   "slug": "nand_only_full_adder"
+  },
+  {
+   "title": "Serial Divisible-by-5 (3 Flip-Flops)",
+   "difficulty": "Medium",
+   "slug": "serial_div5"
+  },
+  {
+   "title": "Timing: Fast Gray → Binary",
+   "difficulty": "Medium",
+   "slug": "timing_gray_to_bin"
+  },
+  {
+   "title": "Add Three Numbers With One Adder",
+   "difficulty": "Medium",
+   "slug": "carry_save_add3"
+  },
+  {
+   "title": "Equality Without ==",
+   "difficulty": "Easy",
+   "slug": "equal_without_eq"
+  },
+  {
+   "title": "Multiply by 7, 10 and 255 Without *",
+   "difficulty": "Easy",
+   "slug": "const_multipliers"
+  },
+  {
+   "title": "Hamming Distance At Most One",
+   "difficulty": "Medium",
+   "slug": "hamming_close"
+  },
+  {
+   "title": "Alternating Bit Pattern",
+   "difficulty": "Easy",
+   "slug": "alternating_bits"
+  },
+  {
+   "title": "Gray-Code Increment",
+   "difficulty": "Medium",
+   "slug": "gray_increment"
+  },
+  {
+   "title": "Branchless Saturating Add",
+   "difficulty": "Easy",
+   "slug": "branchless_sat_add"
+  },
+  {
+   "title": "Three-Way Compare Without Comparators",
+   "difficulty": "Medium",
+   "slug": "spaceship_compare"
+  },
+  {
+   "title": "Divisible by 3, LSB First",
+   "difficulty": "Hard",
+   "slug": "serial_div3_lsb"
+  },
+  {
+   "title": "Mod-6 Counter Without an Adder",
+   "difficulty": "Medium",
+   "slug": "johnson_mod6"
+  }
+ ]
+}

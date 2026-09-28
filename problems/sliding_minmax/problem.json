@@ -1,0 +1,80 @@
+{
+  "id": 163,
+  "title": "Sliding-Window Min/Max",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "streaming",
+    "window",
+    "comparator-tree"
+  ],
+  "top": "win_minmax",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "wmin",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "wmax",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "The window holds the last **8** accepted samples (`valid = 1`). After reset it is full of zeros.",
+    "`wmin` / `wmax` are the minimum and maximum over the window, registered: they reflect the window including the sample accepted at the latest edge. Without `valid`, nothing changes.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "Keep the window in an 8-entry shift register.",
+    "Compute min and max of the **new** window (din plus the 7 newest stored samples) with two comparator trees, and register the results.",
+    "A running max can't simply be updated incrementally: when the maximum leaves the window you must look at the others again."
+  ],
+  "examples": [
+    {
+      "check": "fills the window",
+      "title": "startup",
+      "input": "samples 5, 9, 3 after reset",
+      "expected": "wmin = 0 (zeros still in the window), wmax = 9"
+    },
+    {
+      "check": "maximum leaves the window",
+      "title": "expiry",
+      "input": "the 9 is 8 samples old",
+      "expected": "wmax falls to the next largest value"
+    },
+    {
+      "check": "2500 random",
+      "title": "random",
+      "input": "random stream",
+      "expected": "exact min/max"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

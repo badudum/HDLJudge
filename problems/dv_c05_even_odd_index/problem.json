@@ -1,0 +1,47 @@
+{
+  "id": 111,
+  "title": "Constraint: Even-Odd Index Rules",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "even_odd",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`arr[i]` is even when `i` is even and odd when `i` is odd.",
+    "The even-index elements `arr[0], arr[2], …, arr[10]` are strictly increasing.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Parity is bit 0: `arr[i][0] == i[0]` (or `arr[i] % 2 == i % 2`).",
+    "Compare with the previous even element: `arr[i] > arr[i-2]` for even i ≥ 2."
+  ],
+  "examples": [
+    {
+      "check": "elements at even indices are even",
+      "title": "parity",
+      "input": "arr[4]",
+      "expected": "an even number"
+    },
+    {
+      "check": "even-index elements strictly increase",
+      "title": "order",
+      "input": "arr[0] < arr[2] < … < arr[10]",
+      "expected": "always"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 190 different arrays"
+    }
+  ]
+}

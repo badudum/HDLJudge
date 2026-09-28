@@ -1,0 +1,64 @@
+{
+  "id": 223,
+  "title": "Weighted Round-Robin Arbiter",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "arbitration",
+    "round-robin",
+    "qos"
+  ],
+  "top": "wrr_arb",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 3
+    },
+    {
+      "name": "gnt",
+      "dir": "output",
+      "width": 3
+    }
+  ],
+  "constraints": [
+    "Three requesters with fixed weights W = (3, 2, 1): requester i may hold the grant for up to W[i] **consecutive** cycles per turn. `gnt` is a registered one-hot (or 0).",
+    "State: the current owner `cur` and the number of grants `cnt` it received in this turn. Each edge: if `req[cur]` and `cnt < W[cur]`, grant `cur` again and `cnt++`. Otherwise search round-robin starting **after** `cur` (cur+1, cur+2, then cur itself) for the first requester. Grant it, make it `cur`, set `cnt = 1`. If nobody requests: `gnt = 0` (cur and cnt unchanged).",
+    "Synchronous reset: `cur = 2`, `cnt = 1`, `gnt = 0`, so that the first search starts at requester 0."
+  ],
+  "hints": [
+    "Encode the search order as a rotation of `req`, then a priority encoder.",
+    "The requester continuing its turn doesn't search at all. Only a turn change searches.",
+    "Weighted round-robin gives bandwidth shares proportional to the weights (3:2:1 here) while still being starvation-free."
+  ],
+  "examples": [
+    {
+      "check": "bandwidth shares",
+      "title": "all requesting",
+      "input": "req = 111 forever",
+      "expected": "0,0,0,1,1,2,0,0,0,1,1,2,…"
+    },
+    {
+      "check": "turn ends when the request drops",
+      "title": "drop",
+      "input": "requester 0 stops after 1 cycle",
+      "expected": "grant moves on immediately"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

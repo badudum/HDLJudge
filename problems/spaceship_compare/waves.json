@@ -1,0 +1,52 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7F",
+     "80",
+     "FF",
+     "0",
+     "1",
+     "7F"
+    ]
+   },
+   {
+    "name": "r",
+    "kind": "bus",
+    "values": [
+     "0",
+     "3",
+     "3",
+     "1",
+     "1",
+     "1",
+     "0",
+     "3"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "corner cases"
+ }
+]

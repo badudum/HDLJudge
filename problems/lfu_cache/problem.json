@@ -1,0 +1,32 @@
+{
+  "id": 59, "title": "LFU Replacement (4 entries)", "difficulty": "Hard", "category": "arch",
+  "tags": ["cache", "replacement", "lfu", "counters"], "top": "lfu4",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",    "dir": "input",  "width": 1},
+    {"name": "rst",    "dir": "input",  "width": 1},
+    {"name": "hit",    "dir": "input",  "width": 1},
+    {"name": "way",    "dir": "input",  "width": 2},
+    {"name": "fill",   "dir": "input",  "width": 1},
+    {"name": "victim", "dir": "output", "width": 2},
+    {"name": "counts", "dir": "output", "width": 12}
+  ],
+  "constraints": [
+    "Each of the 4 entries has a 3-bit use counter. `counts` packs them: entry i at `counts[3i+2:3i]`. Reset sets all counters to 0.",
+    "`victim` = the entry with the smallest count. Ties go to the **lowest index**.",
+    "Rising edge with `fill = 1`: the current victim is replaced, so its counter becomes 1 (`hit` is ignored this cycle).",
+    "Otherwise, with `hit = 1`: the counter of entry `way` increments, **saturating at 7**.",
+    "When an increment makes a counter reach 7, **all** counters are halved (shift right by 1) on that same edge, so frequencies age. Must be synthesizable."
+  ],
+  "hints": [
+    "Compute the victim combinationally: compare the four counters with a small tournament that prefers the lower index on ties.",
+    "Handle priorities in one clocked block: reset, then fill, then hit.",
+    "Aging: compute the incremented counter first. If it equals 7, write every counter (including that new value) shifted right by one."
+  ],
+  "examples": [
+    {"check": "reset and fill", "title": "empty set", "input": "reset, then fill", "expected": "entry 0 gets count 1, next victim = 1"},
+    {"check": "frequency wins", "title": "hot entry", "input": "hit entry 2 three times", "expected": "entry 2 is never the victim while others have lower counts"},
+    {"check": "aging", "title": "saturation", "input": "counts {6,1,2,3}, hit entry 0", "expected": "entry 0 reaches 7 → all halved: {3,0,1,1}"}
+  ]
+}

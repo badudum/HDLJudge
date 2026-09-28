@@ -1,0 +1,34 @@
+{
+  "id": 67, "title": "Scoreboard Issue Logic", "difficulty": "Hard", "category": "arch",
+  "tags": ["scoreboard", "hazards", "in-order-issue"], "top": "scoreboard",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",         "dir": "input",  "width": 1},
+    {"name": "rst",         "dir": "input",  "width": 1},
+    {"name": "issue_valid", "dir": "input",  "width": 1},
+    {"name": "rd",          "dir": "input",  "width": 3},
+    {"name": "rs1",         "dir": "input",  "width": 3},
+    {"name": "rs2",         "dir": "input",  "width": 3},
+    {"name": "wb_valid",    "dir": "input",  "width": 1},
+    {"name": "wb_rd",       "dir": "input",  "width": 3},
+    {"name": "issued",      "dir": "output", "width": 1},
+    {"name": "pending",     "dir": "output", "width": 8}
+  ],
+  "constraints": [
+    "`pending[r]` = a result for register r is still in flight. Register 0 is never pending and never causes a hazard.",
+    "Each rising edge first applies the writeback: `wb_valid` clears `pending[wb_rd]`. The cleared bit counts immediately (write-back bypass).",
+    "Then the instruction may issue if `issue_valid`, and none of rs1 (RAW), rs2 (RAW) or rd (WAW) is pending after the writeback. If it issues: `pending[rd] <= 1` (unless rd = 0) and `issued = 1`. Otherwise `issued = 0`.",
+    "Outputs are registered. Synchronous reset clears everything. Must be synthesizable."
+  ],
+  "hints": [
+    "Compute `after_wb = pending & ~wb_mask` first, and use it both for the hazard check and as the base of the new state.",
+    "A register-0 mask (`& 8'hFE`) avoids special cases.",
+    "WAW matters: issuing a second writer to r5 while r5 is pending could let the older result overwrite the newer one."
+  ],
+  "examples": [
+    {"check": "RAW stall", "title": "dependent instruction", "input": "issue rd=3; then rs1=3 before writeback", "expected": "second: issued = 0"},
+    {"check": "writeback bypass", "title": "same-cycle wake-up", "input": "rs1=3 while wb_rd=3 on the same edge", "expected": "issued = 1"},
+    {"check": "register 0", "title": "x0", "input": "rd = 0 or rs = 0", "expected": "never pending, never a hazard"}
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": 47,
+  "title": "Branch Comparator",
+  "difficulty": "Medium",
+  "category": "arch",
+  "tags": ["risc-v", "comparator", "branch"],
+  "top": "branch_cmp",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "a",      "dir": "input",  "width": 32},
+    {"name": "b",      "dir": "input",  "width": 32},
+    {"name": "funct3", "dir": "input",  "width": 3},
+    {"name": "taken",  "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "RISC-V branch encodings: BEQ 000, BNE 001, BLT 100, BGE 101 (signed), BLTU 110, BGEU 111 (unsigned).",
+    "`funct3 = 010` or `011` are not branches: `taken = 0`.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Compute three facts once: equal, signed less-than, unsigned less-than. Every branch is one of them or its inverse.",
+    "Signed less-than from the unsigned one: if the sign bits differ, `a` is less exactly when `a` is negative.",
+    "BGE is `!BLT` (not `>`): equal operands take the branch."
+  ],
+  "examples": [
+    {"check": "BLT / BGE (signed)", "title": "signed", "input": "funct3 = 100 (BLT), a = -1, b = 1", "expected": "taken = 1"},
+    {"check": "BLTU / BGEU (unsigned)", "title": "unsigned", "input": "funct3 = 110 (BLTU), a = 0xFFFFFFFF, b = 1", "expected": "taken = 0"},
+    {"check": "BEQ / BNE", "title": "equal", "input": "funct3 = 101 (BGE), a = b = 5", "expected": "taken = 1"}
+  ]
+}

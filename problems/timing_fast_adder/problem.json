@@ -1,0 +1,34 @@
+{
+  "id": 39,
+  "title": "Timing: Parallel-Prefix Adder",
+  "difficulty": "Hard",
+  "category": "timing",
+  "tags": ["timing", "critical-path", "arithmetic", "carry-lookahead"],
+  "top": "fast_add16",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "max_logic_depth": 12,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "a",    "dir": "input",  "width": 16},
+    {"name": "b",    "dir": "input",  "width": 16},
+    {"name": "cin",  "dir": "input",  "width": 1},
+    {"name": "s",    "dir": "output", "width": 16},
+    {"name": "cout", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`{cout, s} = a + b + cin` (unsigned 16-bit addition).",
+    "Timing budget: at most **12 logic levels**. Ripple carry needs 33, and even the synthesizer's built-in `+` operator needs 16.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Per bit, compute generate `g = a & b` and propagate `p = a ^ b`. The carry into bit i is 1 if some lower bit generates and every bit in between propagates.",
+    "Group (g, p) pairs with the associative operator `(g_hi, p_hi) ∘ (g_lo, p_lo) = (g_hi | p_hi & g_lo, p_hi & p_lo)`.",
+    "Kogge-Stone: combine at distances 1, 2, 4, 8, which is log₂(16) = 4 prefix levels. Fold `cin` into bit 0's generate. Then `s = p ^ {carries, cin}`."
+  ],
+  "examples": [
+    {"check": "carry chains", "title": "longest carry", "input": "a = 16'hFFFF, b = 16'h0000, cin = 1", "expected": "s = 16'h0000, cout = 1"},
+    {"check": "small sums", "title": "small", "input": "a = 3, b = 4, cin = 0", "expected": "s = 7, cout = 0"},
+    {"check": "random", "title": "random", "input": "a = 16'h1234, b = 16'hF00F, cin = 1", "expected": "s = 16'h0244, cout = 1"}
+  ]
+}

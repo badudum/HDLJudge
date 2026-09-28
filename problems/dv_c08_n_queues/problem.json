@@ -1,0 +1,47 @@
+{
+  "id": 114,
+  "title": "Constraint: Map Items to N Non-Empty Queues",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "n_queues",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Map the items 0 … 9 onto 4 queues `q[0..3]`: each item in exactly one queue, each queue with **2 or 3** items, and items in **ascending** order inside each queue.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Same pattern as the three-queue problem: randomize ownership, then build in `post_randomize()`.",
+    "Pushing items in index order keeps every queue sorted for free.",
+    "4 queues × 2…3 items must add up to 10, and the solver finds such splits for you."
+  ],
+  "examples": [
+    {
+      "check": "each item 0..9 is in exactly one queue",
+      "title": "partition",
+      "input": "q = {0,4}, {1,2,9}, {3,5,6}, {7,8}",
+      "expected": "valid"
+    },
+    {
+      "check": "every queue holds 2 or 3 items",
+      "title": "sizes",
+      "input": "a queue with 4 items",
+      "expected": "rejected"
+    },
+    {
+      "check": "items in each queue are in ascending order",
+      "title": "order",
+      "input": "q[1] = {9,2}",
+      "expected": "rejected"
+    }
+  ]
+}

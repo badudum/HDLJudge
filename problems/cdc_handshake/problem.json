@@ -1,0 +1,97 @@
+{
+  "id": 178,
+  "title": "CDC: Req/Ack Handshake",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "cdc",
+    "handshake",
+    "synchronizer",
+    "multi-bit"
+  ],
+  "top": "cdc_handshake",
+  "ports": [
+    {
+      "name": "clk_a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst_a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a_valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "a_ready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "clk_b",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst_b",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "b_valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "b_data",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Transfer 8-bit words from domain A to an unrelated domain B. A word is accepted on a rising `clk_a` edge where `a_valid && a_ready`. `a_valid` / `a_data` stay stable until accepted.",
+    "Every accepted word appears **exactly once**, in order, as a one-`clk_b`-cycle pulse on `b_valid` with `b_data`.",
+    "Control signals crossing domains must go through **2-flop synchronizers**: a word may not appear on `b_valid` sooner than 2 `clk_b` edges after capture, and must appear within 10. The data bus crosses unsynchronized, but it must be held stable while it is being sampled.",
+    "`a_ready` is 0 while a transfer is in flight. Each side has its own synchronous reset. Tested with A fast / B slow **and** A slow / B fast."
+  ],
+  "hints": [
+    "Capture `a_data` into a holding register, then raise `req`. B synchronizes `req`, samples the (now stable) data, pulses `b_valid` and raises `ack`.",
+    "A synchronizes `ack` and drops `req`. B sees `req` low and drops `ack`. A sees `ack` low and becomes ready again: a 4-phase handshake.",
+    "Multi-bit buses must never go through individual synchronizers: the bits could be captured on different cycles. Synchronize one control bit and qualify the data with it."
+  ],
+  "examples": [
+    {
+      "check": "fast to slow, full rate",
+      "title": "fast→slow",
+      "input": "clk_a 7 ns, clk_b 23 ns, a_valid always 1",
+      "expected": "every word arrives once, in order"
+    },
+    {
+      "check": "slow to fast, full rate",
+      "title": "slow→fast",
+      "input": "clk_a 23 ns, clk_b 6 ns",
+      "expected": "every word arrives once, in order"
+    },
+    {
+      "check": "random valid, both directions",
+      "title": "random",
+      "input": "random a_valid",
+      "expected": "no loss, no duplicates"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "timeout_s": 60
+}

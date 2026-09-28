@@ -1,0 +1,47 @@
+{
+  "id": 120,
+  "title": "Constraint: Exactly Five Consecutive Bits",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "five_run",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` (32 bits) has exactly 5 ones, and they form **one** contiguous run. All 28 possible positions should show up (the testbench needs ≥ 24 of them in 200 calls).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Formulation 1: `$countones(v) == 5` and `$countones(v & (v >> 1)) == 4`.",
+    "Formulation 2: a helper shift amount `rand int s; s inside {[0:27]}; v == 32'h1F << s;`.",
+    "Watch for 5 ones as two runs (3 + 2): the second rule must exclude them."
+  ],
+  "examples": [
+    {
+      "check": "exactly 5 ones, all contiguous",
+      "title": "valid",
+      "input": "v = 32'h0000_07C0",
+      "expected": "accepted"
+    },
+    {
+      "check": "exactly 5 ones, all contiguous",
+      "title": "invalid",
+      "input": "v = 32'h0000_0E60",
+      "expected": "rejected (3 + 2)"
+    },
+    {
+      "check": "randomness",
+      "title": "positions",
+      "input": "200 calls",
+      "expected": "≥ 24 of the 28 positions"
+    }
+  ]
+}

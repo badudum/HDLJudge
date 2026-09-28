@@ -1,0 +1,35 @@
+{
+  "id": 26,
+  "title": "UART Receiver",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": ["fsm", "serial", "protocol", "oversampling"],
+  "top": "uart_rx",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",       "dir": "input",  "width": 1},
+    {"name": "rst",       "dir": "input",  "width": 1},
+    {"name": "rx",        "dir": "input",  "width": 1},
+    {"name": "data",      "dir": "output", "width": 8},
+    {"name": "valid",     "dir": "output", "width": 1},
+    {"name": "frame_err", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "8N1 frames, 8 clock cycles per bit. Call the rising edge that first samples `rx = 0` while idle edge E₀.",
+    "At E₀ + 4 (middle of the start bit): if `rx = 1`, it was a glitch, so return to idle.",
+    "Data bit i (LSB first) is sampled at E₀ + 12 + 8·i, for i = 0 … 7. The stop bit is sampled at E₀ + 76.",
+    "At the stop sample: if `rx = 1`, update `data` and pulse `valid` for one cycle. Otherwise pulse `frame_err` for one cycle and leave `data` unchanged. Return to idle at that same edge.",
+    "Synchronous reset: idle, `data = 0`, no pulses. Must be synthesizable."
+  ],
+  "hints": [
+    "States: IDLE, then one counter `k` counting edges since E₀. Everything happens at specific values of `k`.",
+    "Sampling in the middle of each bit (4 cycles after its start) gives the most noise margin, which is why the start bit is checked at +4.",
+    "Shift received bits in from the top (`sh <= {rx, sh[7:1]}`) so that after 8 samples bit 0 sits at `sh[0]`."
+  ],
+  "examples": [
+    {"check": "single frame", "title": "one byte", "input": "idle 1s, start bit (8×0), bits of 0xA5 LSB first (8 cycles each), stop bit (8×1)", "expected": "valid = 1 for one cycle with data = 0xA5, 77 cycles after the start bit began"},
+    {"check": "glitch", "title": "false start", "input": "rx = 0 for 2 cycles during idle", "expected": "no valid, no frame_err"},
+    {"check": "framing error", "title": "bad stop bit", "input": "a frame whose stop bit is 0", "expected": "frame_err = 1 for one cycle, data unchanged"}
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "id": 159,
+  "title": "True Dual-Port RAM",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "memory",
+    "dual-port",
+    "collision"
+  ],
+  "top": "dp_ram32",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we_a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr_a",
+      "dir": "input",
+      "width": 5
+    },
+    {
+      "name": "din_a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "dout_a",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "we_b",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr_b",
+      "dir": "input",
+      "width": 5
+    },
+    {
+      "name": "din_b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "dout_b",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "32 × 8-bit memory with two independent read/write ports A and B on one clock. Each port reads every cycle (registered, read-first: the value before this edge's writes).",
+    "If both ports write the **same** address on the same edge, port **A** wins.",
+    "No reset. Must be synthesizable."
+  ],
+  "hints": [
+    "Two ports in one clocked process: write B first and then A, so A's write wins when the addresses collide.",
+    "Both reads use the pre-edge contents, so read before (or independently of) the writes.",
+    "In a real FPGA, a same-address write collision is 'undefined'. Specifying a winner makes the model deterministic."
+  ],
+  "examples": [
+    {
+      "check": "port A writes, port B reads",
+      "title": "cross-port",
+      "input": "A writes 0x11 to 3, then B reads 3",
+      "expected": "dout_b = 0x11"
+    },
+    {
+      "check": "write collision: A wins",
+      "title": "collision",
+      "input": "A and B both write address 7",
+      "expected": "A's data is stored"
+    },
+    {
+      "check": "read-first on both ports",
+      "title": "read-first",
+      "input": "read and write the same address on one port",
+      "expected": "old data"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

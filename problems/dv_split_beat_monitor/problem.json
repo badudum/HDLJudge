@@ -1,0 +1,45 @@
+{
+  "id": 211,
+  "title": "Split-Beat Monitor",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "monitor",
+    "valid-ready",
+    "reassembly",
+    "protocol-check"
+  ],
+  "top": "beat_monitor",
+  "ports": [],
+  "constraints": [
+    "Write `class beat_monitor` with `function new(virtual beat_if vif)`, `task run()` (forever, sampling on `posedge vif.clk`), and public `msg msgs[$]` and `int n_withdrawn`.",
+    "A beat transfers on a rising edge with `valid && ready`. Collect transferred bytes into the current message, and when a transferred beat has `last = 1`, push the message (a **new** `msg` object each time) to `msgs`. Messages are 1 to 8 beats long.",
+    "Protocol check: once `valid` is high while `ready` is low, the source must keep `valid` high until the transfer. Count every edge where `valid` is found low right after such a stalled edge in `n_withdrawn`."
+  ],
+  "hints": [
+    "Remember `pending = valid && !ready` from the previous edge. That's all the protocol check needs.",
+    "Beats seen with `valid = 1` but `ready = 0` are not transferred and must not be collected.",
+    "Allocate the next `msg` right after publishing the current one, since subscribers keep the handle."
+  ],
+  "examples": [
+    {
+      "check": "reassembles every message",
+      "title": "reassembly",
+      "input": "200 messages of 1–8 beats",
+      "expected": "200 messages, identical bytes"
+    },
+    {
+      "check": "counts valid withdrawn before ready",
+      "title": "protocol",
+      "input": "the source drops valid while stalled",
+      "expected": "n_withdrawn counts each violation"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 60,
+  "simulator": "verilator",
+  "kind": "component"
+}

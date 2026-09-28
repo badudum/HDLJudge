@@ -1,0 +1,89 @@
+{
+  "id": 224,
+  "title": "Credit-Based Flow Control",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "flow-control",
+    "credits",
+    "noc"
+  ],
+  "top": "credit_tx",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "in_valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "in_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "in_ready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "tx_valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "tx_data",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "credit_ret",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "credits",
+      "dir": "output",
+      "width": 3
+    }
+  ],
+  "constraints": [
+    "The receiver has a 4-entry buffer, so the sender starts with **4 credits**. Each word sent consumes one credit, and each `credit_ret` pulse from the receiver returns one.",
+    "`in_ready = (credits != 0)` (combinational). On an edge with `in_valid && in_ready`: `tx_valid <= 1`, `tx_data <= in_data`, and a credit is consumed. Otherwise `tx_valid <= 0`. A consume and a return on the same edge cancel out.",
+    "Synchronous reset: 4 credits, `tx_valid = 0`. The receiver never returns more credits than were consumed."
+  ],
+  "hints": [
+    "`credits <= credits - send + credit_ret` with 3-bit arithmetic.",
+    "Unlike valid/ready, credits let the link be pipelined over many cycles: the sender never has to see the receiver's ready in the same cycle.",
+    "PCIe, NoCs and HBM controllers all use credit-based flow control."
+  ],
+  "examples": [
+    {
+      "check": "stops at zero credits",
+      "title": "exhaust",
+      "input": "5 words, no credits returned",
+      "expected": "4 are sent, then in_ready = 0"
+    },
+    {
+      "check": "simultaneous send and return",
+      "title": "net zero",
+      "input": "send and credit_ret on the same edge",
+      "expected": "credits unchanged"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

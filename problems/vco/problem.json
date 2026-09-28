@@ -1,0 +1,84 @@
+{
+  "id": 36,
+  "title": "Voltage-Controlled Oscillator Model",
+  "difficulty": "Medium",
+  "category": "modeling",
+  "tags": [
+    "analog",
+    "pll",
+    "real-number-modeling",
+    "timing"
+  ],
+  "top": "vco",
+  "synthesis": "optional",
+  "timescale": true,
+  "languages": [
+    "systemverilog",
+    "vhdl"
+  ],
+  "params": [
+    {
+      "name": "F0",
+      "type": "real",
+      "default": "100.0e6"
+    },
+    {
+      "name": "KVCO",
+      "type": "real",
+      "default": "50.0e6"
+    }
+  ],
+  "ports": [
+    {
+      "name": "vctrl",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "clk_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Output frequency `f = F0 + KVCO · vctrl` (Hz), clamped to [1 MHz, 1 GHz].",
+    "`clk_out` is a 50 % duty-cycle square wave starting at 0. It toggles every `1 / (2f)` seconds, using the `vctrl` value at the moment of each toggle.",
+    "Measured frequency must be within 0.5 % and duty cycle within 45 – 55 %. A second instance uses `F0 = 20 MHz`, `KVCO = 10 MHz/V`.",
+    "SystemVerilog: keep `` `timescale 1ns / 1ps `` so that `#` delays are in nanoseconds. Behavioral model, not synthesizable."
+  ],
+  "hints": [
+    "SystemVerilog: an `always` block with no event control, containing `#(half_period_ns) clk_out = ~clk_out;`, is a free-running oscillator.",
+    "Half period in ns is `0.5e9 / f` when the timescale is 1 ns.",
+    "VHDL: `wait for (0.5 / f) * 1 sec;` turns a real number of seconds into a `time`."
+  ],
+  "examples": [
+    {
+      "check": "centre frequency",
+      "title": "vctrl = 0",
+      "input": "vctrl = 0.0",
+      "expected": "clk_out at 100 MHz (10 ns period)"
+    },
+    {
+      "check": "tuning",
+      "title": "vctrl = 1",
+      "input": "vctrl = 1.0",
+      "expected": "150 MHz (6.667 ns period)"
+    },
+    {
+      "check": "clamping",
+      "title": "clamped",
+      "input": "vctrl = -5.0",
+      "expected": "1 MHz (the lower limit)"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 80,
+      "step": 1,
+      "unit": 1,
+      "title": "oscillating at the centre frequency (vctrl = 0)"
+    }
+  ]
+}

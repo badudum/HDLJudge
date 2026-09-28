@@ -1,0 +1,26 @@
+{
+  "id": 48, "title": "N-to-2^N Decoder", "difficulty": "Medium", "category": "arch",
+  "tags": ["decoder", "parameters", "combinational"], "top": "decoder_n",
+  "synthesis": "required", "max_flip_flops": 0, "synth_params": {"N": 5},
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "sel", "dir": "input",  "width": 5},
+    {"name": "en",  "dir": "input",  "width": 1},
+    {"name": "y",   "dir": "output", "width": 32}
+  ],
+  "constraints": [
+    "Parameter `N` (default 3): `sel` is N bits wide and `y` is 2ᴺ bits wide. The judge uses **N = 5** (32 outputs).",
+    "`y` is one-hot with bit `sel` set when `en = 1`, and all zeros when `en = 0`.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "`y = en ? (1 << sel) : 0`, with a constant 1 that is 2ᴺ bits wide.",
+    "Width expressions: `[(1<<N)-1:0]` in Verilog, `2**N - 1 downto 0` in VHDL.",
+    "A loop `y[i] = en && (sel == i)` over all 2ᴺ outputs works too."
+  ],
+  "examples": [
+    {"check": "every output line", "title": "select 17", "input": "N = 5, sel = 17, en = 1", "expected": "y = 32'h0002_0000"},
+    {"check": "disabled", "title": "disabled", "input": "sel = 9, en = 0", "expected": "y = 0"},
+    {"check": "every output line", "title": "select 0", "input": "sel = 0, en = 1", "expected": "y = 32'h0000_0001"}
+  ]
+}

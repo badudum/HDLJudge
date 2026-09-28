@@ -1,0 +1,30 @@
+{
+  "id": 80, "title": "MISR Signature Register", "difficulty": "Medium", "category": "dft",
+  "tags": ["dft", "bist", "compaction", "lfsr"], "top": "misr8",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",    "dir": "input",  "width": 1},
+    {"name": "rst",    "dir": "input",  "width": 1},
+    {"name": "en",     "dir": "input",  "width": 1},
+    {"name": "din",    "dir": "input",  "width": 8},
+    {"name": "golden", "dir": "input",  "width": 8},
+    {"name": "sig",    "dir": "output", "width": 8},
+    {"name": "pass",   "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "8-bit multiple-input signature register, polynomial x⁸ + x⁴ + x³ + x² + 1 (Galois form, feedback mask `8'h1D`).",
+    "On a rising edge with `en = 1`: `sig <= ({sig[6:0], 1'b0} ^ (sig[7] ? 8'h1D : 8'h00)) ^ din`. Without `en` it holds.",
+    "Synchronous reset sets `sig = 8'hFF`. `pass = (sig == golden)` is combinational. Must be synthesizable."
+  ],
+  "hints": [
+    "It's an LFSR (shift left with polynomial feedback) whose state is also XORed with a new data word each cycle.",
+    "After N cycles, `sig` compresses N responses into 8 bits. A defect changes the signature with probability ≈ 1 − 2⁻⁸.",
+    "Seeding with all ones (not zero) makes an all-zero response stream still produce a non-trivial signature."
+  ],
+  "examples": [
+    {"check": "reset seed", "title": "seed", "input": "rst", "expected": "sig = 8'hFF"},
+    {"check": "single step", "title": "one word", "input": "en = 1, din = 8'h00 from 8'hFF", "expected": "sig = 8'hE3  ((FE) ^ 1D)"},
+    {"check": "signature compare", "title": "pass flag", "input": "golden = the expected final signature", "expected": "pass = 1 only when sig matches"}
+  ]
+}

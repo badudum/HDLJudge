@@ -1,0 +1,102 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "FD",
+     "5",
+     "FD",
+     "3",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "5",
+     "FD",
+     "FB",
+     "7",
+     "0",
+     "1",
+     "7F",
+     "80"
+    ]
+   },
+   {
+    "name": "p",
+    "kind": "bus",
+    "values": [
+     "FFF1",
+     "FFF1",
+     "F",
+     "15",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "signs"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "84",
+     "8C",
+     "3A",
+     "E6",
+     "A3",
+     "7A",
+     "C1",
+     "B3"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "34",
+     "2B",
+     "ED",
+     "F2",
+     "97",
+     "8",
+     "EC",
+     "BB"
+    ]
+   },
+   {
+    "name": "p",
+    "kind": "bus",
+    "values": [
+     "E6D0",
+     "EC84",
+     "FBB2",
+     "16C",
+     "2625",
+     "3D0",
+     "4EC",
+     "14C1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "4000 random products"
+ }
+]

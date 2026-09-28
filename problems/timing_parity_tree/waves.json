@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "d",
+    "kind": "bus",
+    "values": [
+     "1",
+     "2",
+     "4",
+     "8",
+     "10",
+     "20",
+     "40",
+     "80"
+    ]
+   },
+   {
+    "name": "p",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "single bits"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "d",
+    "kind": "bus",
+    "values": [
+     "FFFFFFFFFFFFFFFF",
+     "0",
+     "9B95F239AE97D9DB",
+     "EF70B4C0177344A3",
+     "AA59CE1E9E293641",
+     "BF2EB110D7881003",
+     "A269D132D5A5167B",
+     "912B8E383D833A9"
+    ]
+   },
+   {
+    "name": "p",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "all ones"
+ }
+]

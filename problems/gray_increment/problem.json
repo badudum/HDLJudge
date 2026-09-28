@@ -1,0 +1,71 @@
+{
+  "id": 260,
+  "title": "Gray-Code Increment",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "gray-code"
+  ],
+  "top": "gray_inc",
+  "ports": [
+    {
+      "name": "g",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "gn",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "`g` is an 8-bit reflected Gray code. Output `gn` = the Gray code of the **next** value (wrapping 255 → 0).",
+    "No loops or generate: convert with shift-XOR steps."
+  ],
+  "hints": [
+    "Gray → binary is a prefix XOR: `b = g ^ (g >> 1) ^ (g >> 2) ^ … ^ (g >> 7)`, or in 3 doubling steps.",
+    "Increment the binary value, then binary → Gray: `n ^ (n >> 1)`.",
+    "Pure-Gray trick without conversion: if the parity of g is even, flip bit 0, otherwise flip the bit left of the lowest 1."
+  ],
+  "examples": [
+    {
+      "check": "full sequence",
+      "title": "0 → 1",
+      "input": "g = 0000_0000",
+      "expected": "gn = 0000_0001"
+    },
+    {
+      "check": "full sequence",
+      "title": "wrap",
+      "input": "g = 1000_0000 (255)",
+      "expected": "gn = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "F0D",
+     "1234",
+     "FFFF",
+     "FFFE",
+     "80",
+     "7F",
+     "AB80",
+     "8000"
+    ]
+   },
+   {
+    "name": "n",
+    "kind": "bus",
+    "values": [
+     "3",
+     "15",
+     "0",
+     "0",
+     "7",
+     "7",
+     "7",
+     "15"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "FFFD",
+     "1234",
+     "FFFF",
+     "0",
+     "FF80",
+     "7F",
+     "FF80",
+     "8000"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "6336",
+     "66DE",
+     "EEDA",
+     "2838",
+     "8FE8",
+     "ABE3",
+     "117B",
+     "B404"
+    ]
+   },
+   {
+    "name": "n",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "FFFF",
+     "FFFF",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "every width"
+ }
+]

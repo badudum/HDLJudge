@@ -1,0 +1,47 @@
+{
+  "id": 135,
+  "title": "Constraint: Magic Square",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "magic3",
+  "synthesis": "none",
+  "timeout_s": 240,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Fill a 3 × 3 square with 1 … 9, each exactly once, so that every row, column and both diagonals add up to **15**. Different calls should produce different squares (8 exist).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Element values are 4 bits wide. Make sure sums are computed in a wider type (`int'(…)` on the first term widens the whole expression).",
+    "Uniqueness: pairwise inequalities over the flattened index.",
+    "All 8 solutions are rotations and reflections of one square, so the solver should find several of them."
+  ],
+  "examples": [
+    {
+      "check": "uses 1..9 exactly once",
+      "title": "values",
+      "input": "any result",
+      "expected": "a permutation of 1…9"
+    },
+    {
+      "check": "all rows, columns and both diagonals sum to 15",
+      "title": "magic",
+      "input": "[[2,7,6],[9,5,1],[4,3,8]]",
+      "expected": "valid"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "16 calls",
+      "expected": "≥ 5 different squares"
+    }
+  ]
+}

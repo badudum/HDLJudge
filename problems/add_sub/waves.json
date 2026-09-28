@@ -1,0 +1,158 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7FF",
+     "800",
+     "FFE",
+     "FFF",
+     "100",
+     "0"
+    ]
+   },
+   {
+    "name": "sub",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7FF",
+     "800",
+     "FFE",
+     "FFF",
+     "100",
+     "1"
+    ]
+   },
+   {
+    "name": "cout",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "add"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "7FF",
+     "800",
+     "FFE",
+     "FFF",
+     "100",
+     "0"
+    ]
+   },
+   {
+    "name": "sub",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "0",
+     "FFF",
+     "801",
+     "800",
+     "2",
+     "1",
+     "F00",
+     "1"
+    ]
+   },
+   {
+    "name": "cout",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "subtract"
+ }
+]

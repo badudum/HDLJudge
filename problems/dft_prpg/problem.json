@@ -1,0 +1,80 @@
+{
+  "id": 238,
+  "title": "LBIST Pattern Generator (PRPG + Phase Shifter)",
+  "difficulty": "Medium",
+  "category": "dft",
+  "tags": [
+    "dft",
+    "lbist",
+    "lfsr",
+    "phase-shifter"
+  ],
+  "top": "prpg",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "load",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "seed",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "state",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "chains",
+      "dir": "output",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "A 16-bit Fibonacci LFSR with polynomial x¹⁶ + x¹⁴ + x¹³ + x¹¹ + 1: each enabled edge shifts left, `state <= {state[14:0], fb}` with `fb = state[15] ^ state[13] ^ state[12] ^ state[10]`.",
+    "`load` (priority over `en`) loads `seed`. Synchronous reset loads 16'hACE1.",
+    "A phase shifter feeds 4 scan chains (combinational): `chains[0] = s[0]^s[5]`, `chains[1] = s[3]^s[9]`, `chains[2] = s[7]^s[12]`, `chains[3] = s[2]^s[14]`."
+  ],
+  "hints": [
+    "Adjacent LFSR bits are the same sequence one cycle apart, so feeding neighbouring scan chains from neighbouring bits makes them highly correlated. XOR-ing taps (the phase shifter) decorrelates them.",
+    "This polynomial is maximal-length: the state visits all 65535 non-zero values.",
+    "Never load a zero seed: an all-zero Fibonacci LFSR stays zero forever."
+  ],
+  "examples": [
+    {
+      "check": "steps from the reset seed",
+      "title": "sequence",
+      "input": "reset, then 5 enabled cycles",
+      "expected": "matches the reference LFSR"
+    },
+    {
+      "check": "seed load",
+      "title": "load",
+      "input": "load 0x1234",
+      "expected": "state = 0x1234"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": 244,
+  "title": "Power of Four",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks"
+  ],
+  "top": "pow4",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "p4",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`p4 = 1` exactly when `x` is a power of four (1, 4, 16, …, 16384).",
+    "Purely combinational. No loops or generate, no `$countones` / `$onehot`."
+  ],
+  "hints": [
+    "A power of four is a power of two whose single 1 sits in an **even** bit position.",
+    "Power of two: `x != 0 && (x & (x - 1)) == 0`.",
+    "Even positions: mask with `16'h5555`."
+  ],
+  "examples": [
+    {
+      "check": "powers of four",
+      "title": "16",
+      "input": "x = 16",
+      "expected": "p4 = 1"
+    },
+    {
+      "check": "other powers of two",
+      "title": "8",
+      "input": "x = 8",
+      "expected": "p4 = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

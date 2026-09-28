@@ -1,0 +1,90 @@
+{
+  "id": 155,
+  "title": "Assertion: AXI-Lite Write Protocol Monitor",
+  "difficulty": "Hard",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_axil_wr",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "awready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "bvalid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "bready",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rules 1–3: `awvalid`, `wvalid` and `bvalid` each stay high until their handshake (valid && ready) completes.",
+    "Rule 4: `bvalid` may only be asserted after **both** an address handshake and a data handshake happened (in earlier cycles) that haven't been answered by a response yet.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Rules 1–3 are three copies of `x_valid && !x_ready |=> x_valid`.",
+    "Rule 4 needs bookkeeping: count completed AW and W handshakes, subtract completed B handshakes, and assert `bvalid |-> aw_pending > 0 && w_pending > 0` using the counters from before the edge.",
+    "Handshakes in the same cycle as `bvalid` don't count yet: the response must come later."
+  ],
+  "examples": [
+    {
+      "check": "legal: single write",
+      "title": "write",
+      "input": "AW, W handshakes, then B",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: response before data",
+      "title": "early B",
+      "input": "bvalid after AW but before W",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: awvalid dropped",
+      "title": "withdrawn",
+      "input": "awvalid falls before awready",
+      "expected": "assertion fails"
+    }
+  ]
+}

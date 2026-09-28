@@ -1,0 +1,32 @@
+{
+  "id": 61, "title": "Write-Back Dirty Bit Management", "difficulty": "Medium", "category": "arch",
+  "tags": ["cache", "write-back", "state"], "top": "dirty_tracker",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",        "dir": "input",  "width": 1},
+    {"name": "rst",        "dir": "input",  "width": 1},
+    {"name": "op",         "dir": "input",  "width": 2},
+    {"name": "index",      "dir": "input",  "width": 3},
+    {"name": "valid",      "dir": "output", "width": 8},
+    {"name": "dirty",      "dir": "output", "width": 8},
+    {"name": "writeback",  "dir": "output", "width": 1},
+    {"name": "wb_index",   "dir": "output", "width": 3}
+  ],
+  "constraints": [
+    "8 cache lines, each with a valid and a dirty bit (outputs `valid[i]`, `dirty[i]`). Reset clears both, and also `writeback` and `wb_index`.",
+    "`op` on each rising edge: 00 idle, 01 **write** (line becomes valid + dirty), 10 **fill** (new line from memory: valid, clean), 11 **invalidate** (line becomes invalid + clean).",
+    "Fill and invalidate evict the old line: if it was valid **and** dirty, pulse `writeback = 1` for one cycle with `wb_index = index`. Otherwise `writeback = 0`.",
+    "`wb_index` holds its value when there is no writeback. Must be synthesizable."
+  ],
+  "hints": [
+    "Two 8-bit registers plus a registered writeback pulse.",
+    "Check the *old* dirty/valid bits (before the update) to decide on the writeback.",
+    "A write to an invalid line is a write-allocate hit here: it becomes valid and dirty."
+  ],
+  "examples": [
+    {"check": "write marks dirty", "title": "write", "input": "op = write, index = 3", "expected": "valid[3] = 1, dirty[3] = 1"},
+    {"check": "fill of a dirty line writes back", "title": "eviction", "input": "line 3 dirty, then op = fill, index = 3", "expected": "writeback = 1, wb_index = 3, dirty[3] = 0"},
+    {"check": "clean lines are dropped silently", "title": "clean eviction", "input": "fill over a clean line", "expected": "writeback = 0"}
+  ]
+}

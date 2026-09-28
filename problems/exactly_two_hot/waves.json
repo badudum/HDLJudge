@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "3",
+     "5",
+     "9",
+     "11",
+     "21",
+     "41",
+     "81",
+     "101"
+    ]
+   },
+   {
+    "name": "two",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "two bits"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "0",
+     "FFFF",
+     "1",
+     "8000",
+     "7",
+     "8011",
+     "1",
+     "2"
+    ]
+   },
+   {
+    "name": "two",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "other counts"
+ }
+]

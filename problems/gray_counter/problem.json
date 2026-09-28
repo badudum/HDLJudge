@@ -1,0 +1,28 @@
+{
+  "id": 72, "title": "Gray-Code Counter", "difficulty": "Medium", "category": "digital",
+  "tags": ["counter", "gray-code", "cdc", "sequential"], "top": "gray_counter",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",  "dir": "input",  "width": 1},
+    {"name": "rst",  "dir": "input",  "width": 1},
+    {"name": "en",   "dir": "input",  "width": 1},
+    {"name": "gray", "dir": "output", "width": 5},
+    {"name": "bin",  "dir": "output", "width": 5}
+  ],
+  "constraints": [
+    "A 5-bit counter that counts in Gray code: each enabled rising edge moves `gray` to the next Gray code, wrapping after 31. `bin` is the equivalent binary count.",
+    "Consecutive values of `gray` differ in exactly one bit (including the wrap 31 → 0).",
+    "`gray` must be a **registered** output, not decoded combinationally from a binary counter at the output, since it feeds clock-domain crossings. Synchronous reset to 0. Must be synthesizable."
+  ],
+  "hints": [
+    "Keep a binary counter `b`. On each enabled edge, register `b_next = b + 1` **and** `gray <= b_next ^ (b_next >> 1)`.",
+    "Then `bin` can simply be the binary register.",
+    "Why registered? A Gray code computed by combinational XORs can glitch through multi-bit changes, which defeats its purpose in a synchronizer."
+  ],
+  "examples": [
+    {"check": "count sequence", "title": "first codes", "input": "reset, en = 1", "expected": "gray = 0, 1, 3, 2, 6, 7, 5, 4, …"},
+    {"check": "wrap-around", "title": "wrap", "input": "after 31 (gray 10000)", "expected": "back to 0 (a one-bit change)"},
+    {"check": "enable", "title": "hold", "input": "en = 0", "expected": "gray and bin hold"}
+  ]
+}

@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: rotating grants",
+  "violation": false
+ },
+ {
+  "name": "legal: single requester may win repeatedly",
+  "violation": false
+ },
+ {
+  "name": "violation: two grants at once",
+  "violation": true
+ },
+ {
+  "name": "violation: grant without request",
+  "violation": true
+ },
+ {
+  "name": "violation: back-to-back grant while others wait",
+  "violation": true
+ }
+]

@@ -1,0 +1,45 @@
+{
+  "id": 235,
+  "title": "UVM: Factory Override + Config Object",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "factory",
+    "config-db",
+    "test-layering"
+  ],
+  "top": "my_test",
+  "ports": [],
+  "constraints": [
+    "Write `class parity_driver extends base_driver` that overrides `process(pkt_item t)` to set `t.parity = ^t.data` and count calls in a public `int n_parity`.",
+    "Write `class my_test extends base_test`. In its `build_phase`, before calling `super.build_phase(phase)`: create an `env_cfg` with `n_items = 25` and `enable_parity = 1`, publish it with `uvm_config_db#(env_cfg)` under field name `\"cfg\"` for the env (`env` is created by `base_test`), and replace `base_driver` with `parity_driver` through a **factory type override**.",
+    "The testbench calls `run_test(\"my_test\")`. Don't modify the provided classes."
+  ],
+  "hints": [
+    "`base_driver::type_id::set_type_override(parity_driver::get_type());`",
+    "`uvm_config_db#(env_cfg)::set(this, \"env\", \"cfg\", cfg);`: the path is relative to `this` (the test).",
+    "The order matters: the override and the config must exist **before** `super.build_phase()` creates the env, and the env then builds its children."
+  ],
+  "examples": [
+    {
+      "check": "driver replaced through the factory",
+      "title": "override",
+      "input": "run_test(\"my_test\")",
+      "expected": "env.drv is a parity_driver"
+    },
+    {
+      "check": "sequence length from config",
+      "title": "config",
+      "input": "cfg.n_items = 25",
+      "expected": "25 items driven"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

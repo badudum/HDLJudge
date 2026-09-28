@@ -1,0 +1,68 @@
+{
+  "id": 251,
+  "title": "2:1 Mux From NAND Gates Only",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "gates",
+    "brain-teaser",
+    "universal-gate",
+    "structural"
+  ],
+  "top": "nand_mux",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sel",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`y = sel ? b : a`.",
+    "Use **only** Verilog `nand` gate primitives, e.g. `nand g1 (out, in1, in2);`. No `assign`, `always`, operators or other gates. 4 gates suffice."
+  ],
+  "hints": [
+    "A NAND with both inputs tied together is an inverter.",
+    "AND-OR = NAND-NAND: `y = (a·s̄) + (b·s) = NAND(NAND(a, s̄), NAND(b, s))`.",
+    "NAND is *universal*: every Boolean function can be built from it, which is why standard-cell libraries are built around it."
+  ],
+  "examples": [
+    {
+      "check": "truth table",
+      "title": "select b",
+      "input": "sel = 1, a = 0, b = 1",
+      "expected": "y = 1"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bassign\\b|\\balways|\\binitial\\b|\\bprimitive\\b|\\b(and|or|xor|xnor|nor|not|buf|bufif[01]|notif[01])\\b|[&|^~+\\-*/?!%]|==",
+      "message": "only `nand` gate instances are allowed (no assign, always, operators or other gates)",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": 267,
+  "title": "Return Address Stack",
+  "difficulty": "Medium",
+  "category": "arch",
+  "tags": [
+    "cpu",
+    "stack",
+    "branch-prediction"
+  ],
+  "top": "ras4",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "push",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pop",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "top",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "count",
+      "dir": "output",
+      "width": 3
+    }
+  ],
+  "constraints": [
+    "A 4-entry stack of return addresses. `push` (a call) pushes `addr`, `pop` (a return) removes the top. `top` = the top entry (0 when empty) and `count` = the number of entries (0–4), both combinational.",
+    "Overflow: pushing onto a full stack **drops the oldest** entry (the most recent 4 are kept). Popping an empty stack does nothing.",
+    "`push` and `pop` together (a tail call) replace the top entry with `addr` (on an empty stack it acts as a push). Synchronous reset empties the stack."
+  ],
+  "hints": [
+    "A circular buffer with a top pointer and a count: overflow just keeps moving the pointer, overwriting the oldest slot.",
+    "Deep recursion overflows a small RAS. Dropping the *oldest* entries keeps the innermost returns predicted correctly.",
+    "Real CPUs predict the target of `ret` from this stack, since the BTB can't predict a return with many callers."
+  ],
+  "examples": [
+    {
+      "check": "call and return",
+      "title": "nesting",
+      "input": "push 10, push 20, pop",
+      "expected": "top = 20, then 10"
+    },
+    {
+      "check": "overflow keeps the newest",
+      "title": "overflow",
+      "input": "5 pushes",
+      "expected": "count = 4, the first address is gone"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

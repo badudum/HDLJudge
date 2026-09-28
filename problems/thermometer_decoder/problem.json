@@ -1,0 +1,31 @@
+{
+  "id": 21,
+  "title": "Thermometer Decoder with Bubble Detection",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "mixed-signal", "flash-adc"],
+  "top": "therm2bin",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "t",     "dir": "input",  "width": 15},
+    {"name": "count", "dir": "output", "width": 4},
+    {"name": "err",   "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`count` = (index of the highest `1` in `t`) + 1, or 0 when `t == 0`.",
+    "`err = 1` when `t` is not a valid thermometer code, i.e. not of the form `0…01…1` (there is a \"bubble\").",
+    "Purely combinational and synthesizable."
+  ],
+  "hints": [
+    "`count` is a priority encoder on the most significant `1`, plus one.",
+    "Valid thermometer codes are exactly the numbers 2ᵏ − 1. What happens to `t & (t + 1)` for those?",
+    "Mind the width: compute `t + 1` in 16 bits so that `15'h7FFF + 1` does not wrap to zero unexpectedly (both ways work, but think about it)."
+  ],
+  "examples": [
+    {"check": "valid codes", "title": "valid code", "input": "t = 15'b000_0000_0001_1111", "expected": "count = 5, err = 0"},
+    {"check": "single bubbles", "title": "bubble", "input": "t = 15'b000_0000_0001_1011", "expected": "count = 5, err = 1"},
+    {"check": "valid codes", "title": "empty", "input": "t = 0", "expected": "count = 0, err = 0"}
+  ]
+}

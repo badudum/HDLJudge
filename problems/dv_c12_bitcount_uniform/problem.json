@@ -1,0 +1,47 @@
+{
+  "id": 118,
+  "title": "Constraint: Uniform by Bit Count",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "popc_uniform",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` is 8 bits. Its **number of set bits** (0 … 8) must be uniformly distributed: each count roughly 1/9 of the time over 900 calls (every bin between 60 and 145).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Uniform over *values* gives a binomial bit-count distribution: 70 of the 256 values have 4 ones, only 1 has 0 ones.",
+    "Pick the count first, then constrain `$countones(v) == k`.",
+    "By the LRM, `rand int k` with `solve k before v;` would do it, but Verilator doesn't honor `solve…before` for the distribution. Drawing `k` yourself in `pre_randomize()` (`k = $urandom_range(0, 8);`, with `k` a non-rand member) works on every simulator."
+  ],
+  "examples": [
+    {
+      "check": "every bit count 0..8 occurs about 1/9",
+      "title": "uniform",
+      "input": "900 calls",
+      "expected": "≈ 100 per bit count"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "900 calls",
+      "expected": "≥ 150 different values"
+    },
+    {
+      "check": "randomize() succeeds",
+      "title": "solvable",
+      "input": "every call",
+      "expected": "randomize() returns 1"
+    }
+  ]
+}

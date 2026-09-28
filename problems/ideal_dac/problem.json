@@ -1,0 +1,73 @@
+{
+  "id": 11,
+  "title": "Ideal 8-bit DAC Model",
+  "difficulty": "Easy",
+  "category": "modeling",
+  "tags": [
+    "analog",
+    "mixed-signal",
+    "real-number-modeling"
+  ],
+  "top": "dac8",
+  "synthesis": "optional",
+  "languages": [
+    "systemverilog",
+    "vhdl"
+  ],
+  "params": [
+    {
+      "name": "VREF",
+      "type": "real",
+      "default": "1.0"
+    }
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "code",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "vout",
+      "dir": "output",
+      "width": 1,
+      "type": "real"
+    }
+  ],
+  "constraints": [
+    "`VREF` is a `real` parameter / generic, default `1.0`. The judge instantiates the model with `VREF = 2.5`.",
+    "`vout = code / 256 * VREF`, updated on each rising edge of `clk` (a clocked DAC register).",
+    "`vout` starts at `0.0` and holds between edges.",
+    "Checked with an absolute tolerance of 1e-9 V."
+  ],
+  "hints": [
+    "Convert the unsigned code to a real first: SystemVerilog allows `real'(code)`, VHDL uses `real(to_integer(unsigned(code)))`.",
+    "Divide by 256.0, not 255.0: full scale is one LSB below VREF.",
+    "Make the update edge-triggered so `vout` holds between edges."
+  ],
+  "examples": [
+    {
+      "check": "code transitions",
+      "title": "codes",
+      "input": "VREF = 2.5, code = 0, 1, 128, 255",
+      "expected": "vout = 0, 0.009765625, 1.25, 2.490234375"
+    },
+    {
+      "check": "500 random codes",
+      "title": "random codes",
+      "input": "VREF = 2.5, code = 0x3C",
+      "expected": "vout = 60/256 * 2.5 = 0.5859375 after the next rising edge"
+    },
+    {
+      "check": "ramp 0 to 255",
+      "title": "full ramp",
+      "input": "code = 0 … 255",
+      "expected": "vout rises in steps of VREF / 256"
+    }
+  ]
+}

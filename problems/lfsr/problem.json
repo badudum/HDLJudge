@@ -1,0 +1,34 @@
+{
+  "id": 10,
+  "title": "8-bit LFSR",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": ["sequential", "shift-register", "prbs"],
+  "top": "lfsr8",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",  "dir": "input",  "width": 1},
+    {"name": "rst",  "dir": "input",  "width": 1},
+    {"name": "load", "dir": "input",  "width": 1},
+    {"name": "seed", "dir": "input",  "width": 8},
+    {"name": "en",   "dir": "input",  "width": 1},
+    {"name": "q",    "dir": "output", "width": 8}
+  ],
+  "constraints": [
+    "Feedback polynomial x⁸ + x⁶ + x⁵ + x⁴ + 1: the new bit is `q[7] ^ q[5] ^ q[4] ^ q[3]`.",
+    "Shift left: `q <= {q[6:0], feedback}`.",
+    "Priority on a rising edge: `rst` (q = 8'h01), then `load` (q = seed), then `en` (shift).",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "It is just an 8-bit register with a one-line next-state expression.",
+    "Compute the feedback bit from the *current* value of `q`.",
+    "With this polynomial and a non-zero seed the sequence repeats every 255 steps."
+  ],
+  "examples": [
+    {"check": "reset value", "title": "reset", "input": "rst = 1 for one edge", "expected": "q = 0x01"},
+    {"check": "first steps from 0x01", "title": "shifting", "input": "q = 0x01, en = 1 for 4 edges", "expected": "q = 0x02, 0x04, 0x08, 0x11"},
+    {"check": "load a seed", "title": "load", "input": "load = 1, seed = 0xA5 for one edge, then en = 1", "expected": "q = 0xA5, then 0x4B"}
+  ]
+}

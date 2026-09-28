@@ -1,0 +1,158 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "FF010203",
+     "FFFFFFFF",
+     "0",
+     "80808080",
+     "7FFF8000",
+     "6A2CA9A3",
+     "49A6B7EC",
+     "D83F117E"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "1010101",
+     "1",
+     "1",
+     "80808080",
+     "80017FFF",
+     "49F1B610",
+     "83A52DF2",
+     "384E79CF"
+    ]
+   },
+   {
+    "name": "mode",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "op",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "20304",
+     "FFFFFF00",
+     "1",
+     "0",
+     "FF00FFFF",
+     "B31D5FB3",
+     "CC4BE4DE",
+     "108D8A4D"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "8-bit lanes: add"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "F0F00000",
+     "FFFFFFFF",
+     "0",
+     "80808080",
+     "7FFF8000",
+     "7F814FF9",
+     "8027448F",
+     "BEF8076C"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "20010000",
+     "1",
+     "1",
+     "80808080",
+     "80017FFF",
+     "F793EB79",
+     "5A76F929",
+     "84C0F075"
+    ]
+   },
+   {
+    "name": "mode",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "op",
+    "kind": "bus",
+    "values": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2"
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bus",
+    "values": [
+     "FFF10000",
+     "FFFFFFFF",
+     "1",
+     "FFFFFFFF",
+     "FFFFFFFF",
+     "FFFFFFFF",
+     "DA9DFFB8",
+     "FFFFF7E1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "8-bit lanes: saturating add"
+ }
+]

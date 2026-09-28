@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: every request served",
+  "violation": false
+ },
+ {
+  "name": "legal: immediate grant",
+  "violation": false
+ },
+ {
+  "name": "violation: master 3 starved",
+  "violation": true
+ },
+ {
+  "name": "violation: never granted",
+  "violation": true
+ }
+]

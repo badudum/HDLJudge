@@ -1,0 +1,48 @@
+{
+  "id": 109,
+  "title": "Constraint: Dynamic Array Repetition Rules",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "rep_rules",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`arr.size() == len` with `len` in 5 … 12, and element values in 0 … 9.",
+    "No value appears more than **twice**, and no two **adjacent** elements are equal.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Constrain the size of a dynamic array directly: `arr.size() == len;`.",
+    "Adjacent: `foreach (arr[i]) if (i > 0) arr[i] != arr[i-1];`",
+    "\"At most twice\": no three positions i < j < k may hold the same value. (Verilator does not support every reduction form on dynamic arrays; pairwise and triple loops always work.)"
+  ],
+  "examples": [
+    {
+      "check": "size is between 5 and 12",
+      "title": "size",
+      "input": "len = 7",
+      "expected": "arr.size() = 7"
+    },
+    {
+      "check": "no value appears more than twice",
+      "title": "repetition",
+      "input": "{1,2,1,3,1}",
+      "expected": "rejected: 1 appears 3×"
+    },
+    {
+      "check": "no two adjacent elements are equal",
+      "title": "adjacency",
+      "input": "{4,4,…}",
+      "expected": "rejected"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": 176,
+  "title": "Reset Synchronizer",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "reset",
+    "cdc",
+    "async-assert-sync-deassert"
+  ],
+  "top": "reset_sync",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "arst_n",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst_n",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`arst_n` is an asynchronous, active-low reset from a pin. `rst_n` is the reset for the logic in the `clk` domain.",
+    "**Assertion is asynchronous:** when `arst_n` falls, `rst_n` falls immediately, even if `clk` is stopped.",
+    "**Deassertion is synchronous:** after `arst_n` rises, `rst_n` rises exactly at the **second** rising edge of `clk`, so every flop leaves reset in the same cycle.",
+    "Use two flip-flops. Must be synthesizable."
+  ],
+  "hints": [
+    "Two flops with asynchronous clear from `arst_n`. The first samples a constant 1.",
+    "`always @(posedge clk or negedge arst_n) if (!arst_n) s <= 2'b00; else s <= {s[0], 1'b1};`",
+    "Why not a plain synchronous reset? It can't reset the logic while the clock is stopped, and a purely asynchronous release can violate recovery/removal timing and leave flops metastable."
+  ],
+  "examples": [
+    {
+      "check": "deasserts on the second rising edge",
+      "title": "release",
+      "input": "arst_n rises mid-cycle",
+      "expected": "rst_n rises at the 2nd following clk edge"
+    },
+    {
+      "check": "asserts asynchronously (clock stopped)",
+      "title": "no clock",
+      "input": "clk stopped, arst_n falls",
+      "expected": "rst_n falls immediately"
+    },
+    {
+      "check": "short reset pulse",
+      "title": "glitch",
+      "input": "a 1 ns low pulse on arst_n",
+      "expected": "a full, synchronized reset"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 70,
+      "step": 1,
+      "unit": 10,
+      "clock": "clk",
+      "title": "asynchronous assertion, synchronous release",
+      "caption": "rst_n falls as soon as arst_n falls, but rises only at the second rising clk edge after arst_n is released."
+    }
+  ]
+}

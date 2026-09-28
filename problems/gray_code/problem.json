@@ -1,0 +1,32 @@
+{
+  "id": 12,
+  "title": "Gray Code Converter",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": ["combinational", "encoding"],
+  "top": "gray_conv",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "bin",     "dir": "input",  "width": 8},
+    {"name": "gray_in", "dir": "input",  "width": 8},
+    {"name": "gray",    "dir": "output", "width": 8},
+    {"name": "bin_out", "dir": "output", "width": 8}
+  ],
+  "constraints": [
+    "Both converters are 8 bits wide and work independently.",
+    "Purely combinational: no flip-flops or latches.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "Binary → Gray: each Gray bit is the XOR of a binary bit and the bit above it, i.e. `bin ^ (bin >> 1)`.",
+    "Gray → binary: the MSB is copied, then `bin_out[i] = bin_out[i+1] ^ gray_in[i]` going down.",
+    "Equivalently, `bin_out[i]` is the XOR-reduction of all Gray bits from position `i` upward: `^(gray_in >> i)`."
+  ],
+  "examples": [
+    {"check": "binary to Gray", "title": "binary → Gray", "input": "bin = 8'b0000_0110 (6)", "expected": "gray = 8'b0000_0101"},
+    {"check": "Gray to binary", "title": "Gray → binary", "input": "gray_in = 8'b0000_0101", "expected": "bin_out = 8'b0000_0110 (6)"},
+    {"check": "round trip", "title": "round trip", "input": "gray_in = gray(bin) for random bin", "expected": "bin_out = bin"}
+  ]
+}

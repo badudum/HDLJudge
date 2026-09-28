@@ -1,0 +1,72 @@
+{
+  "id": 271,
+  "title": "Saturating Integrator Model",
+  "difficulty": "Easy",
+  "category": "modeling",
+  "tags": [
+    "modeling",
+    "real",
+    "integrator",
+    "sigma-delta"
+  ],
+  "top": "integrator",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 1,
+      "type": "real"
+    }
+  ],
+  "constraints": [
+    "Discrete-time integrator with gain `K` (parameter, default 0.1): on each rising edge `y <= clamp(y + K·x, −1.0, +1.0)`. Synchronous reset → `y = 0.0`.",
+    "The testbench uses K = 0.1 and K = 0.25. Not synthesizable (real numbers)."
+  ],
+  "hints": [
+    "Compute the new value first, then clamp it into [−1, 1].",
+    "Saturation models the limited output swing of an op-amp integrator. Without it, the model could reach values the real circuit never can.",
+    "This block is the heart of a sigma-delta modulator (see that problem)."
+  ],
+  "examples": [
+    {
+      "check": "ramps and saturates",
+      "title": "ramp",
+      "input": "x = 1.0 for 12 cycles (K = 0.1)",
+      "expected": "y = 0.1, 0.2, …, 1.0, then holds at 1.0"
+    },
+    {
+      "check": "ramps and saturates",
+      "title": "down",
+      "input": "x = -0.5",
+      "expected": "y decreases by 0.05 per cycle"
+    }
+  ],
+  "synthesis": "optional",
+  "languages": [
+    "systemverilog",
+    "vhdl"
+  ],
+  "params": [
+    {
+      "name": "K",
+      "type": "real",
+      "default": "0.1"
+    }
+  ]
+}

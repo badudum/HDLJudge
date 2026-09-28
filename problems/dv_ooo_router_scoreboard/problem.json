@@ -1,0 +1,45 @@
+{
+  "id": 208,
+  "title": "Router Scoreboard (Per-Port Ordering)",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "scoreboard",
+    "router",
+    "ordering",
+    "queues"
+  ],
+  "top": "router_scoreboard",
+  "ports": [],
+  "constraints": [
+    "A 1→4 router preserves order **per output port**, but packets to different ports interleave arbitrarily. Write `class router_scoreboard` with `add_input(pkt p)`, `add_output(int port, pkt p)`, `final_check()` and public counters `n_match, n_misroute, n_order, n_corrupt, n_missing, n_unknown`.",
+    "`add_output`: find the expected packet with the same `uid` (on any port) and remove it. Classify in this priority: it was expected on a different port → `n_misroute`; payload differs → `n_corrupt`; it isn't the **oldest** outstanding packet of its port → `n_order`; otherwise `n_match`. A uid that isn't outstanding anywhere → `n_unknown`.",
+    "`final_check()` sets `n_missing` = packets still outstanding (dropped by the router)."
+  ],
+  "hints": [
+    "Keep one queue of expected packets per destination port: `pkt exp_q[4][$]`.",
+    "Search by uid so that a misrouted or overtaking packet is still identified (and retired) correctly.",
+    "The ordering check is just 'is it at index 0 of its port's queue?'."
+  ],
+  "examples": [
+    {
+      "check": "in-order per port, interleaved across ports",
+      "title": "interleave",
+      "input": "400 packets, ports drained in random order",
+      "expected": "all match"
+    },
+    {
+      "check": "detects reordering within a port",
+      "title": "order",
+      "input": "packet b overtakes a on port 0",
+      "expected": "n_order = 1"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 60,
+  "simulator": "verilator",
+  "kind": "component"
+}

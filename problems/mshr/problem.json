@@ -1,0 +1,38 @@
+{
+  "id": 70, "title": "MSHR (Miss Status Holding Registers)", "difficulty": "Hard", "category": "arch",
+  "tags": ["cache", "non-blocking", "miss-handling"], "top": "mshr4",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",        "dir": "input",  "width": 1},
+    {"name": "rst",        "dir": "input",  "width": 1},
+    {"name": "miss_valid", "dir": "input",  "width": 1},
+    {"name": "miss_addr",  "dir": "input",  "width": 8},
+    {"name": "resp_valid", "dir": "input",  "width": 1},
+    {"name": "resp_id",    "dir": "input",  "width": 2},
+    {"name": "mem_req",    "dir": "output", "width": 1},
+    {"name": "mem_id",     "dir": "output", "width": 2},
+    {"name": "mem_addr",   "dir": "output", "width": 8},
+    {"name": "merged",     "dir": "output", "width": 1},
+    {"name": "merge_id",   "dir": "output", "width": 2},
+    {"name": "stall",      "dir": "output", "width": 1},
+    {"name": "valid_mask", "dir": "output", "width": 4}
+  ],
+  "constraints": [
+    "4 entries, each tracking one outstanding cache-line miss (`valid`, 8-bit line address).",
+    "Each rising edge: first, `resp_valid` frees entry `resp_id`. Then a `miss_valid` request is handled against the remaining valid entries:",
+    "• same line already outstanding → **secondary miss**: `merged = 1`, `merge_id` = that entry, and no memory request;",
+    "• otherwise, if an entry is free → **primary miss**: allocate the lowest free entry, `mem_req = 1` with `mem_id` and `mem_addr`;",
+    "• otherwise → `stall = 1`. All outputs are registered pulses/values for the last edge (ids and address are don't-care when their flag is 0). Synchronous reset clears all entries."
+  ],
+  "hints": [
+    "Compute `v = valid & ~free_mask` first, then do an associative lookup of `miss_addr` over entries with `v[i]`.",
+    "Allocation is a priority encoder on `~v` (lowest free entry).",
+    "Merging is what makes a non-blocking cache efficient: the second access to a line that's already being fetched doesn't generate a new memory request."
+  ],
+  "examples": [
+    {"check": "primary miss", "title": "new line", "input": "miss 0x40 after reset", "expected": "mem_req = 1, mem_id = 0, mem_addr = 0x40"},
+    {"check": "secondary miss merges", "title": "same line", "input": "miss 0x40 again", "expected": "merged = 1, merge_id = 0, mem_req = 0"},
+    {"check": "full", "title": "no free entry", "input": "4 different lines outstanding, a 5th miss", "expected": "stall = 1"}
+  ]
+}

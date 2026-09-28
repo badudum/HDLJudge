@@ -1,0 +1,70 @@
+{
+  "id": 99,
+  "title": "Assertion: Acknowledge Within 5 Cycles",
+  "difficulty": "Medium",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_ack",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "ack",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule: every cycle with `req = 1` must be followed by `ack = 1` within 1 to 5 cycles (`req` is a single-cycle pulse).",
+    "The testbench always runs long enough for pending obligations to be decided.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Bounded delay range: `##[1:5]`.",
+    "`req |-> ##[1:5] ack`.",
+    "An ack in the same cycle as req does not count (the window starts at 1)."
+  ],
+  "examples": [
+    {
+      "check": "legal: ack after 2 cycles",
+      "title": "fast ack",
+      "input": "req, then ack two cycles later",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: late ack",
+      "title": "late",
+      "input": "ack 6 cycles after req",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "legal: ack after exactly 5",
+      "title": "boundary",
+      "input": "ack 5 cycles after req",
+      "expected": "no failure"
+    }
+  ]
+}

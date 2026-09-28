@@ -1,0 +1,81 @@
+{
+  "id": 8,
+  "title": "RC Low-Pass Filter Model",
+  "difficulty": "Medium",
+  "category": "modeling",
+  "tags": [
+    "analog",
+    "real-number-modeling",
+    "filter"
+  ],
+  "top": "rc_lpf",
+  "synthesis": "optional",
+  "languages": [
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "vin",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "vout",
+      "dir": "output",
+      "width": 1,
+      "type": "real"
+    }
+  ],
+  "constraints": [
+    "`TAU` and `TS` are `real` parameters / generics in seconds, with defaults 1.0e-6 and 10.0e-9.",
+    "Update once per rising edge of `clk`: `vout += (vin - vout) * (1 - exp(-TS/TAU))`.",
+    "`vout` starts at 0.0. Results must match the exact recurrence within 1e-9 V.",
+    "The model does not need to be synthesizable."
+  ],
+  "hints": [
+    "`alpha = 1 - exp(-TS/TAU)` is constant. Compute it once as a `localparam real` / `constant`.",
+    "SystemVerilog: `$exp()`. VHDL: `exp()` from `ieee.math_real`.",
+    "In VHDL, keep the filter state in an internal `real` signal and assign it to `vout`."
+  ],
+  "examples": [
+    {
+      "check": "unit step response",
+      "title": "unit step",
+      "input": "vin steps 0 → 1.0, TAU = 1 µs, TS = 10 ns",
+      "expected": "vout = 0.00995, 0.01980, 0.02955, … (the recurrence)"
+    },
+    {
+      "check": "reaches 63.2%",
+      "title": "one time constant",
+      "input": "after 100 steps (= 1 TAU) of vin = 1.0",
+      "expected": "vout ≈ 1 − e⁻¹ ≈ 0.632"
+    },
+    {
+      "check": "settles and discharges",
+      "title": "discharge",
+      "input": "vin = 1.0 for 300 more steps, then -0.5 for 400 steps",
+      "expected": "vout settles near 1.0, then decays toward -0.5"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 1600,
+      "step": 50,
+      "unit": 1,
+      "signals": [
+        "dut1.vin:vin",
+        "dut1.vout:vout"
+      ],
+      "title": "step response (TAU = 1 us)",
+      "caption": "vout approaches vin exponentially: 63 % after one time constant."
+    }
+  ]
+}

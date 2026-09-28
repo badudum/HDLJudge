@@ -1,0 +1,61 @@
+{
+  "id": 236,
+  "title": "Timing: 32-Bit Priority Encoder",
+  "difficulty": "Medium",
+  "category": "timing",
+  "tags": [
+    "timing",
+    "critical-path",
+    "priority-encoder",
+    "tree"
+  ],
+  "top": "penc32",
+  "ports": [
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "idx",
+      "dir": "output",
+      "width": 5
+    }
+  ],
+  "constraints": [
+    "`idx` = index of the **lowest** set bit of `req`, and `valid = |req`. When `req = 0`, `idx = 0`. Purely combinational.",
+    "Timing budget: at most **12 logic levels** (the Synthesis stage reports the depth). A priority chain (`for` loop with `if`) is far deeper."
+  ],
+  "hints": [
+    "Divide and conquer: encode each 16-bit half, then pick the lower half if it has any bit set, and prepend one index bit.",
+    "Recursively: an n-bit encoder = two n/2-bit encoders + one mux level, so the depth grows as log₂ n.",
+    "Write it as a recursive function over the width, or as explicit levels (pairs → quads → …)."
+  ],
+  "examples": [
+    {
+      "check": "single bits",
+      "title": "one bit",
+      "input": "req = 1 << 17",
+      "expected": "idx = 17"
+    },
+    {
+      "check": "lowest wins",
+      "title": "priority",
+      "input": "req = 0x80010000",
+      "expected": "idx = 16"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "max_logic_depth": 12
+}

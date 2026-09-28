@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: data held while stalled",
+  "violation": false
+ },
+ {
+  "name": "violation: data changes while stalled",
+  "violation": true
+ },
+ {
+  "name": "legal: data may change after a transfer",
+  "violation": false
+ },
+ {
+  "name": "violation: change on the last stall cycle",
+  "violation": true
+ },
+ {
+  "name": "legal: data changes when valid is low",
+  "violation": false
+ }
+]

@@ -1,0 +1,75 @@
+{
+  "id": 193,
+  "title": "Level Shifter Model",
+  "difficulty": "Easy",
+  "category": "lowpower",
+  "tags": [
+    "modeling",
+    "level-shifter",
+    "real",
+    "multi-voltage"
+  ],
+  "top": "level_shifter",
+  "ports": [
+    {
+      "name": "vin",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "vddl",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "vddh",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "vout",
+      "dir": "output",
+      "width": 1,
+      "type": "real"
+    }
+  ],
+  "constraints": [
+    "Behavioral model of a low → high voltage level shifter with an input Schmitt trigger. `vin` swings between 0 and `vddl`, and `vout` is either 0.0 or exactly `vddh`.",
+    "Output goes high when `vin > 0.6·vddl` and low when `vin < 0.4·vddl`. In between it **holds** its previous value (hysteresis). The initial value is low.",
+    "If the low-voltage domain is off (`vddl < 0.3`), `vout = 0.0` and the stored state resets to low (a built-in isolation, as in an enable-type level shifter).",
+    "`vout` must follow the inputs combinationally (no clock). Not synthesizable (real numbers)."
+  ],
+  "hints": [
+    "Keep the state in a variable updated whenever an input changes: `always @(vin or vddl or vddh)` in SystemVerilog, or a process sensitive to all three inputs in VHDL.",
+    "Update the state first (off → low, above 0.6 → high, below 0.4 → low), then drive `vout = state ? vddh : 0.0`.",
+    "Hysteresis gives noise immunity when the input edge is slow or noisy."
+  ],
+  "examples": [
+    {
+      "check": "switches at the thresholds",
+      "title": "thresholds",
+      "input": "vddl = 0.8: vin = 0.5 then 0.3",
+      "expected": "vout = vddh at 0.5 (> 0.48), 0 at 0.3 (< 0.32)"
+    },
+    {
+      "check": "hysteresis band holds",
+      "title": "hold",
+      "input": "vin = 0.4 (inside the band)",
+      "expected": "vout keeps its previous value"
+    },
+    {
+      "check": "isolated when vddl is off",
+      "title": "off",
+      "input": "vddl = 0.0",
+      "expected": "vout = 0.0"
+    }
+  ],
+  "synthesis": "optional",
+  "languages": [
+    "systemverilog",
+    "vhdl"
+  ]
+}

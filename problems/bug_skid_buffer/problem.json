@@ -1,0 +1,85 @@
+{
+  "id": 226,
+  "title": "Debug: Skid Buffer",
+  "difficulty": "Hard",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "valid-ready",
+    "skid-buffer"
+  ],
+  "top": "skid_buffer",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "in_valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "in_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "in_ready",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "out_valid",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "out_data",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "out_ready",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "A pipeline stage that breaks **both** the valid/data path and the ready path: `in_ready` must come straight from a register (`in_ready = !skid_valid`), with no combinational path from `out_ready`.",
+    "State: a main register (`out_valid`/`out_data`) and a skid register. On each edge: if the main register can advance (`!out_valid || out_ready`), it loads the skid entry if there is one (emptying the skid), otherwise it takes the input (`out_valid <= in_valid && in_ready`). If the main register is stalled, an accepted input goes into the skid register.",
+    "Full throughput (one transfer per cycle when `out_ready = 1`), no loss, no duplication. Synchronous reset empties both. `out_data` is don't-care while `out_valid = 0`.",
+    "The starter code has **2 bugs**."
+  ],
+  "hints": [
+    "Throttle the output and follow one word through the skid register: does it come out in order?",
+    "What happens to the skid register when a word arrives while `in_ready` is 0?",
+    "The skid entry is older than anything on the input, so it must drain first."
+  ],
+  "examples": [
+    {
+      "check": "full throughput",
+      "title": "streaming",
+      "input": "in_valid and out_ready always 1",
+      "expected": "one word per cycle, one cycle of latency"
+    },
+    {
+      "check": "stall catches the in-flight word",
+      "title": "skid",
+      "input": "out_ready drops for 3 cycles",
+      "expected": "one word goes to the skid register, in_ready drops, nothing is lost"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

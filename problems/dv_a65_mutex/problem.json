@@ -1,0 +1,70 @@
+{
+  "id": 153,
+  "title": "Assertion: Lock Mutual Exclusion",
+  "difficulty": "Hard",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_lock",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "lock_req",
+      "dir": "input",
+      "width": 3
+    },
+    {
+      "name": "lock_gnt",
+      "dir": "input",
+      "width": 3
+    }
+  ],
+  "constraints": [
+    "Rule 1: at most one lock grant at a time. Rule 2: a **new** grant (a rising `lock_gnt[i]`) only goes to a master that is requesting.",
+    "Rule 3: a grant is never revoked while its owner keeps requesting: if `lock_gnt[i] && lock_req[i]`, then `lock_gnt[i]` is still high next cycle.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`$onehot0(lock_gnt)` is an invariant. For rule 2 use `$rose(lock_gnt[i]) |-> lock_req[i]`: the grant legitimately stays high for the cycle in which the owner releases.",
+    "Per owner: `lock_gnt[i] && lock_req[i] |=> lock_gnt[i]` (generate loop).",
+    "Writing rule 2 as the invariant `(lock_gnt & ~lock_req) == 0` contradicts rule 3 at release time. Try it on the legal trace."
+  ],
+  "examples": [
+    {
+      "check": "legal: lock handed over",
+      "title": "ok",
+      "input": "owner 0 releases, owner 2 acquires",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: two owners",
+      "title": "two",
+      "input": "lock_gnt = 101",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: lock revoked",
+      "title": "revoked",
+      "input": "grant drops while owner still requests",
+      "expected": "assertion fails"
+    }
+  ]
+}

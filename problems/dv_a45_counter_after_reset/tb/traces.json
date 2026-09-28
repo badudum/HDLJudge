@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: correct counter",
+  "violation": false
+ },
+ {
+  "name": "violation: skips a value",
+  "violation": true
+ },
+ {
+  "name": "violation: counts while disabled",
+  "violation": true
+ },
+ {
+  "name": "violation: not zero after reset",
+  "violation": true
+ },
+ {
+  "name": "legal: wraps from 15 to 0",
+  "violation": false
+ }
+]

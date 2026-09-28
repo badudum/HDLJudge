@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: one transaction",
+  "violation": false
+ },
+ {
+  "name": "legal: back-to-back transactions",
+  "violation": false
+ },
+ {
+  "name": "violation: grant too late",
+  "violation": true
+ },
+ {
+  "name": "violation: done too late",
+  "violation": true
+ },
+ {
+  "name": "violation: overlapping request",
+  "violation": true
+ }
+]

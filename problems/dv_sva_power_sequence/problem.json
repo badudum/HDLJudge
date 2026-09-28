@@ -1,0 +1,81 @@
+{
+  "id": 156,
+  "title": "Assertion: Power-Down Sequencing",
+  "difficulty": "Medium",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker",
+    "low-power"
+  ],
+  "top": "chk_power_seq",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pwr_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "iso_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "save",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "restore",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Power-down: when `pwr_en` falls, `iso_en` must already have been high for at least one cycle, and a `save` pulse must have occurred while isolated.",
+    "Power-up: `iso_en` may only fall when `pwr_en` has been high for at least 2 cycles and a `restore` pulse occurred after power came back.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Isolation first: `$fell(pwr_en) |-> iso_en && $past(iso_en)`.",
+    "Track `saved` (set by `save` while `iso_en`, cleared when isolation ends) and `restored` (set by `restore` while `pwr_en`, cleared when power drops), then assert `$fell(pwr_en) |-> saved` and `$fell(iso_en) |-> pwr_en && $past(pwr_en) && restored`.",
+    "These are the checks UPF-driven power-aware simulation performs automatically. Here you write them by hand."
+  ],
+  "examples": [
+    {
+      "check": "legal: full power cycle",
+      "title": "ok",
+      "input": "iso, save, power off … power on, restore, iso off",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: power off before isolation",
+      "title": "no iso",
+      "input": "pwr_en falls with iso_en low",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: isolation released before restore",
+      "title": "early release",
+      "input": "iso_en falls before restore",
+      "expected": "assertion fails"
+    }
+  ]
+}

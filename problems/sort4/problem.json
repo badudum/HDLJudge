@@ -1,0 +1,85 @@
+{
+  "id": 217,
+  "title": "Sorting Network (4 Inputs)",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "sorting-network",
+    "compare-swap"
+  ],
+  "top": "sort4",
+  "ports": [
+    {
+      "name": "in0",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "in1",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "in2",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "in3",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "out0",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "out1",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "out2",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "out3",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Output the four unsigned inputs sorted ascending: `out0 ≤ out1 ≤ out2 ≤ out3`. Purely combinational.",
+    "Timing budget: at most 40 logic levels. A sorting network of 5 compare-and-swap units in 3 layers fits, and an insertion-sort chain does not."
+  ],
+  "hints": [
+    "Optimal 4-input network: layer 1 (0,1)(2,3), layer 2 (0,2)(1,3), layer 3 (1,2).",
+    "One compare-and-swap: `lo = a < b ? a : b; hi = a < b ? b : a;`. Write it as a function.",
+    "Sorting networks are data-independent, which is why they are used in hardware (median filters, top-K)."
+  ],
+  "examples": [
+    {
+      "check": "sorts",
+      "title": "sort",
+      "input": "3, 1, 4, 1",
+      "expected": "1, 1, 3, 4"
+    },
+    {
+      "check": "5000 random",
+      "title": "random",
+      "input": "random bytes",
+      "expected": "sorted order"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "max_logic_depth": 40
+}

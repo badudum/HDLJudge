@@ -1,0 +1,46 @@
+{
+  "id": 200,
+  "title": "UVM: Driver Response Path",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "driver",
+    "sequence",
+    "response"
+  ],
+  "top": "mul_driver",
+  "ports": [],
+  "constraints": [
+    "Write `class mul_driver extends uvm_driver #(mul_item)`. Get the virtual interface from `uvm_config_db#(virtual mul_if)` with field name `\"vif\"`.",
+    "For each item: wait until `busy = 0`, then drive `a`, `b` and a **one-cycle** `req` pulse (synchronous to `clk`, nonblocking assignments). Wait for the `done` pulse and sample `result`.",
+    "Return a response: a new `mul_item` with `result` filled in, and with `set_id_info(req)` so it reaches the right sequence. Two sequences share the driver in parallel, and each calls `get_response()` after every item.",
+    "Drive `req` to 0 when idle. The UVM library is the Verilator-compatible chipsalliance/uvm-verilator (UVM 2017), and building it takes about a minute."
+  ],
+  "hints": [
+    "`seq_item_port.item_done(rsp)` completes the item **and** sends `rsp` back (the same as `put_response(rsp)`).",
+    "Without `rsp.set_id_info(req)` the sequencer can't tell which sequence the response belongs to, so `get_response()` waits forever.",
+    "Wait for `done` with `do @(posedge vif.clk); while (!vif.done);`."
+  ],
+  "examples": [
+    {
+      "check": "one sequence: every request gets a response",
+      "title": "responses",
+      "input": "10 items",
+      "expected": "10 responses, each with a × b"
+    },
+    {
+      "check": "two parallel sequences share the driver",
+      "title": "routing",
+      "input": "two sequences in parallel",
+      "expected": "each gets only its own responses"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

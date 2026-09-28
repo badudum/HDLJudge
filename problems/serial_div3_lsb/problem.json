@@ -1,0 +1,70 @@
+{
+  "id": 263,
+  "title": "Divisible by 3, LSB First",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "fsm",
+    "brain-teaser",
+    "modular-arithmetic",
+    "serial"
+  ],
+  "top": "sdiv3l",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "bit_in",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "d3",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Bits of a number arrive **least significant bit first**, one per rising edge with `valid`. After each edge, `d3 = 1` when the number received so far is divisible by 3 (combinational from state). Reset starts a new number (`d3 = 1`).",
+    "At most **3 flip-flops**."
+  ],
+  "hints": [
+    "MSB-first is easy (n → 2n + b). LSB-first adds b·2^k, and 2^k mod 3 alternates 1, 2, 1, 2, …",
+    "So track the remainder (0–2) **and** whether the next bit has weight 1 or 2: 3 × 2 = 6 states, 3 flops.",
+    "With weight w: r ← (r + w·b) mod 3, then w ← 3 − w."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "6",
+      "input": "bits 0, 1, 1 (= 6)",
+      "expected": "d3 = 1, 0, 1"
+    },
+    {
+      "check": "long numbers",
+      "title": "long",
+      "input": "random bits",
+      "expected": "tracks the running value mod 3"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 3
+}

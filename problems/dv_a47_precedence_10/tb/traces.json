@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: done 4 cycles after start",
+  "violation": false
+ },
+ {
+  "name": "violation: done without start",
+  "violation": true
+ },
+ {
+  "name": "violation: done too late",
+  "violation": true
+ },
+ {
+  "name": "legal: done exactly 10 cycles later",
+  "violation": false
+ },
+ {
+  "name": "violation: done in the same cycle as start",
+  "violation": true
+ }
+]

@@ -1,0 +1,41 @@
+{
+  "id": 239,
+  "title": "Constraint: Private IPv4 Address",
+  "difficulty": "Easy",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "ip_addr",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Generate a random address from the RFC 1918 private ranges: 10.0.0.0/8, 172.16.0.0/12 (172.16.x.x – 172.31.x.x) or 192.168.0.0/16.",
+    "The last octet is never 0 (network) or 255 (broadcast). All three ranges must actually be produced.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "One constraint with three OR-ed alternatives, and `inside {[16:31]}` for the 172 range.",
+    "`!(o[3] inside {0, 255})` excludes the two host values."
+  ],
+  "examples": [
+    {
+      "check": "inside a private range",
+      "title": "range",
+      "input": "172.20.1.5",
+      "expected": "accepted"
+    },
+    {
+      "check": "host octet is not 0 or 255",
+      "title": "host",
+      "input": "10.1.2.255",
+      "expected": "rejected"
+    }
+  ]
+}

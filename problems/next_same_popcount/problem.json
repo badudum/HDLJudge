@@ -1,0 +1,88 @@
+{
+  "id": 249,
+  "title": "Next Number With the Same Popcount",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks",
+    "gosper"
+  ],
+  "top": "snoob",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "nxt",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "`nxt` = the smallest number greater than `x` with the **same number of 1 bits**. If none fits in 16 bits (or `x = 0`), `nxt = 0`.",
+    "Purely combinational. No loops, no `/` or `%`, and no `$countones`."
+  ],
+  "hints": [
+    "Gosper's hack: `s = x & -x` (lowest 1), `r = x + s` (the lowest block of ones ripples into the next 0).",
+    "The ones that fell off go back at the bottom: `ones = ((x ^ r) >> 2) / s`, and `nxt = r | ones`.",
+    "Division by a power of two is a right shift by its index. Find the index of the one-hot `s` without loops by OR-ing it under the masks 0xAAAA, 0xCCCC, 0xF0F0 and 0xFF00.",
+    "Keep r 17 bits wide: a carry out of bit 15 means there is no next value."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "0b0110",
+      "input": "x = 6",
+      "expected": "nxt = 9 (0b1001)"
+    },
+    {
+      "check": "no next value",
+      "title": "overflow",
+      "input": "x = 0xF000",
+      "expected": "nxt = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "%|/",
+      "message": "no / or %: shift instead",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

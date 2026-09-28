@@ -1,0 +1,80 @@
+{
+  "id": 158,
+  "title": "Single-Port Synchronous RAM",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "memory",
+    "bram",
+    "sequential"
+  ],
+  "top": "sp_ram64",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 6
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "64 × 8-bit memory. On a rising edge with `en = 1`: if `we`, write `wdata` to `addr`.",
+    "Registered read, **read-first**: on every enabled edge `rdata` gets the value stored at `addr` **before** this edge's write. With `en = 0` nothing changes.",
+    "No reset. Must be synthesizable (it should infer a block RAM)."
+  ],
+  "hints": [
+    "Write and read in the same clocked block with nonblocking assignments: `rdata <= mem[addr]` naturally reads the old value.",
+    "This is the canonical pattern FPGA tools recognize as block RAM.",
+    "Compare with the write-first memory of the Debug problem."
+  ],
+  "examples": [
+    {
+      "check": "write then read",
+      "title": "basic",
+      "input": "write 0x5A to 10, then read 10",
+      "expected": "rdata = 0x5A"
+    },
+    {
+      "check": "read-first on a write",
+      "title": "read during write",
+      "input": "write 0x77 to 10 while reading it",
+      "expected": "rdata = old value (0x5A)"
+    },
+    {
+      "check": "enable gates everything",
+      "title": "disabled",
+      "input": "en = 0",
+      "expected": "no write, rdata holds"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

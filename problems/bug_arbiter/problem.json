@@ -1,0 +1,71 @@
+{
+  "id": 88,
+  "title": "Debug: Round-Robin Arbiter",
+  "difficulty": "Hard",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "arbiter",
+    "fairness",
+    "starvation"
+  ],
+  "top": "rr_arbiter4",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "grant",
+      "dir": "output",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Intended behavior: the round-robin arbiter of problem 28. Registered one-hot grant. The search starts at a pointer, and after granting requester i the pointer moves to i + 1. With no request, `grant = 0` and the pointer stays.",
+    "The starter has **2 bugs**: one breaks fairness (a requester can be starved), one leaves a stale grant around.",
+    "Synchronous reset: pointer 0, grant 0."
+  ],
+  "hints": [
+    "Let all four request continuously. Does the grant rotate, or does one requester win over and over?",
+    "Drop all requests. What should `grant` show in the next cycle?",
+    "Starvation bugs rarely show up in short directed tests. That's why the random test matters."
+  ],
+  "examples": [
+    {
+      "check": "all requesting",
+      "title": "rotation",
+      "input": "req = 1111",
+      "expected": "grant = 0001, 0010, 0100, 1000, …"
+    },
+    {
+      "check": "no request",
+      "title": "idle",
+      "input": "req = 0000",
+      "expected": "grant = 0000"
+    },
+    {
+      "check": "2000 random",
+      "title": "random",
+      "input": "random requests",
+      "expected": "matches the reference"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": 50, "title": "Shared-Memory Bank Conflict Detector", "difficulty": "Hard", "category": "arch",
+  "tags": ["gpu", "memory", "banking", "combinational"], "top": "bank_conflict",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "addr",     "dir": "input",  "width": 32},
+    {"name": "valid",    "dir": "input",  "width": 4},
+    {"name": "conflict", "dir": "output", "width": 1},
+    {"name": "cycles",   "dir": "output", "width": 3}
+  ],
+  "constraints": [
+    "4 lanes, each with an 8-bit word address: lane i uses `addr[8i+7 : 8i]`. Only lanes with `valid[i] = 1` access memory.",
+    "Memory has 4 banks; a word lives in bank `address[1:0]`.",
+    "Lanes that read the **same address** are served together (broadcast): no conflict.",
+    "`cycles` = the largest number of **distinct** addresses any single bank must serve (0 if no lane is valid). `conflict = (cycles > 1)`.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "With 4 lanes there are only 6 lane pairs. Compare banks and addresses pairwise.",
+    "For each bank, count the distinct addresses: a lane counts only if no *lower* valid lane in the same bank had the same address.",
+    "Then take the maximum over the 4 banks."
+  ],
+  "examples": [
+    {"check": "no conflict", "title": "stride 1", "input": "addresses 0, 1, 2, 3 (all valid)", "expected": "cycles = 1, conflict = 0"},
+    {"check": "broadcast", "title": "same word", "input": "addresses 8, 8, 8, 8", "expected": "cycles = 1, conflict = 0 (broadcast)"},
+    {"check": "conflicts", "title": "stride 4", "input": "addresses 0, 4, 8, 12", "expected": "cycles = 4, conflict = 1 (all in bank 0)"}
+  ]
+}

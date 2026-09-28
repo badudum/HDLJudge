@@ -1,0 +1,46 @@
+{
+  "id": 142,
+  "title": "Constraint: Queue With Size-Based Range",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "size_q",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "A random queue of 3 … 8 bytes, strictly ascending, where every element is smaller than 10 × (the queue's size).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "`q.size()` can be constrained and used inside other constraints.",
+    "Ascending: `if (i > 0) q[i] > q[i-1];` inside a `foreach`."
+  ],
+  "examples": [
+    {
+      "check": "size is 3..8",
+      "title": "size",
+      "input": "any result",
+      "expected": "3…8 elements"
+    },
+    {
+      "check": "every element is below 10 * size",
+      "title": "range",
+      "input": "size 4 → elements < 40",
+      "expected": "always"
+    },
+    {
+      "check": "elements are strictly ascending",
+      "title": "order",
+      "input": "{3, 3, 9}",
+      "expected": "rejected"
+    }
+  ]
+}

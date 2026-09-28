@@ -1,0 +1,33 @@
+{
+  "id": 17,
+  "title": "Barrel Rotator",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": ["combinational", "shifter"],
+  "top": "rotator8",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "din",  "dir": "input",  "width": 8},
+    {"name": "amt",  "dir": "input",  "width": 3},
+    {"name": "dir",  "dir": "input",  "width": 1},
+    {"name": "dout", "dir": "output", "width": 8}
+  ],
+  "constraints": [
+    "`dir = 0` rotates **left** (toward the MSB), `dir = 1` rotates **right**.",
+    "Bits shifted out on one side re-enter on the other. No bit is lost.",
+    "`amt = 0` passes `din` through unchanged.",
+    "Purely combinational and synthesizable."
+  ],
+  "hints": [
+    "Rotate left by k = `(din << k) | (din >> (8 - k))` inside an 8-bit context.",
+    "Or concatenate `{din, din}` and pick an 8-bit window.",
+    "A log-shifter uses three stages (rotate by 1, 2 and 4) controlled by the bits of `amt`."
+  ],
+  "examples": [
+    {"check": "rotate left", "title": "left", "input": "din = 8'b1000_0011, amt = 1, dir = 0", "expected": "dout = 8'b0000_0111"},
+    {"check": "rotate right", "title": "right", "input": "din = 8'b1000_0011, amt = 2, dir = 1", "expected": "dout = 8'b1110_0000"},
+    {"check": "amt = 0", "title": "no rotation", "input": "din = 8'hA5, amt = 0, dir = 1", "expected": "dout = 8'hA5"}
+  ]
+}

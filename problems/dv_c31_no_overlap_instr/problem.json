@@ -1,0 +1,46 @@
+{
+  "id": 137,
+  "title": "Constraint: Non-Overlapping Memory Accesses",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "mem_ops",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Six memory accesses `[addr[i], addr[i] + len[i])` with 1 … 8 bytes each, all inside a 64-byte buffer, and **no two overlapping**.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Two ranges don't overlap if one ends before the other starts.",
+    "Widen before adding (`int'(addr[i]) + len[i]`): 6-bit + 4-bit arithmetic would wrap at 64."
+  ],
+  "examples": [
+    {
+      "check": "no two accesses overlap",
+      "title": "overlap",
+      "input": "[10,14) and [12,16)",
+      "expected": "rejected"
+    },
+    {
+      "check": "each access is 1..8 bytes inside 0..63",
+      "title": "bounds",
+      "input": "addr = 60, len = 8",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 195 sets"
+    }
+  ]
+}

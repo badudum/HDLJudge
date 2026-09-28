@@ -1,0 +1,35 @@
+{
+  "id": 32,
+  "title": "Slew-Rate Limiter Model",
+  "difficulty": "Medium",
+  "category": "modeling",
+  "tags": ["analog", "real-number-modeling", "amplifier"],
+  "top": "slew_limiter",
+  "synthesis": "optional",
+  "languages": ["systemverilog", "vhdl"],
+  "params": [
+    {"name": "SR", "type": "real", "default": "1.0e7"},
+    {"name": "TS", "type": "real", "default": "10.0e-9"}
+  ],
+  "ports": [
+    {"name": "clk",  "dir": "input",  "width": 1},
+    {"name": "vin",  "dir": "input",  "width": 1, "type": "real"},
+    {"name": "vout", "dir": "output", "width": 1, "type": "real"}
+  ],
+  "constraints": [
+    "`SR` is the slew rate in V/s and `TS` the clock period in s. The maximum step per edge is `SR · TS`.",
+    "On each rising edge, `vout` moves toward `vin` by at most `SR · TS`. If `vin` is closer than that, `vout = vin` exactly.",
+    "The judge uses `SR = 2.0e7` (0.2 V per 10 ns step). `vout` starts at 0.0. Tolerance 1e-9 V.",
+    "Behavioral model. Synthesis is informational."
+  ],
+  "hints": [
+    "Compute `d = vin - vout` and clamp it to [−SR·TS, +SR·TS].",
+    "Then `vout += clamped_d`, which automatically lands exactly on `vin` when |d| is small.",
+    "The step size is a constant: declare it as a `localparam real` / `constant`."
+  ],
+  "examples": [
+    {"check": "large step is rate-limited", "title": "big step", "input": "vin jumps 0 → 1.0 (SR·TS = 0.2)", "expected": "vout = 0.2, 0.4, 0.6, 0.8, 1.0, 1.0"},
+    {"check": "small changes pass through", "title": "small change", "input": "vout = 1.0, vin = 1.05", "expected": "vout = 1.05 on the next edge"},
+    {"check": "falling step", "title": "negative slew", "input": "vin jumps 1.0 → -0.5", "expected": "vout = 0.8, 0.6, …, -0.4, -0.5"}
+  ]
+}

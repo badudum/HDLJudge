@@ -1,0 +1,31 @@
+{
+  "id": 79, "title": "Scan-Inserted Counter", "difficulty": "Medium", "category": "dft",
+  "tags": ["dft", "scan", "atpg"], "top": "scan_counter",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",   "dir": "input",  "width": 1},
+    {"name": "rst",   "dir": "input",  "width": 1},
+    {"name": "en",    "dir": "input",  "width": 1},
+    {"name": "se",    "dir": "input",  "width": 1},
+    {"name": "si",    "dir": "input",  "width": 1},
+    {"name": "count", "dir": "output", "width": 4},
+    {"name": "tc",    "dir": "output", "width": 1},
+    {"name": "so",    "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Functional mode (`se = 0`): a 4-bit up counter with enable, wrapping 15 → 0. `tc` (terminal count) = 1 when `count == 15`, combinational.",
+    "Scan mode (`se = 1`): the 4 counter flops become a shift chain, `count <= {count[2:0], si}` (enable ignored). `so = count[3]`.",
+    "Synchronous reset clears the counter. Must be synthesizable."
+  ],
+  "hints": [
+    "Take the functional next state, `en ? count + 1 : count`, and put the scan mux after it.",
+    "A typical ATPG test: shift in 1110 (4 scan edges), one functional capture edge with en = 1 (→ 1111, tc = 1), then shift out and compare.",
+    "Scan lets the tester reach count = 15 in 4 cycles instead of 15, which matters for 32-bit counters."
+  ],
+  "examples": [
+    {"check": "functional counting", "title": "count", "input": "se = 0, en = 1", "expected": "count = 1, 2, …, 15, 0; tc = 1 at 15"},
+    {"check": "scan load, capture, unload", "title": "ATPG pattern", "input": "shift 1,1,1,0; capture with en = 1", "expected": "count = 14 → 15, tc = 1"},
+    {"check": "scan mode ignores enable", "title": "enable ignored", "input": "se = 1, en = 1", "expected": "pure shifting"}
+  ]
+}

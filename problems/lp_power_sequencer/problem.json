@@ -1,0 +1,100 @@
+{
+  "id": 191,
+  "title": "Power Sequencer FSM",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "fsm",
+    "power-gating",
+    "sequencing"
+  ],
+  "top": "pwr_seq",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sleep_req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wake_req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pwr_ack",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "clk_en",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "iso_en",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "save",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "restore",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "pwr_en",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "asleep",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Moore FSM (outputs from the state only). **Power down** from ON on `sleep_req`: STOP_CLK (clock off) → ISOLATE (iso on) → SAVE (`save` pulse) → PWR_OFF (`pwr_en = 0`, wait for `pwr_ack = 0`) → OFF.",
+    "**Power up** from OFF on `wake_req`: PWR_ON (`pwr_en = 1`, wait for `pwr_ack = 1`) → RESTORE (`restore` pulse) → DEISO (iso off) → ON (clock on).",
+    "Outputs per state (clk_en, iso_en, save, restore, pwr_en, asleep): ON 1,0,0,0,1,0 · STOP_CLK 0,0,0,0,1,0 · ISOLATE 0,1,0,0,1,0 · SAVE 0,1,1,0,1,0 · PWR_OFF 0,1,0,0,0,0 · OFF 0,1,0,0,0,1 · PWR_ON 0,1,0,0,1,0 · RESTORE 0,1,0,1,1,0 · DEISO 0,0,0,0,1,0.",
+    "States without a wait condition last exactly one cycle. Requests in other states are ignored. Synchronous reset → ON."
+  ],
+  "hints": [
+    "Nine states. The only conditional transitions are ON (sleep_req), PWR_OFF / PWR_ON (pwr_ack) and OFF (wake_req).",
+    "The order is what matters: stop the clock before isolating, isolate before saving, and power off last. Power-up is the mirror image.",
+    "`pwr_ack` comes from the power switch network: it takes several cycles for the rail to ramp."
+  ],
+  "examples": [
+    {
+      "check": "power-down sequence",
+      "title": "sleep",
+      "input": "sleep_req in ON",
+      "expected": "STOP_CLK, ISOLATE, SAVE, PWR_OFF, then OFF after pwr_ack falls"
+    },
+    {
+      "check": "power-up sequence",
+      "title": "wake",
+      "input": "wake_req in OFF",
+      "expected": "PWR_ON until pwr_ack, RESTORE, DEISO, ON"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

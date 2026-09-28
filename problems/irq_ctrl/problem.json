@@ -1,0 +1,95 @@
+{
+  "id": 221,
+  "title": "Interrupt Controller",
+  "difficulty": "Hard",
+  "category": "arch",
+  "tags": [
+    "interrupts",
+    "priority",
+    "edge-detect",
+    "w1c"
+  ],
+  "top": "irq_ctrl",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "irq_in",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "mask_we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "mask_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "ack",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "irq",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "id",
+      "dir": "output",
+      "width": 3
+    },
+    {
+      "name": "pending",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "mask",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Eight **edge-triggered** sources: a rising edge on `irq_in[i]` (compared with its value at the previous clock edge) sets the sticky bit `pending[i]`.",
+    "`mask` register (1 = enabled), written from `mask_data` on an edge with `mask_we`. `irq = |(pending & mask)`. `id` = index of the **lowest-numbered** pending and enabled source (0 when none). Both combinational.",
+    "An edge with `ack` clears `pending[id]` of the current `id` (only if `irq` is 1). If the same source has a new rising edge on that edge, set wins. Synchronous reset clears pending, mask, and the previous-input register."
+  ],
+  "hints": [
+    "`rise = irq_in & ~irq_prev`, then `pending <= (pending & ~clr) | rise`.",
+    "A priority encoder over `pending & mask` gives `id`, and a one-hot of `id` gives `clr`.",
+    "Masked sources still latch their edges: unmasking later raises `irq` immediately."
+  ],
+  "examples": [
+    {
+      "check": "edge sets pending",
+      "title": "edge",
+      "input": "irq_in[3] rises",
+      "expected": "pending[3] = 1 (after unmasking: irq = 1, id = 3)"
+    },
+    {
+      "check": "priority and ack",
+      "title": "priority",
+      "input": "pending 3 and 5, ack",
+      "expected": "id = 3, then after ack id = 5"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: ack after 2 cycles",
+  "violation": false
+ },
+ {
+  "name": "violation: late ack",
+  "violation": true
+ },
+ {
+  "name": "legal: ack after exactly 5",
+  "violation": false
+ },
+ {
+  "name": "violation: no ack at all",
+  "violation": true
+ },
+ {
+  "name": "legal: back-to-back requests",
+  "violation": false
+ }
+]

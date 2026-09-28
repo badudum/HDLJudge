@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: normal traffic",
+  "violation": false
+ },
+ {
+  "name": "violation: push while full",
+  "violation": true
+ },
+ {
+  "name": "legal: push and pop while full",
+  "violation": false
+ },
+ {
+  "name": "violation: pop while empty",
+  "violation": true
+ }
+]

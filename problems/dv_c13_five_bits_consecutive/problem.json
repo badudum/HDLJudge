@@ -1,0 +1,48 @@
+{
+  "id": 119,
+  "title": "Constraint: Five Bits, Sometimes Consecutive",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "five_bits",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`v` (16 bits) has exactly **5** ones.",
+    "In about **30 %** of results the five ones are **contiguous** (e.g. `0000_0011_1110_0000`), otherwise they are not.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Five ones are contiguous exactly when `v & (v >> 1)` has **four** ones. Verilator's constraint-to-SMT translation mis-sizes shift operators on vectors narrower than 32 bits (z3 then rejects the query and `randomize()` fails). Use part-selects and concatenation instead: `v >> 1` becomes `{1'b0, v[15:1]}`.",
+    "Helper bit: `rand bit run; run dist {1 := 30, 0 := 70};` and `run == ($countones(v & (v >> 1)) == 4);`.",
+    "Without the helper, contiguous patterns (12 of 4368) would almost never appear."
+  ],
+  "examples": [
+    {
+      "check": "exactly 5 bits are set",
+      "title": "count",
+      "input": "any result",
+      "expected": "5 ones"
+    },
+    {
+      "check": "the 5 ones are consecutive in about 30 %",
+      "title": "run rate",
+      "input": "600 calls",
+      "expected": "≈ 180 contiguous"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "600 calls",
+      "expected": "≥ 300 different values"
+    }
+  ]
+}

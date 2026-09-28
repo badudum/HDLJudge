@@ -1,0 +1,33 @@
+{
+  "id": 16,
+  "title": "Signed Saturating Adder",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "arithmetic", "dsp"],
+  "top": "sat_add8",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "a",   "dir": "input",  "width": 8},
+    {"name": "b",   "dir": "input",  "width": 8},
+    {"name": "sum", "dir": "output", "width": 8},
+    {"name": "ovf", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`a`, `b` and `sum` are two's-complement signed values in the range −128 … 127.",
+    "When the true sum is above 127, `sum = 127` (0x7F). When it is below −128, `sum = −128` (0x80).",
+    "`ovf = 1` exactly when saturation happened.",
+    "Purely combinational and synthesizable."
+  ],
+  "hints": [
+    "Overflow in two's complement: both operands have the same sign and the result has the other sign.",
+    "Or sign-extend both operands to 9 bits and add: overflow happens when bits 8 and 7 of the 9-bit result differ.",
+    "The saturation value depends only on the sign of the operands (or bit 8 of the 9-bit sum)."
+  ],
+  "examples": [
+    {"check": "no overflow", "title": "in range", "input": "a = 100 (0x64), b = -30 (0xE2)", "expected": "sum = 70 (0x46), ovf = 0"},
+    {"check": "positive overflow", "title": "positive saturation", "input": "a = 100 (0x64), b = 100 (0x64)", "expected": "sum = 127 (0x7F), ovf = 1"},
+    {"check": "negative overflow", "title": "negative saturation", "input": "a = -100 (0x9C), b = -100 (0x9C)", "expected": "sum = -128 (0x80), ovf = 1"}
+  ]
+}

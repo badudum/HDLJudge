@@ -1,0 +1,83 @@
+{
+  "id": 258,
+  "title": "Hamming Distance At Most One",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bit-tricks"
+  ],
+  "top": "close16",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "close",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`close = 1` when `a` and `b` differ in **at most one** bit position.",
+    "No loops or generate, no `$countones` / `$onehot`, and no popcount tree."
+  ],
+  "hints": [
+    "The differing positions are `d = a ^ b`.",
+    "At most one bit set means d is 0 or a power of two: `(d & (d - 1)) == 0`."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "one bit",
+      "input": "a = 0x00F0, b = 0x00F8",
+      "expected": "close = 1"
+    },
+    {
+      "check": "worked examples",
+      "title": "two bits",
+      "input": "a = 0x00F0, b = 0x00F3",
+      "expected": "close = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\$countones|\\$onehot0?|\\$clog2",
+      "message": "system functions that do the work for you are not allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

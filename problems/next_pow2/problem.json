@@ -1,0 +1,34 @@
+{
+  "id": 19,
+  "title": "Round Up to a Power of Two",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "brain-teaser", "bit-tricks"],
+  "top": "next_pow2",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "x", "dir": "input",  "width": 16},
+    {"name": "y", "dir": "output", "width": 17}
+  ],
+  "forbidden": [
+    {"pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bloop\\b|\\bgenerate\\b", "message": "no loops or generate blocks: use the bit-smearing trick"},
+    {"pattern": "\\$clog2|\\$countones|\\*\\*", "message": "no $clog2, $countones or ** — derive it with shifts and ORs"}
+  ],
+  "constraints": [
+    "`y` is the smallest power of two that is ≥ `x`.",
+    "`x = 0` gives `y = 1`. `x` above 32768 gives `y = 65536`, which is why `y` has 17 bits.",
+    "No loops, `generate`, `$clog2`, `$countones` or `**`. Purely combinational."
+  ],
+  "hints": [
+    "If you could set every bit below the most significant 1, adding 1 would give the next power of two.",
+    "`v | (v >> 1)`, then `| (v >> 2)`, `| (v >> 4)`, `| (v >> 8)` smears the top bit all the way down.",
+    "Start from `x - 1` so that exact powers of two map to themselves, and handle `x = 0` separately."
+  ],
+  "examples": [
+    {"check": "exact powers of two", "title": "already a power", "input": "x = 64", "expected": "y = 64"},
+    {"check": "between powers", "title": "round up", "input": "x = 65", "expected": "y = 128"},
+    {"check": "corner cases", "title": "zero", "input": "x = 0", "expected": "y = 1"}
+  ]
+}

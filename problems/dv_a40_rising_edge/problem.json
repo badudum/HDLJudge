@@ -1,0 +1,70 @@
+{
+  "id": 96,
+  "title": "Assertion: Pulse on Every Rising Edge",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_rise",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pulse",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule 1: in every cycle where `a` rose (0 at the previous sample, 1 now), `pulse` must be 1.",
+    "Rule 2: `pulse` may only be 1 in such a cycle.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`$rose(a)` is true when a was 0 at the previous sample and is 1 now.",
+    "Two implications: `$rose(a) |-> pulse` and `pulse |-> $rose(a)`.",
+    "Equivalent single property: `pulse == $rose(a)`, asserted every cycle."
+  ],
+  "examples": [
+    {
+      "check": "legal",
+      "title": "correct pulses",
+      "input": "a = 0011100, pulse = 0010000",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: missing pulse",
+      "title": "missing",
+      "input": "a rises, pulse stays 0",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: extra pulse",
+      "title": "extra",
+      "input": "pulse while a stays high",
+      "expected": "assertion fails"
+    }
+  ]
+}

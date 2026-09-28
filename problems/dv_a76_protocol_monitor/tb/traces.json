@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: single write",
+  "violation": false
+ },
+ {
+  "name": "legal: data before address",
+  "violation": false
+ },
+ {
+  "name": "violation: response before data",
+  "violation": true
+ },
+ {
+  "name": "violation: awvalid dropped",
+  "violation": true
+ },
+ {
+  "name": "violation: bvalid dropped",
+  "violation": true
+ }
+]

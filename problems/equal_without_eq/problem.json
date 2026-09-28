@@ -1,0 +1,87 @@
+{
+  "id": 256,
+  "title": "Equality Without ==",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "bitwise"
+  ],
+  "top": "eq16",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "eq",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "diff_mask",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "`eq = 1` when `a` equals `b`. `diff_mask` has a 1 in every bit position where they differ.",
+    "No `==`, `!=`, `===`, comparisons, `+` or `-`: bitwise and reduction operators only."
+  ],
+  "hints": [
+    "XOR is 1 exactly where two bits differ.",
+    "`eq` is 'no bit differs': a reduction NOR, `~|(a ^ b)`."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "equal",
+      "input": "a = b = 0x1234",
+      "expected": "eq = 1, diff_mask = 0"
+    },
+    {
+      "check": "worked examples",
+      "title": "one bit",
+      "input": "a = 0x1234, b = 0x1236",
+      "expected": "eq = 0, diff_mask = 0x0002"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "==|!=|===|!==|-|\\+|<|>",
+      "message": "no equality / comparison operators and no arithmetic: use bitwise logic",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

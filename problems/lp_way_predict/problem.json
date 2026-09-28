@@ -1,0 +1,91 @@
+{
+  "id": 197,
+  "title": "Way-Predicting Cache Tags",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "cache",
+    "way-prediction",
+    "mru",
+    "energy"
+  ],
+  "top": "way_pred",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "req",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 6
+    },
+    {
+      "name": "pred",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "fast_hit",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "slow_hit",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "miss",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "tag_reads",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "2-way set-associative tag store: 4 sets (`set = addr[1:0]`, `tag = addr[5:2]`), with a valid bit per way and an MRU bit per set (the predicted way).",
+    "Access (`req`), resolved on the edge with registered results: probe the **predicted** (MRU) way first. If it hits → `fast_hit` (1 tag read). Otherwise probe the other way. A hit there → `slow_hit` (2 tag reads). Otherwise → `miss` (2 tag reads), and the tag is installed into an invalid way (way 0 first) or else the non-MRU way.",
+    "After every access the way that hit or was filled becomes MRU. `pred` shows the way predicted for the latest access. `tag_reads` accumulates tag-array reads (16-bit). Without `req`: `fast_hit = slow_hit = miss = 0`, and `pred` holds.",
+    "Synchronous reset: all invalid, MRU bits 0, counters and outputs 0."
+  ],
+  "hints": [
+    "Look up both ways combinationally, and use the MRU bit to decide which outcome you *report* and how many reads you *count*.",
+    "Real designs save energy because the second probe only happens on a mispredict. Here you just count the reads.",
+    "With a high MRU hit rate, a 2-way cache costs almost exactly as much energy as a direct-mapped one."
+  ],
+  "examples": [
+    {
+      "check": "predicted way hits",
+      "title": "fast",
+      "input": "access the same line twice",
+      "expected": "2nd access: fast_hit, 1 read"
+    },
+    {
+      "check": "mispredict costs a second probe",
+      "title": "slow",
+      "input": "alternate between two lines of one set",
+      "expected": "slow_hit, 2 reads each"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "id": 174,
+  "title": "Latch-Based Clock Gate (ICG)",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "clock-gating",
+    "latch",
+    "low-power",
+    "glitch-free"
+  ],
+  "top": "icg",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "test_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "gclk",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`gclk` = `clk` gated by the enable, with no glitches and no truncated pulses.",
+    "The enable `en | test_en` is captured by a **latch that is transparent while `clk` is low**. `gclk = clk & latched_enable`.",
+    "So an enable change while `clk` is high takes effect at the **next** rising edge, and a change while `clk` is low takes effect at the coming rising edge. `test_en` forces the clock on (for scan testing).",
+    "Latches are allowed (and required) here. Must be synthesizable."
+  ],
+  "hints": [
+    "The latch holds its value during the whole high phase of `clk`, so the AND gate's other input can't change while `clk` is high.",
+    "In Verilog: `always @(*) if (!clk) en_l = en | test_en;`. That is an intentional latch.",
+    "A negedge flip-flop is **not** equivalent. It samples only at the falling edge, so it misses enable changes made later in the low phase."
+  ],
+  "examples": [
+    {
+      "check": "passes the clock when enabled",
+      "title": "enabled",
+      "input": "en = 1",
+      "expected": "gclk = clk"
+    },
+    {
+      "check": "enable changes while clk is high",
+      "title": "no glitch",
+      "input": "en toggles in the middle of a high phase",
+      "expected": "gclk unaffected until the next cycle"
+    },
+    {
+      "check": "test_en forces the clock on",
+      "title": "scan",
+      "input": "en = 0, test_en = 1",
+      "expected": "gclk = clk"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "allow_latches": true,
+  "wave_windows": [
+    {
+      "from": 212,
+      "to": 262,
+      "step": 0.5,
+      "unit": 20,
+      "clock": "clk",
+      "signals": [
+        "clk",
+        "en",
+        "test_en",
+        "gclk"
+      ],
+      "title": "enable toggling while clk is high: no glitch",
+      "caption": "en changes in the middle of high phases; the latch holds the old enable until clk falls, so gclk only ever has full pulses."
+    }
+  ]
+}

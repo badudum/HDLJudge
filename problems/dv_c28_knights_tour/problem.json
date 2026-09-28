@@ -1,0 +1,47 @@
+{
+  "id": 134,
+  "title": "Constraint: Knight's Tour (3 × 4)",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "knight_tour",
+  "synthesis": "none",
+  "timeout_s": 240,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Find an open knight's tour on a 3 × 4 board (3 rows, 4 columns): a sequence of 12 squares (`r[k]`, `c[k]`) visiting every square exactly once, each step a legal knight move. Different calls should find different tours.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Represent each step by its row and column. \"Every square exactly once\" means all 12 (r, c) pairs are different.",
+    "A knight move changes one coordinate by ±1 and the other by ±2. `inside {-1, 1}` on signed differences expresses it neatly.",
+    "Tours on larger boards (5 × 5, 8 × 8) are too hard for the solver interface in reasonable time. 3 × 4 is the smallest board that has one."
+  ],
+  "examples": [
+    {
+      "check": "every square is visited exactly once",
+      "title": "coverage",
+      "input": "12 steps",
+      "expected": "each of the 12 squares once"
+    },
+    {
+      "check": "consecutive squares are a knight's move apart",
+      "title": "moves",
+      "input": "(0,0) → (1,2)",
+      "expected": "legal"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "8 calls",
+      "expected": "≥ 5 different tours"
+    }
+  ]
+}

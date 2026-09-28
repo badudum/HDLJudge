@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: Gray sequence",
+  "violation": false
+ },
+ {
+  "name": "legal: holding",
+  "violation": false
+ },
+ {
+  "name": "violation: binary step",
+  "violation": true
+ },
+ {
+  "name": "violation: jump",
+  "violation": true
+ }
+]

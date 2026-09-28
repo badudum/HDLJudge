@@ -1,0 +1,116 @@
+{
+  "id": 170,
+  "title": "Direct-Mapped Cache",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "cache",
+    "memory-hierarchy",
+    "write-through"
+  ],
+  "top": "dm_cache",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rd",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wr",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "fill",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "inv",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "fill_data",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "hit",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "hits",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "misses",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "8 lines of one byte each. `index = addr[2:0]`, `tag = addr[7:3]`. Each line has a valid bit, a 5-bit tag and a data byte. At most one of `rd`, `wr`, `fill`, `inv` is 1 per cycle.",
+    "**Lookup** (`rd` or `wr`): hit = the line at `index` is valid and its tag matches. The result is **registered**: after the edge, `hit` holds the lookup result and `rdata` the line's data (don't-care on a miss). On any edge without a lookup, `hit <= 0`.",
+    "`wr` is write-through with **no write-allocate**: on a hit the line's data becomes `wdata`. A write miss leaves the cache unchanged.",
+    "`fill` installs `fill_data` for `addr` (valid, tag, data) at `index`, replacing whatever was there. `inv` clears every valid bit. `hits` / `misses` count `rd` lookups only (8-bit, wrapping). Synchronous reset clears valid bits, counters and `hit`."
+  ],
+  "hints": [
+    "Store `valid[8]`, `tag[8]` and `data[8]` arrays, and compare the tag in the same cycle, before the edge.",
+    "Register the compare result: `hit <= lookup && valid[idx] && tag[idx] == addr[7:3]`.",
+    "Don't forget that two addresses with the same index (e.g. 0x05 and 0x0D) evict each other: conflict misses."
+  ],
+  "examples": [
+    {
+      "check": "cold miss then fill then hit",
+      "title": "compulsory miss",
+      "input": "rd 0x2A, fill 0x2A, rd 0x2A",
+      "expected": "miss, then hit with the filled data"
+    },
+    {
+      "check": "conflict misses",
+      "title": "conflict",
+      "input": "fill 0x05, then rd 0x0D",
+      "expected": "miss (same index, different tag)"
+    },
+    {
+      "check": "write-through, no allocate",
+      "title": "write",
+      "input": "wr to a missing line",
+      "expected": "cache unchanged"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

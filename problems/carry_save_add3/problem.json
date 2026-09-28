@@ -1,0 +1,97 @@
+{
+  "id": 255,
+  "title": "Add Three Numbers With One Adder",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "carry-save",
+    "arithmetic"
+  ],
+  "top": "add3",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "c",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "sum",
+      "dir": "output",
+      "width": 10
+    }
+  ],
+  "constraints": [
+    "`sum = a + b + c` (unsigned, 10 bits).",
+    "Your code may contain only **one** `+` (part-selects like `[i +: 8]` don't count), and no `-` or `*`."
+  ],
+  "hints": [
+    "A full adder takes three bits and produces two (sum, carry). Apply it to all 8 bit positions in parallel: `s = a ^ b ^ c`, `cy = majority(a, b, c)`.",
+    "Now a + b + c = s + (cy << 1): three numbers reduced to two, without any carry propagation. That's a **carry-save adder**.",
+    "One final `+` adds the two. Multipliers use trees of these 3:2 compressors (Wallace trees)."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "all max",
+      "input": "a = b = c = 255",
+      "expected": "sum = 765"
+    },
+    {
+      "check": "4000 random",
+      "title": "random",
+      "input": "random a, b, c",
+      "expected": "exact sum"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\+(?!:)[\\s\\S]*\\+(?!:)",
+      "message": "only ONE + operator is allowed (a single carry-propagate adder)",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "[-*]",
+      "message": "no - or *",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

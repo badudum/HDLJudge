@@ -1,0 +1,90 @@
+{
+  "id": 213,
+  "title": "Write a Testbench: FIFO",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "testbench",
+    "mutation-testing",
+    "fifo",
+    "reference-model"
+  ],
+  "top": "sync_fifo4",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wr_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rd_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "dout",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "full",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "empty",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "count",
+      "dir": "output",
+      "width": 3
+    }
+  ],
+  "constraints": [
+    "Write a self-checking testbench: top module `tb`, instantiating `sync_fifo4` as `dut`. Report bugs with `$error(...)`, finish with `$finish`.",
+    "Specification: a 4-entry, 8-bit synchronous FIFO. On a rising edge, it writes if `wr_en && !full` and reads (pops) if `rd_en && !empty`. Both can happen on the same edge. `dout` = the oldest entry (first-word fall-through, valid while `!empty`). `full = (count == 4)`, `empty = (count == 0)`, and `count` = number of entries. `rst` is synchronous and empties the FIFO.",
+    "Stay silent on the correct FIFO and catch all **8** hidden bugs, within 10 s."
+  ],
+  "hints": [
+    "Model the FIFO with a SystemVerilog queue: `push_back` on a write, `pop_front` on a read, and check `dout`, `count`, `full` and `empty` against it every cycle.",
+    "Directed tests first: write while full, read while empty, simultaneous read + write when full and when empty, reset in the middle of traffic.",
+    "Then random traffic with a bias toward the full and empty boundaries. Pointer wrap-around bugs need many cycles."
+  ],
+  "examples": [
+    {
+      "check": "correct design",
+      "title": "no false alarms",
+      "input": "your testbench + the correct FIFO",
+      "expected": "no errors reported"
+    },
+    {
+      "check": "bug 2",
+      "title": "write while full",
+      "input": "a FIFO that overwrites when full",
+      "expected": "your testbench reports an error"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 10,
+  "kind": "testbench"
+}

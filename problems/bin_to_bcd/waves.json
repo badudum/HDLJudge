@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "bin",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   },
+   {
+    "name": "bcd",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "small values 0-9"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "bin",
+    "kind": "bus",
+    "values": [
+     "9",
+     "A",
+     "13",
+     "14",
+     "2A",
+     "63",
+     "64",
+     "65"
+    ]
+   },
+   {
+    "name": "bcd",
+    "kind": "bus",
+    "values": [
+     "9",
+     "10",
+     "19",
+     "20",
+     "42",
+     "99",
+     "100",
+     "101"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "decade boundaries"
+ }
+]

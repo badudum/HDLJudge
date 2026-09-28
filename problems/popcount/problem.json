@@ -1,0 +1,33 @@
+{
+  "id": 13,
+  "title": "Population Count",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["combinational", "arithmetic", "adder-tree"],
+  "top": "popcount16",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "x",     "dir": "input",  "width": 16},
+    {"name": "count", "dir": "output", "width": 5}
+  ],
+  "forbidden": [
+    {"pattern": "\\$countones|\\$onehot0?", "message": "$countones / $onehot are not allowed: build the counter yourself"}
+  ],
+  "constraints": [
+    "`count` (0 – 16) is the number of `1` bits in `x`.",
+    "Purely combinational. `$countones` is not allowed.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "A `for` loop that adds each bit to an accumulator is a perfectly synthesizable adder chain.",
+    "For a shallower circuit, add bits in pairs, then 2-bit sums in pairs, and so on (an adder tree).",
+    "The SWAR trick: `x - ((x >> 1) & 16'h5555)` gives 2-bit counts, then combine with masks 0x3333, 0x0F0F, 0x00FF."
+  ],
+  "examples": [
+    {"check": "zero", "title": "no bits", "input": "x = 16'h0000", "expected": "count = 0"},
+    {"check": "all ones", "title": "all bits", "input": "x = 16'hFFFF", "expected": "count = 16"},
+    {"check": "3000 random", "title": "mixed", "input": "x = 16'hA5F0", "expected": "count = 8"}
+  ]
+}

@@ -1,0 +1,26 @@
+[
+ {
+  "name": "legal: aligned accesses",
+  "violation": false
+ },
+ {
+  "name": "violation: misaligned word",
+  "violation": true
+ },
+ {
+  "name": "violation: misaligned halfword",
+  "violation": true
+ },
+ {
+  "name": "violation: reserved size",
+  "violation": true
+ },
+ {
+  "name": "violation: address changes while stalled",
+  "violation": true
+ },
+ {
+  "name": "legal: stall with stable address",
+  "violation": false
+ }
+]

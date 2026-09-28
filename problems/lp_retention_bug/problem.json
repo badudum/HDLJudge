@@ -1,0 +1,87 @@
+{
+  "id": 195,
+  "title": "Debug: Retention Counter",
+  "difficulty": "Hard",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "retention",
+    "power-gating",
+    "low-power"
+  ],
+  "top": "ret_counter",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pwr_on",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "save",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "restore",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "count_out",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Intended behavior: an 8-bit event counter in a switchable domain with an always-on shadow register. `rst` is an always-on synchronous reset for both.",
+    "Each edge: while `pwr_on = 0`, the counter is lost (cleared to 0). Otherwise `restore` loads it from the shadow, and **restore has priority over counting**. Otherwise `en` increments it. `save` copies the pre-edge count into the shadow, but **only while powered** (a powered-down counter holds garbage).",
+    "`count_out` is isolated: **0** while `pwr_on = 0`.",
+    "The starter code has **3 bugs**."
+  ],
+  "hints": [
+    "Check what the shadow holds after a `save` that arrives while the domain is already off.",
+    "What happens when `restore` and `en` are asserted on the same edge (the domain's logic wakes up with `en` already high)?",
+    "What value does the always-on side see while the domain is off?"
+  ],
+  "examples": [
+    {
+      "check": "save, power cycle, restore",
+      "title": "retention",
+      "input": "count 5, save, power off/on, restore",
+      "expected": "count_out = 5"
+    },
+    {
+      "check": "late save while off is ignored",
+      "title": "late save",
+      "input": "save pulse while pwr_on = 0",
+      "expected": "shadow keeps the good value"
+    },
+    {
+      "check": "isolation clamps to 0",
+      "title": "isolation",
+      "input": "pwr_on = 0",
+      "expected": "count_out = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

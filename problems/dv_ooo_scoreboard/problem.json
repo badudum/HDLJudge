@@ -1,0 +1,44 @@
+{
+  "id": 207,
+  "title": "Out-of-Order Scoreboard",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "scoreboard",
+    "associative-array",
+    "out-of-order"
+  ],
+  "top": "ooo_scoreboard",
+  "ports": [],
+  "constraints": [
+    "Write `class ooo_scoreboard` with `function void add_expected(txn t)`, `function void add_actual(txn t)`, `function void final_check()` and public `int n_match, n_mismatch, n_missing, n_unexpected`.",
+    "Results complete **out of order** and are matched by `id`. When both an expected and an actual with the same id are present, compare `data`: equal → `n_match++`, otherwise `n_mismatch++`. Then both are retired. An actual may arrive **before** its expected, so hold it until the expected shows up.",
+    "An id is unique among outstanding transactions but is **reused** after completion. `final_check()` sets `n_missing` = expected results never matched, and `n_unexpected` = actual results never matched."
+  ],
+  "hints": [
+    "Two associative arrays keyed by id: outstanding expected, and early actual.",
+    "`exists()` and `delete()` make each operation O(1).",
+    "An in-order queue scoreboard fails here: the first actual is rarely the oldest expected."
+  ],
+  "examples": [
+    {
+      "check": "matches out-of-order results",
+      "title": "reordering",
+      "input": "64 transactions delivered shuffled",
+      "expected": "all matched"
+    },
+    {
+      "check": "reports unexpected results",
+      "title": "unexpected",
+      "input": "actuals with ids never expected",
+      "expected": "n_unexpected counts them"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 60,
+  "simulator": "verilator",
+  "kind": "component"
+}

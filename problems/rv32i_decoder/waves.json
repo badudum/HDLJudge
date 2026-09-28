@@ -1,0 +1,242 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "instr",
+    "kind": "bus",
+    "values": [
+     "FFF00093",
+     "A12083",
+     "80E7",
+     "347F5E7",
+     "7100FA03",
+     "92741213",
+     "ABB00093",
+     "74D85683"
+    ]
+   },
+   {
+    "name": "fmt",
+    "kind": "bus",
+    "values": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   },
+   {
+    "name": "imm",
+    "kind": "bus",
+    "values": [
+     "FFFFFFFF",
+     "A",
+     "0",
+     "34",
+     "710",
+     "FFFFF927",
+     "FFFFFABB",
+     "74D"
+    ]
+   },
+   {
+    "name": "reg_write",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "mem_read",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     0,
+     0,
+     1,
+     0,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "mem_write",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "branch",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "jump",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "I-type (OP-IMM, LOAD, JALR)"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "instr",
+    "kind": "bus",
+    "values": [
+     "FE000EE3",
+     "8F970163",
+     "488C0563",
+     "4AA186E3",
+     "BB25E1E3",
+     "5E29BB63",
+     "C9055163",
+     "9ED4D163"
+    ]
+   },
+   {
+    "name": "fmt",
+    "kind": "bus",
+    "values": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ]
+   },
+   {
+    "name": "imm",
+    "kind": "bus",
+    "values": [
+     "FFFFFFFC",
+     "FFFFF0E2",
+     "48A",
+     "CAC",
+     "FFFFFBA2",
+     "5F6",
+     "FFFFF482",
+     "FFFFF1E2"
+    ]
+   },
+   {
+    "name": "reg_write",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "mem_read",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "mem_write",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "branch",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "jump",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "B-type"
+ }
+]

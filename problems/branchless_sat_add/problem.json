@@ -1,0 +1,83 @@
+{
+  "id": 261,
+  "title": "Branchless Saturating Add",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "branchless",
+    "saturation"
+  ],
+  "top": "bsat",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Unsigned saturating addition: `y = min(a + b, 255)`.",
+    "**Branchless:** no `?:`, `if`, `case` or comparisons."
+  ],
+  "hints": [
+    "Add in 9 bits: the carry out says 'overflow'.",
+    "OR the 8-bit sum with a mask made of copies of the carry: `s[7:0] | {8{s[8]}}`."
+  ],
+  "examples": [
+    {
+      "check": "corner cases",
+      "title": "overflow",
+      "input": "a = 200, b = 100",
+      "expected": "y = 255"
+    },
+    {
+      "check": "corner cases",
+      "title": "no overflow",
+      "input": "a = 100, b = 100",
+      "expected": "y = 200"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\?|\\bif\\b|\\bcase[xz]?\\b",
+      "message": "branchless: no ?:, if or case",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bif\\b|\\bcase\\b|\\bwhen\\b|\\bselect\\b",
+      "message": "branchless: no if, case, when or select",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "(?<![<>])[<>](?![<>])",
+      "message": "no comparison operators (<, >, <=, >=): only shifts << >> >>> are allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

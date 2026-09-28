@@ -1,0 +1,41 @@
+{
+  "id": 41,
+  "title": "Assertion: Enable High When Valid",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": ["sva", "assertions", "checker"],
+  "top": "chk_valid_en",
+  "synthesis": "none",
+  "languages": ["systemverilog"],
+  "ports": [
+    {"name": "clk",   "dir": "input", "width": 1},
+    {"name": "rst",   "dir": "input", "width": 1},
+    {"name": "valid", "dir": "input", "width": 1},
+    {"name": "en",    "dir": "input", "width": 1}
+  ],
+  "traces": [
+    {"name": "legal: en high whenever valid is high", "violation": false},
+    {"name": "legal: en high without valid", "violation": false},
+    {"name": "violation: valid without en for one cycle", "violation": true},
+    {"name": "legal: violation-looking values while in reset", "violation": false},
+    {"name": "violation: long valid burst, en drops at the end", "violation": true},
+    {"name": "violation: en drops the same cycle valid rises", "violation": true}
+  ],
+  "constraints": [
+    "Rule: on every rising edge of `clk` where `rst = 0`, if `valid = 1` then `en` must be 1.",
+    "Report a violation with a failing `assert property` (or `$error`). Stay silent on legal traces: a false alarm fails that trace.",
+    "Sampling happens at the rising edge (standard SVA semantics). `rst` is active high and disables checking."
+  ],
+  "hints": [
+    "`assert property (@(posedge clk) disable iff (rst) valid |-> en) else $error(\"...\");`",
+    "`|->` is the overlapping implication: the consequent is checked in the same cycle as the antecedent.",
+    "`disable iff (rst)` turns the check off while reset is asserted."
+  ],
+  "examples": [
+    {"check": "legal: en high whenever", "title": "legal trace", "input": "valid = 0 1 1 0, en = 1 1 1 0", "expected": "no assertion failure"},
+    {"check": "violation: valid without en", "title": "violation", "input": "valid = 0 1 0, en = 0 0 0", "expected": "assertion fails at the edge where valid=1, en=0"},
+    {"check": "legal: violation-looking values while in reset", "title": "in reset", "input": "rst = 1, valid = 1, en = 0", "expected": "no failure (checking disabled)"}
+  ]
+}

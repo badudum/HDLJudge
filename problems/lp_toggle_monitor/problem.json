@@ -1,0 +1,73 @@
+{
+  "id": 269,
+  "title": "Switching-Activity Monitor",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "power-estimation",
+    "popcount",
+    "activity"
+  ],
+  "top": "toggle_mon",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "bus",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "threshold",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "activity",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "hot",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Count the bit toggles of `bus`: on each rising edge add popcount(bus ^ prev), where `prev` is the value of `bus` at the previous edge (0 after reset).",
+    "Windows are 16 edges long. On the 16th edge of a window, `activity <=` the toggle count of the whole window (including that edge), and the running count restarts. `hot <= activity_new > threshold` at the same edge. Both hold until the next window ends.",
+    "Synchronous reset clears everything (prev, counters, outputs)."
+  ],
+  "hints": [
+    "Dynamic power ∝ switching activity: this is what on-chip power monitors and DVFS governors measure.",
+    "A 4-bit window counter, an 8-bit accumulator, and a popcount of an 8-bit XOR.",
+    "Careful with the last edge: the value latched into `activity` must include that edge's toggles."
+  ],
+  "examples": [
+    {
+      "check": "counts toggles per window",
+      "title": "alternating",
+      "input": "bus alternates 0x00 / 0xFF",
+      "expected": "activity = 128 after 16 edges"
+    },
+    {
+      "check": "counts toggles per window",
+      "title": "quiet",
+      "input": "bus constant",
+      "expected": "activity = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": 177,
+  "title": "CDC: Slow → Fast Level + Edge",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "cdc",
+    "synchronizer",
+    "edge-detect"
+  ],
+  "top": "sync_edge",
+  "ports": [
+    {
+      "name": "clk_fast",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "d_slow",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "q",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "rise",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`d_slow` comes from a slower, unrelated clock domain and is asynchronous to `clk_fast`. It stays stable for at least 2 `clk_fast` periods.",
+    "`q` is `d_slow` passed through a **2-flop synchronizer**: q = the value of `d_slow` sampled at the 2nd-most-recent rising edge of `clk_fast`.",
+    "`rise` is high for exactly **one** `clk_fast` cycle per rising edge of `q` (the cycle in which `q` has just become 1). It's computed from the synchronized signal, never from raw `d_slow`.",
+    "Synchronous reset (in the `clk_fast` domain) clears all flops. Must be synthesizable."
+  ],
+  "hints": [
+    "Three flops: `s1 <= d_slow; s2 <= s1; s3 <= s2;` then `q = s2` and `rise = s2 & ~s3`.",
+    "Never use `d_slow` in any logic before it has passed through both synchronizer flops. The first flop may be metastable.",
+    "Slow to fast is the easy direction: the fast clock is guaranteed to see every level. Fast to slow needs a handshake."
+  ],
+  "examples": [
+    {
+      "check": "q follows d after two fast edges",
+      "title": "latency",
+      "input": "d_slow rises",
+      "expected": "q rises 2 fast edges later"
+    },
+    {
+      "check": "one pulse per rising edge",
+      "title": "edge",
+      "input": "d_slow high for many fast cycles",
+      "expected": "rise high for exactly one cycle"
+    },
+    {
+      "check": "400 random slow-domain changes",
+      "title": "random",
+      "input": "slow clock 37 ns, fast clock 10 ns",
+      "expected": "exact match"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "wave_windows": [
+    {
+      "from": 30,
+      "to": 190,
+      "step": 2.5,
+      "unit": 4,
+      "clock": "clk_fast",
+      "signals": [
+        "clk_fast",
+        "d_slow",
+        "q",
+        "rise"
+      ],
+      "title": "d_slow crossing into the fast domain",
+      "caption": "q follows d_slow two fast-clock edges later; rise pulses for one fast cycle."
+    }
+  ]
+}

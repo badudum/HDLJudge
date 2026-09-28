@@ -1,0 +1,47 @@
+{
+  "id": 123,
+  "title": "Constraint: Unique Row Maximums",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "row_max",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`m` is a 4 × 4 byte matrix. Let rowmax(i) be the largest element of row i. Then rowmax(0) < rowmax(1) < rowmax(2) < rowmax(3).",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "\"max of a row\" isn't a constraint primitive. Introduce helper variables `rand bit [7:0] mx[4];`.",
+    "Pin each helper to its row's maximum: every element ≤ mx[i], and at least one element == mx[i].",
+    "Then order the helpers."
+  ],
+  "examples": [
+    {
+      "check": "row maxima are strictly increasing",
+      "title": "valid",
+      "input": "row maxima 30 < 90 < 91 < 250",
+      "expected": "accepted"
+    },
+    {
+      "check": "row maxima are strictly increasing",
+      "title": "invalid",
+      "input": "two rows with maximum 90",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "150 calls",
+      "expected": "≥ 145 matrices"
+    }
+  ]
+}

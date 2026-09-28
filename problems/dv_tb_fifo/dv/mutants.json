@@ -1,0 +1,42 @@
+[
+ {
+  "file": "m1_full_early.v",
+  "hint": "full flag",
+  "desc": "full asserts at 3 entries"
+ },
+ {
+  "file": "m2_overwrite.v",
+  "hint": "write while full",
+  "desc": "a write while full overwrites the oldest entry"
+ },
+ {
+  "file": "m3_underflow.v",
+  "hint": "read while empty",
+  "desc": "a read while empty still decrements count"
+ },
+ {
+  "file": "m4_simul_count.v",
+  "hint": "simultaneous read and write",
+  "desc": "count decrements on a simultaneous read + write"
+ },
+ {
+  "file": "m5_rst_rptr.v",
+  "hint": "reset mid-stream",
+  "desc": "reset does not clear the read pointer"
+ },
+ {
+  "file": "m6_empty_late.v",
+  "hint": "empty flag timing",
+  "desc": "empty deasserts one cycle late after the first write"
+ },
+ {
+  "file": "m7_data_bit.v",
+  "hint": "data integrity",
+  "desc": "bit 7 is lost when writing to slot 2"
+ },
+ {
+  "file": "m8_lifo.v",
+  "hint": "ordering",
+  "desc": "dout shows the newest entry when 3 or more are stored"
+ }
+]

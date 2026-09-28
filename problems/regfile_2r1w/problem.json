@@ -1,0 +1,33 @@
+{
+  "id": 52, "title": "2-Read 1-Write Register File", "difficulty": "Medium", "category": "arch",
+  "tags": ["register-file", "memory", "risc-v", "bypass"], "top": "regfile",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",    "dir": "input",  "width": 1},
+    {"name": "we",     "dir": "input",  "width": 1},
+    {"name": "waddr",  "dir": "input",  "width": 5},
+    {"name": "wdata",  "dir": "input",  "width": 32},
+    {"name": "raddr1", "dir": "input",  "width": 5},
+    {"name": "raddr2", "dir": "input",  "width": 5},
+    {"name": "rdata1", "dir": "output", "width": 32},
+    {"name": "rdata2", "dir": "output", "width": 32}
+  ],
+  "constraints": [
+    "32 registers × 32 bits. Register **x0 always reads 0**: writes to it are ignored.",
+    "Writes happen on the rising edge when `we = 1`.",
+    "Reads are **registered**: on every rising edge, `rdataN` captures register `raddrN`.",
+    "Read-during-write is **write-first**: if the same edge writes the register being read, the read returns the new `wdata`.",
+    "No reset. Registers never written read as don't-care, except x0. Must be synthesizable."
+  ],
+  "hints": [
+    "`reg [31:0] regs [0:31]` / an array type in VHDL, written in a clocked block.",
+    "Write-first read: `rdata1 <= (we && waddr == raddr1 && raddr1 != 0) ? wdata : regs[raddr1];`",
+    "Handle x0 on the read side (always return 0) or on the write side (never write it)."
+  ],
+  "examples": [
+    {"check": "write then read", "title": "basic", "input": "write x5 = 0xCAFEF00D, then raddr1 = 5", "expected": "rdata1 = 0xCAFEF00D on the next edge"},
+    {"check": "write-first bypass", "title": "same-cycle read", "input": "we = 1, waddr = 7, wdata = 0x1234, raddr2 = 7 on the same edge", "expected": "rdata2 = 0x1234"},
+    {"check": "x0 is hardwired", "title": "x0", "input": "write x0 = 0xFFFFFFFF, then read x0", "expected": "rdata = 0"}
+  ]
+}

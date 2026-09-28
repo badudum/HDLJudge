@@ -1,0 +1,88 @@
+{
+  "id": 1,
+  "title": "4-to-1 Multiplexer",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational"
+  ],
+  "top": "mux4",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "c",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "d",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "sel",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Purely combinational: no clock and no registers.",
+    "`y` must follow any input change immediately (checked 1 ns after `sel` changes).",
+    "Must be synthesizable and must not infer latches."
+  ],
+  "hints": [
+    "A `case` on `sel` inside `always @(*)` / `always_comb` — or `with sel select` in VHDL — maps directly onto a multiplexer.",
+    "Latches appear when `y` is not assigned for some value of `sel`. Cover every case, or add a `default` / `when others` branch.",
+    "A one-line alternative: nested conditional operators on `sel[1]` and `sel[0]`."
+  ],
+  "examples": [
+    {
+      "check": "sel=0",
+      "title": "sel = 0",
+      "input": "a = 0x11, b = 0x22, c = 0x33, d = 0x44, sel = 0\n(+ 64 random vectors)",
+      "expected": "y = 0x11  (a)"
+    },
+    {
+      "check": "sel=2",
+      "title": "sel = 2",
+      "input": "a = 0x11, b = 0x22, c = 0x33, d = 0x44, sel = 2\n(+ 64 random vectors)",
+      "expected": "y = 0x33  (c)"
+    },
+    {
+      "check": "output follows sel",
+      "title": "only sel changes",
+      "input": "a..d fixed at 0x11, 0x22, 0x33, 0x44\nsel = 0 → 1 → 2 → 3, one step per ns",
+      "expected": "y = 0x11 → 0x22 → 0x33 → 0x44"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 2560,
+      "to": 2570,
+      "step": 1,
+      "unit": 1,
+      "title": "output follows sel",
+      "caption": "Combinational: with fixed inputs 11/22/33/44 (hex), y follows sel immediately."
+    }
+  ]
+}

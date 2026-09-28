@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "0",
+     "FFFF",
+     "1",
+     "2",
+     "4",
+     "8",
+     "10",
+     "20"
+    ]
+   },
+   {
+    "name": "count",
+    "kind": "bus",
+    "values": [
+     "0",
+     "10",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "zero"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "FFFE",
+     "FFFD",
+     "FFFB",
+     "FFF7",
+     "FFEF",
+     "FFDF",
+     "FFBF",
+     "FF7F"
+    ]
+   },
+   {
+    "name": "count",
+    "kind": "bus",
+    "values": [
+     "F",
+     "F",
+     "F",
+     "F",
+     "F",
+     "F",
+     "F",
+     "F"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "all but one bit"
+ }
+]

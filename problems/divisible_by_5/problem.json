@@ -1,0 +1,86 @@
+{
+  "id": 248,
+  "title": "Divisible by 5 Without Dividing",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "modular-arithmetic"
+  ],
+  "top": "div5",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "d5",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`d5 = 1` when the unsigned 16-bit `x` is divisible by 5.",
+    "No `/`, `%`, `mod` or `rem`, and no loops. Purely combinational."
+  ],
+  "hints": [
+    "16 ≡ 1 (mod 5), so a number is congruent to the **sum of its hex digits** modulo 5, just like casting out nines in decimal.",
+    "Sum the four nibbles (at most 60), fold again (the sum's upper bits are worth 16 ≡ 1 as well), and finish with a small comparison against {0, 5, 10, 15}.",
+    "Compare *Divisible by 3*, which uses 4 ≡ 1 (mod 3)."
+  ],
+  "examples": [
+    {
+      "check": "small values",
+      "title": "25",
+      "input": "x = 25",
+      "expected": "d5 = 1"
+    },
+    {
+      "check": "small values",
+      "title": "26",
+      "input": "x = 26",
+      "expected": "d5 = 0"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "%|/",
+      "message": "no / or %: find the arithmetic trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bmod\\b|\\brem\\b|/",
+      "message": "no /, mod or rem: find the arithmetic trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": 157,
+  "title": "Milliseconds to Clock Time",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "counter",
+    "cascade",
+    "sequential"
+  ],
+  "top": "time_counter",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "tick_ms",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "load",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "ld_ms",
+      "dir": "input",
+      "width": 10
+    },
+    {
+      "name": "ld_sec",
+      "dir": "input",
+      "width": 6
+    },
+    {
+      "name": "ld_min",
+      "dir": "input",
+      "width": 6
+    },
+    {
+      "name": "ld_hr",
+      "dir": "input",
+      "width": 5
+    },
+    {
+      "name": "ms",
+      "dir": "output",
+      "width": 10
+    },
+    {
+      "name": "sec",
+      "dir": "output",
+      "width": 6
+    },
+    {
+      "name": "min",
+      "dir": "output",
+      "width": 6
+    },
+    {
+      "name": "hr",
+      "dir": "output",
+      "width": 5
+    }
+  ],
+  "constraints": [
+    "Each rising edge with `tick_ms = 1` advances the time by one millisecond: ms 0 … 999, sec 0 … 59, min 0 … 59, hr 0 … 23, wrapping 23:59:59.999 → 00:00:00.000.",
+    "`load = 1` sets all four fields from `ld_*` on that edge (priority over `tick_ms`). Loaded values are always legal.",
+    "Synchronous reset clears everything. Must be synthesizable."
+  ],
+  "hints": [
+    "A cascade of four counters: each one advances only when all the counters below it wrap.",
+    "Carry conditions: `ms == 999`, then also `sec == 59`, then `min == 59`.",
+    "Resist building one giant binary counter plus dividers: the cascade is smaller and much easier to verify."
+  ],
+  "examples": [
+    {
+      "check": "rollover of seconds",
+      "title": "second",
+      "input": "time 00:00:00.999, one tick",
+      "expected": "00:00:01.000"
+    },
+    {
+      "check": "rollover of the day",
+      "title": "midnight",
+      "input": "time 23:59:59.999, one tick",
+      "expected": "00:00:00.000"
+    },
+    {
+      "check": "load",
+      "title": "load",
+      "input": "load 12:34:56.789",
+      "expected": "fields show exactly that"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

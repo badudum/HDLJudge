@@ -1,0 +1,38 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "g",
+    "kind": "bus",
+    "values": [
+     "6",
+     "0",
+     "1",
+     "80000000",
+     "FFFFFFFF",
+     "C0000000",
+     "5FF32385",
+     "8040C0A1"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "4",
+     "0",
+     "1",
+     "FFFFFFFF",
+     "AAAAAAAA",
+     "80000000",
+     "6AA23D06",
+     "FF8080C1"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

@@ -1,0 +1,27 @@
+{
+  "id": 51, "title": "Parameterizable Barrel Shifter", "difficulty": "Hard", "category": "arch",
+  "tags": ["shifter", "parameters", "log-shifter", "combinational"], "top": "barrel_shifter",
+  "synthesis": "required", "max_flip_flops": 0, "synth_params": {"WIDTH": 16},
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "din",   "dir": "input",  "width": 16},
+    {"name": "shamt", "dir": "input",  "width": 4},
+    {"name": "op",    "dir": "input",  "width": 2},
+    {"name": "dout",  "dir": "output", "width": 16}
+  ],
+  "constraints": [
+    "Parameter `WIDTH` (a power of two, default 8). `din`/`dout` are WIDTH bits and `shamt` is log₂(WIDTH) bits. The judge uses **WIDTH = 16**.",
+    "`op`: 00 = shift left logical, 01 = shift right logical, 10 = shift right arithmetic (sign fill), 11 = rotate right.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "A log shifter uses log₂(WIDTH) stages. Stage k shifts by 2ᵏ when `shamt[k]` is set. A `for` loop over the stages can build it.",
+    "Fill bits per operation: zeros (SLL, SRL), copies of the sign bit (SRA), or the bits that fell off the other end (ROR).",
+    "Rotate right by k = `(din >> k) | (din << (WIDTH - k))`, keeping only WIDTH bits."
+  ],
+  "examples": [
+    {"check": "SLL", "title": "shift left", "input": "WIDTH=16, din = 16'h00F1, shamt = 4, op = 00", "expected": "dout = 16'h0F10"},
+    {"check": "SRA", "title": "arithmetic right", "input": "din = 16'h8010, shamt = 4, op = 10", "expected": "dout = 16'hF801"},
+    {"check": "ROR", "title": "rotate right", "input": "din = 16'h000F, shamt = 4, op = 11", "expected": "dout = 16'hF000"}
+  ]
+}

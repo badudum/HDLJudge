@@ -1,0 +1,46 @@
+{
+  "id": 205,
+  "title": "UVM: Register Model (RAL)",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "ral",
+    "registers",
+    "adapter"
+  ],
+  "top": "regs_block",
+  "ports": [],
+  "constraints": [
+    "Model this register block. **CTRL** @ 0x0: `en` [0] RW reset 0, `mode` [2:1] RW reset 0, `prescale` [15:8] RW reset 0x10. **STATUS** @ 0x4: `busy` [0] RO (volatile), `err` [1] **W1C** (volatile). **DATA** @ 0x8: `data` [31:0] RW reset 0.",
+    "Classes: `ctrl_reg`, `status_reg`, `data_reg` (extend `uvm_reg`, 32 bits, with public field handles named as above) and `regs_block` (extends `uvm_reg_block`, public handles `ctrl`, `status`, `data`). `regs_block::build()` creates and configures everything and creates `default_map` (base 0, 4 bytes per word, little endian). The test calls `build()` and `lock_model()` itself.",
+    "Write `class bus_adapter extends uvm_reg_adapter` converting between `uvm_reg_bus_op` and `bus_item` (the driver fills `data` in place for reads, so `provides_responses` stays 0).",
+    "The hidden test uses the frontdoor with auto-prediction, pokes the DUT directly, and checks both the DUT and the mirror."
+  ],
+  "hints": [
+    "`field.configure(parent, size, lsb, access, volatile, reset, has_reset, is_rand, individually_accessible)`.",
+    "In each register's `build()`, create the fields with `uvm_reg_field::type_id::create()`. In the block's `build()`, call `configure(this)` and then `build()` for each register, then `default_map.add_reg(reg, offset, \"RW\")`.",
+    "`reg2bus` returns a new `bus_item`. `bus2reg` must also set `rw.status = UVM_IS_OK`."
+  ],
+  "examples": [
+    {
+      "check": "reset values",
+      "title": "reset",
+      "input": "rm.reset()",
+      "expected": "ctrl = 0x00001000, status = data = 0"
+    },
+    {
+      "check": "W1C field clears in DUT and mirror",
+      "title": "W1C",
+      "input": "err = 1, write 0x2 to STATUS",
+      "expected": "DUT and mirror both show err = 0"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 180,
+  "simulator": "verilator",
+  "uvm": true
+}

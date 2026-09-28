@@ -1,0 +1,65 @@
+{
+  "id": 95,
+  "title": "Assertion: Count Is Zero After Reset",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_reset_value",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "count",
+      "dir": "input",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Rule: at the rising edge right after an edge where `rst = 1` was sampled, `count` must be 0.",
+    "This property is **about** reset, so it must not be disabled by reset.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`rst |=> count == 0`",
+    "Don't use `disable iff (rst)` here, or the property can never fire.",
+    "`$past(rst) |-> count == 0` is an equivalent formulation."
+  ],
+  "examples": [
+    {
+      "check": "legal: counter clears",
+      "title": "correct reset",
+      "input": "rst for 2 cycles, count = 0 after",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: counter not cleared",
+      "title": "stuck value",
+      "input": "count stays 5 after reset",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "legal: counting after reset",
+      "title": "after reset",
+      "input": "count increments once rst is low",
+      "expected": "no failure"
+    }
+  ]
+}

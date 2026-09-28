@@ -1,0 +1,44 @@
+{
+  "id": 233,
+  "title": "UVM: Virtual Sequence",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "virtual-sequence",
+    "multi-agent"
+  ],
+  "top": "top_vseq",
+  "ports": [],
+  "constraints": [
+    "Write `class top_vseq extends uvm_sequence` (no item type) with public handles `uvm_sequencer #(cfg_item) cfg_sqr` and `uvm_sequencer #(data_item) data_sqr`. The test sets them and starts the sequence on `null`.",
+    "`body()`: (1) write register 0x00 = 0x01, then 0x04 = 0x08 on the config agent. (2) **In parallel**: a `data_burst_seq` with `n = 8` on the data agent, and a write of 0x08 = 0xAB on the config agent. (3) When both finish, write 0x00 = 0x00.",
+    "Use the provided `cfg_write_seq` and `data_burst_seq`, started on the right sequencers. The hidden drivers log when each item completes."
+  ],
+  "hints": [
+    "A virtual sequence doesn't generate items itself: it starts sub-sequences on other sequencers: `s.start(cfg_sqr, this)`.",
+    "Use `fork … join` for step 2, so that step 3 waits for both branches.",
+    "Passing `this` as the parent sequence keeps the sequence hierarchy (and priorities / responses) intact."
+  ],
+  "examples": [
+    {
+      "check": "configuration before data",
+      "title": "ordering",
+      "input": "run top_vseq",
+      "expected": "writes 0x00, 0x04 finish before any data item"
+    },
+    {
+      "check": "status write overlaps the burst",
+      "title": "parallel",
+      "input": "run top_vseq",
+      "expected": "the 0x08 write completes during the burst"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

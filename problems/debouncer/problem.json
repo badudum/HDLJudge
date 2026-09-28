@@ -1,0 +1,32 @@
+{
+  "id": 27,
+  "title": "Button Debouncer",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": ["sequential", "counter", "filter"],
+  "top": "debounce",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk", "dir": "input",  "width": 1},
+    {"name": "rst", "dir": "input",  "width": 1},
+    {"name": "btn", "dir": "input",  "width": 1},
+    {"name": "clean", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`clean` changes to the value of `btn` only after `btn` differed from `clean` on **4 consecutive** rising edges. The 4th such edge updates `clean`.",
+    "Any edge where `btn == clean` restarts the count.",
+    "`clean` is registered. The synchronous reset sets `clean = 0` and clears the count.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "Keep a small counter of consecutive samples that disagree with `clean`.",
+    "Clear the counter whenever the sample agrees with `clean`, and also when `clean` flips.",
+    "A 2-bit counter is enough: flip `clean` when it would reach 4."
+  ],
+  "examples": [
+    {"check": "clean press", "title": "stable press", "input": "btn = 1 for 6 cycles", "expected": "clean becomes 1 after the 4th edge"},
+    {"check": "bouncing contact", "title": "bounce", "input": "btn = 1 1 0 1 1 1 0 1 1 1 1", "expected": "clean only rises after the final run of four 1s"},
+    {"check": "short glitch", "title": "glitch", "input": "btn = 1 for 3 cycles, then 0", "expected": "clean stays 0"}
+  ]
+}

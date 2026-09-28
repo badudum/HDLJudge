@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "58",
+     "8000",
+     "1",
+     "FFFF",
+     "100",
+     "55D9",
+     "0",
+     "6F40"
+    ]
+   },
+   {
+    "name": "iso",
+    "kind": "bus",
+    "values": [
+     "8",
+     "8000",
+     "1",
+     "1",
+     "100",
+     "1",
+     "0",
+     "40"
+    ]
+   },
+   {
+    "name": "clr",
+    "kind": "bus",
+    "values": [
+     "50",
+     "0",
+     "0",
+     "FFFE",
+     "0",
+     "55D8",
+     "0",
+     "6F00"
+    ]
+   },
+   {
+    "name": "tmask",
+    "kind": "bus",
+    "values": [
+     "7",
+     "7FFF",
+     "0",
+     "0",
+     "FF",
+     "0",
+     "FFFF",
+     "3F"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "0",
+     "58",
+     "8000",
+     "1",
+     "FFFF",
+     "100",
+     "55D9",
+     "0"
+    ]
+   },
+   {
+    "name": "iso",
+    "kind": "bus",
+    "values": [
+     "0",
+     "8",
+     "8000",
+     "1",
+     "1",
+     "100",
+     "1",
+     "0"
+    ]
+   },
+   {
+    "name": "clr",
+    "kind": "bus",
+    "values": [
+     "0",
+     "50",
+     "0",
+     "0",
+     "FFFE",
+     "0",
+     "55D8",
+     "0"
+    ]
+   },
+   {
+    "name": "tmask",
+    "kind": "bus",
+    "values": [
+     "FFFF",
+     "7",
+     "7FFF",
+     "0",
+     "0",
+     "FF",
+     "0",
+     "FFFF"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "zero"
+ }
+]

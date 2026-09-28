@@ -1,0 +1,31 @@
+{
+  "id": 37,
+  "title": "Timing: Shorten the Parity Path",
+  "difficulty": "Easy",
+  "category": "timing",
+  "tags": ["timing", "critical-path", "combinational"],
+  "top": "parity64",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "max_logic_depth": 8,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "d", "dir": "input",  "width": 64},
+    {"name": "p", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`p` is the XOR of all 64 bits of `d` (even parity bit).",
+    "Timing budget: the longest combinational path may be at most **8 logic levels** (generic 2-input gates, as reported in the Synthesis stage).",
+    "Purely combinational."
+  ],
+  "hints": [
+    "The starter's loop computes `p = ((d0 ^ d1) ^ d2) ^ …`: a chain of 63 XOR gates in a row. Look at the critical path in the Synthesis stage.",
+    "XOR is associative, so you can pair bits up: 32 XORs, then 16, 8, 4, 2, 1. That is 6 levels.",
+    "The reduction operator `^d` (VHDL-2008: `xor d`) builds a balanced tree for you."
+  ],
+  "examples": [
+    {"check": "single bits", "title": "one bit set", "input": "d = 64'h0000_0000_0001_0000", "expected": "p = 1"},
+    {"check": "all ones", "title": "all ones", "input": "d = 64'hFFFF_FFFF_FFFF_FFFF", "expected": "p = 0"},
+    {"check": "random", "title": "random", "input": "d = 64'h0123_4567_89AB_CDEF", "expected": "p = 0 (32 ones)"}
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": 202,
+  "title": "UVM: Analysis-FIFO Scoreboard",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "scoreboard",
+    "tlm",
+    "analysis-fifo"
+  ],
+  "top": "fifo_scoreboard",
+  "ports": [],
+  "constraints": [
+    "Write `class fifo_scoreboard extends uvm_scoreboard` with two public exports, `uvm_analysis_export #(pkt) exp_export` (predictor) and `act_export` (DUT monitor), created in `build_phase`.",
+    "Buffer both streams in `uvm_tlm_analysis_fifo #(pkt)`s, and in `run_phase` pair them **in order**: the n-th actual packet is compared with the n-th expected packet (id and payload). Expected packets arrive long before the actual ones.",
+    "Maintain public `int n_match, n_mismatch` (note: `matches` is a SystemVerilog keyword). In `check_phase`, set public `int leftover` to the number of expected packets that were never paired (and report them with `uvm_error`)."
+  ],
+  "hints": [
+    "Exports connect to the FIFOs' `analysis_export` in `connect_phase`.",
+    "`get()` blocks, so a `forever` loop in `run_phase` naturally waits for data. It's killed when the run phase ends.",
+    "`used()` returns how many entries a TLM FIFO holds."
+  ],
+  "examples": [
+    {
+      "check": "counts matches",
+      "title": "matches",
+      "input": "100 expected, 97 actual (7 corrupted)",
+      "expected": "n_match = 90"
+    },
+    {
+      "check": "reports leftover expected packets",
+      "title": "leftover",
+      "input": "3 packets never arrive",
+      "expected": "leftover = 3"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

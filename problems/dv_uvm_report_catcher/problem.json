@@ -1,0 +1,45 @@
+{
+  "id": 234,
+  "title": "UVM: Report Catcher (Waivers)",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "reporting",
+    "report-catcher",
+    "waivers"
+  ],
+  "top": "demote_catcher",
+  "ports": [],
+  "constraints": [
+    "Write `class demote_catcher extends uvm_report_catcher` (with `` `uvm_object_utils `` and a `new(string name = \"demote_catcher\")` constructor) and public `int n_demoted, n_caught`.",
+    "Implement `function action_e catch()`: a **UVM_ERROR** whose **id** is `\"KNOWN_BUG\"` is demoted to UVM_WARNING (`n_demoted++`), and an **UVM_INFO** with id `\"NOISY\"` is swallowed (`return CAUGHT`, `n_caught++`). Everything else passes through unchanged (`return THROW`).",
+    "Match on the message **id**, not the message text, and on the severity."
+  ],
+  "hints": [
+    "`get_severity()`, `get_id()`, `get_message()` and `set_severity()` are the catcher's API.",
+    "Demoted messages still reach the report server (as warnings), while caught ones don't.",
+    "Waivers of known bugs through catchers keep regressions green without deleting checks, and they are easy to audit and remove later."
+  ],
+  "examples": [
+    {
+      "check": "demotes KNOWN_BUG errors to warnings",
+      "title": "waiver",
+      "input": "3 errors with id KNOWN_BUG",
+      "expected": "3 warnings instead"
+    },
+    {
+      "check": "swallows NOISY info messages only",
+      "title": "filter",
+      "input": "5 NOISY infos, 1 NOISY warning",
+      "expected": "the warning survives"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

@@ -1,0 +1,47 @@
+{
+  "id": 126,
+  "title": "Constraint: Two Groups of Ones",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "two_groups",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "The set bits of `v` (16 bits) form exactly **two** separate groups (runs), for example `0011_1000_0110_0000`.",
+    "Every group is at least **two** bits long.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "A run starts where a bit is 1 and its lower neighbour is 0: `v & ~(v << 1)`. Count those. Verilator's constraint-to-SMT translation mis-sizes shift operators on vectors narrower than 32 bits (z3 then rejects the query and `randomize()` fails). Use part-selects and concatenation instead: `v >> 1` becomes `{1'b0, v[15:1]}`.",
+    "An isolated one has zeros on both sides: `v & ~(v << 1) & ~(v >> 1)`. There must be none."
+  ],
+  "examples": [
+    {
+      "check": "the ones form exactly two groups",
+      "title": "valid",
+      "input": "v = 0011_1000_0110_0000",
+      "expected": "accepted"
+    },
+    {
+      "check": "every group has at least two ones",
+      "title": "short group",
+      "input": "v = 0011_1000_0100_0000",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "300 calls",
+      "expected": "≥ 250 values"
+    }
+  ]
+}

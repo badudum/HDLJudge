@@ -1,0 +1,80 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "1",
+     "1",
+     "2",
+     "2",
+     "3",
+     "3"
+    ]
+   },
+   {
+    "name": "cin",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "sum",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "1",
+     "2",
+     "2",
+     "3",
+     "3",
+     "4"
+    ]
+   },
+   {
+    "name": "cout",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "all digit pairs"
+ }
+]

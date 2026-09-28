@@ -1,0 +1,74 @@
+{
+  "id": 94,
+  "title": "Assertion: Data Stable While Stalled",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_stable",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "ready",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data",
+      "dir": "input",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Rule: if `valid && !ready` at a rising edge, then at the next edge `data` must be unchanged.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "Next-cycle implication: `|=>`.",
+    "`$stable(data)` compares data with its value at the previous sample.",
+    "`assert property (@(posedge clk) disable iff (rst) valid && !ready |=> $stable(data));`"
+  ],
+  "examples": [
+    {
+      "check": "legal: data held",
+      "title": "held",
+      "input": "valid=1, ready=0 for 3 cycles, data constant",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: data changes",
+      "title": "changed",
+      "input": "data changes while stalled",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "legal: data may change after a transfer",
+      "title": "after transfer",
+      "input": "valid && ready, then new data",
+      "expected": "no failure"
+    }
+  ]
+}

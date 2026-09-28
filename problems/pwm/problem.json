@@ -1,0 +1,32 @@
+{
+  "id": 22,
+  "title": "PWM Generator",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": ["sequential", "counter", "motor-control"],
+  "top": "pwm8",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",     "dir": "input",  "width": 1},
+    {"name": "rst",     "dir": "input",  "width": 1},
+    {"name": "duty",    "dir": "input",  "width": 8},
+    {"name": "pwm_out", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "An internal 8-bit counter `cnt` is cleared by the synchronous reset and increments (wrapping 255 → 0) on every other rising edge.",
+    "`pwm_out = (cnt < duty)`, a combinational compare against the current `duty` input.",
+    "The period is 256 clock cycles: `duty = 0` is always low, `duty = 255` is high for 255 of every 256 cycles.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "You need exactly one register: the 8-bit counter.",
+    "Let the counter wrap naturally by using an 8-bit width.",
+    "Keep the compare outside the clocked block, since `pwm_out` reacts to `duty` immediately."
+  ],
+  "examples": [
+    {"check": "duty = 64", "title": "25 % duty", "input": "reset, then duty = 64 for 512 cycles", "expected": "pwm_out high for 64 cycles, low for 192, repeating"},
+    {"check": "duty = 0", "title": "always off", "input": "duty = 0", "expected": "pwm_out = 0 in every cycle"},
+    {"check": "duty changes", "title": "duty change", "input": "duty switches from 200 to 10 in mid-period", "expected": "pwm_out follows the new compare right away"}
+  ]
+}

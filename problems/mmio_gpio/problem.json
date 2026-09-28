@@ -1,0 +1,97 @@
+{
+  "id": 168,
+  "title": "Memory-Mapped GPIO",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "mmio",
+    "registers",
+    "synchronizer",
+    "w1c"
+  ],
+  "top": "mmio_gpio",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "gpio_in",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "gpio_out",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "gpio_oe",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Register map: 0 `OUT` (read/write, drives `gpio_out`), 1 `DIR` (read/write, drives `gpio_oe`), 2 `IN` (read-only), 3 `RISE` (sticky rising-edge flags, write-1-to-clear).",
+    "`gpio_in` is asynchronous: pass it through a **2-flop synchronizer**. `IN` reads the output of the second flop.",
+    "A third flop holds the previous synchronized value. Every edge where synchronized bit i is 1 and its previous value is 0 sets `RISE[i]`. A write to address 3 clears the bits written as 1. If a bit is set and cleared on the same edge, **set wins**.",
+    "`rdata` = the register at `addr`, combinational. Writes to address 2 are ignored. Synchronous reset clears every register and flop."
+  ],
+  "hints": [
+    "Pipeline: `s1 <= gpio_in; s2 <= s1; s3 <= s2;` gives `IN = s2` and `rise = s2 & ~s3`.",
+    "W1C with set priority: `RISE <= (RISE & ~clr) | rise`.",
+    "The sticky flag means software can't miss a short pulse even when it polls slowly."
+  ],
+  "examples": [
+    {
+      "check": "OUT and DIR registers",
+      "title": "rw registers",
+      "input": "write 0xA5 to OUT",
+      "expected": "gpio_out = 0xA5, reads back 0xA5"
+    },
+    {
+      "check": "input synchronizer latency",
+      "title": "sync",
+      "input": "gpio_in changes",
+      "expected": "IN reflects it 2 edges later"
+    },
+    {
+      "check": "sticky rise flags, write-1-to-clear",
+      "title": "w1c",
+      "input": "pulse on gpio_in[3], then write 0x08 to RISE",
+      "expected": "RISE[3] sets, then clears"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

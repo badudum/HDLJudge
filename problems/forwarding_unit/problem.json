@@ -1,0 +1,32 @@
+{
+  "id": 55, "title": "Data Forwarding Unit", "difficulty": "Hard", "category": "arch",
+  "tags": ["pipeline", "forwarding", "bypass", "risc-v"], "top": "forwarding_unit",
+  "synthesis": "required", "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "ex_rs1",        "dir": "input",  "width": 5},
+    {"name": "ex_rs2",        "dir": "input",  "width": 5},
+    {"name": "mem_rd",        "dir": "input",  "width": 5},
+    {"name": "mem_reg_write", "dir": "input",  "width": 1},
+    {"name": "wb_rd",         "dir": "input",  "width": 5},
+    {"name": "wb_reg_write",  "dir": "input",  "width": 1},
+    {"name": "fwd_a",         "dir": "output", "width": 2},
+    {"name": "fwd_b",         "dir": "output", "width": 2}
+  ],
+  "constraints": [
+    "Mux select encoding: `00` = value read from the register file, `10` = forward from EX/MEM (ALU result of the previous instruction), `01` = forward from MEM/WB.",
+    "Forward from a stage only if it writes a register (`*_reg_write`), its destination is not x0, and it matches the source register.",
+    "When both stages match, **EX/MEM wins**: it holds the more recent value.",
+    "`fwd_a` is for `ex_rs1`, `fwd_b` for `ex_rs2`. Purely combinational."
+  ],
+  "hints": [
+    "Write one priority `if / else if` per operand: EX/MEM first, then MEM/WB, otherwise 00.",
+    "The `rd != 0` check matters: an instruction that writes x0 must never be forwarded.",
+    "Test the double-match case (`add x1…; add x1…; add x2, x1, x1`): the second add's result must win."
+  ],
+  "examples": [
+    {"check": "EX/MEM forwarding", "title": "back-to-back", "input": "ex_rs1 = x3, mem_rd = x3 (writes)", "expected": "fwd_a = 10"},
+    {"check": "priority", "title": "both match", "input": "ex_rs2 = x4, mem_rd = x4, wb_rd = x4 (both write)", "expected": "fwd_b = 10 (EX/MEM wins)"},
+    {"check": "never forward x0", "title": "x0", "input": "ex_rs1 = x0, mem_rd = x0 (writes)", "expected": "fwd_a = 00"}
+  ]
+}

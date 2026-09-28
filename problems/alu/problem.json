@@ -1,0 +1,103 @@
+{
+  "id": 44,
+  "title": "Parameterized ALU",
+  "difficulty": "Medium",
+  "category": "arch",
+  "tags": [
+    "alu",
+    "arithmetic",
+    "parameters",
+    "risc-v"
+  ],
+  "top": "alu",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "params": [
+    {
+      "name": "WIDTH",
+      "default": "8"
+    }
+  ],
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "op",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 16
+    },
+    {
+      "name": "zero",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "carry",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "overflow",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "negative",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Parameter `WIDTH` (default 8) sets the width of `a`, `b` and `y`. The judge instantiates the ALU with **WIDTH = 16**.",
+    "Shift amounts use the low log₂(WIDTH) bits of `b`. Opcodes 11–15 produce `y = 0`.",
+    "`carry`: the carry-out for ADD. For SUB it is the carry-out of `a + ~b + 1`, i.e. 1 when `a ≥ b` unsigned. It is 0 for all other ops.",
+    "`overflow`: signed overflow for ADD and SUB, 0 otherwise. `zero = (y == 0)`, `negative = y[WIDTH-1]` for every op.",
+    "Purely combinational and synthesizable."
+  ],
+  "hints": [
+    "Compute the add/subtract once, in WIDTH+1 bits, with `b` inverted and a carry-in of 1 for SUB. Bit WIDTH is then the carry.",
+    "Signed overflow: the operands (after inverting `b` for SUB) have equal signs, and the result's sign differs.",
+    "SRA needs a signed shift: `$signed(a) >>> shamt` in Verilog, `shift_right(signed(a), n)` in VHDL. Use `$clog2(WIDTH)` for the shift-amount width."
+  ],
+  "examples": [
+    {
+      "check": "ADD",
+      "title": "ADD with carry",
+      "input": "WIDTH=16, op=0, a=16'hFFFF, b=16'h0001",
+      "expected": "y=0, zero=1, carry=1, overflow=0"
+    },
+    {
+      "check": "SUB",
+      "title": "SUB signed overflow",
+      "input": "op=1, a=16'h8000, b=16'h0001",
+      "expected": "y=16'h7FFF, carry=1, overflow=1"
+    },
+    {
+      "check": "SLT",
+      "title": "signed compare",
+      "input": "op=9, a=16'hFFFF (-1), b=16'h0001",
+      "expected": "y=1"
+    }
+  ],
+  "synth_params": {
+    "WIDTH": 16
+  }
+}

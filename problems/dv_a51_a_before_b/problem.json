@@ -1,0 +1,69 @@
+{
+  "id": 107,
+  "title": "Assertion: A Before B",
+  "difficulty": "Easy",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_order",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule: `b` may be high only if `a` has been high at some earlier edge since the last reset (not the same cycle).",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "A sticky flag in the checker: `seen_a <= seen_a | a;` (cleared by reset).",
+    "`assert property (... b |-> seen_a)`: the assertion samples the flag's pre-edge value, so the same cycle does not count.",
+    "Checkers may contain modeling code. That is normal and not part of any design."
+  ],
+  "examples": [
+    {
+      "check": "legal: a then b",
+      "title": "ordered",
+      "input": "a pulse, later b",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: b before any a",
+      "title": "b first",
+      "input": "b before any a",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: a and b in the same cycle",
+      "title": "same cycle",
+      "input": "a and b together as the first event",
+      "expected": "assertion fails"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": 194,
+  "title": "Glitch-Free Programmable Divider",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "clocking",
+    "divider",
+    "dvfs",
+    "glitch-free"
+  ],
+  "top": "gf_div",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "div",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "clk_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`clk_out` divides `clk` by R = 2·(div + 1), i.e. 2, 4, 6 or 8, with a 50 % duty cycle: high for R/2 cycles, then low for R/2 cycles. It comes straight from a flop.",
+    "`div` may change at any time, but a new ratio takes effect **only at the start of an output period** (the edge where `clk_out` rises), and it is used for that whole period (high and low halves). So no high or low phase is ever truncated.",
+    "Synchronous reset: `clk_out = 0`, counter 0, and the ratio is loaded from `div`. The first rising edge of `clk_out` comes at the end of the first low half after reset."
+  ],
+  "hints": [
+    "State: `q`, a half-period counter `cnt`, and the active half-period `h` (1 … 4).",
+    "Each edge: if `cnt == h - 1`, then `cnt <= 0`, `q <= ~q`, and if `q` is about to rise (`q == 0`), load `h <= div + 1`. Otherwise `cnt <= cnt + 1`.",
+    "This is how DVFS clock generators change frequency without upsetting the downstream logic."
+  ],
+  "examples": [
+    {
+      "check": "fixed ratios",
+      "title": "static",
+      "input": "div = 0, 1, 2, 3",
+      "expected": "periods of 2, 4, 6, 8 cycles"
+    },
+    {
+      "check": "ratio changes only at period boundaries",
+      "title": "switch",
+      "input": "div changes mid-period",
+      "expected": "the current period finishes with the old ratio"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

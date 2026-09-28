@@ -1,0 +1,75 @@
+{
+  "id": 6,
+  "title": "Comparator with Hysteresis",
+  "difficulty": "Easy",
+  "category": "modeling",
+  "tags": [
+    "analog",
+    "real-number-modeling"
+  ],
+  "top": "hyst_comp",
+  "synthesis": "optional",
+  "languages": [
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "vp",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "vn",
+      "dir": "input",
+      "width": 1,
+      "type": "real"
+    },
+    {
+      "name": "q",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`VH` is a `real` parameter / generic, default `0.1` V.",
+    "Switch high only when `vp - vn > VH/2` and low only when `vp - vn < -VH/2` (strict inequalities). Otherwise hold.",
+    "There is no clock. `q` must react within 1 ns of an input change.",
+    "`q` starts at 0. The model does not need to be synthesizable."
+  ],
+  "hints": [
+    "Re-evaluate whenever an input changes: `always @(vp or vn)` in SystemVerilog, `process (vp, vn)` in VHDL.",
+    "Assign `q` only in the two threshold branches. Leaving it unassigned in between gives the \"hold\" behavior — exactly the latch you want in a model.",
+    "Give `q` its initial value in the port declaration (`output logic q = 1'b0` / `q : out std_logic := '0'`)."
+  ],
+  "examples": [
+    {
+      "check": "switches high only above",
+      "title": "rising input",
+      "input": "vn = 0.5, VH = 0.1\nvp = 0.52 → 0.56 → 0.60",
+      "expected": "q = 0 → 1 → 1"
+    },
+    {
+      "check": "holds inside the hysteresis window",
+      "title": "inside the window",
+      "input": "vn = 0.5, q = 1\nvp = 0.52 → 0.48 → 0.46",
+      "expected": "q stays 1"
+    },
+    {
+      "check": "switches low only below",
+      "title": "falling input",
+      "input": "vn = 0.5, q = 1\nvp = 0.44 → 0.40 → 0.50",
+      "expected": "q = 0 → 0 → 0"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 200,
+      "step": 10,
+      "unit": 1,
+      "title": "switching with hysteresis"
+    }
+  ]
+}

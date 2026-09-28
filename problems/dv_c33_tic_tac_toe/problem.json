@@ -1,0 +1,47 @@
+{
+  "id": 139,
+  "title": "Constraint: Tic-Tac-Toe Win for X",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "ttt",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Generate a final tic-tac-toe position that **X has just won**: X moved first, so the number of X marks is the number of O marks plus one. X has three in a row, and O has none.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Encode the 8 winning lines explicitly. X needs at least one (OR), O needs none (AND of negations).",
+    "Count marks with sums of comparisons. Cast the first term to `int` so the sum doesn't wrap.",
+    "The count rule excludes impossible positions such as a board full of X."
+  ],
+  "examples": [
+    {
+      "check": "X has three in a row and O does not",
+      "title": "valid",
+      "input": "X on the diagonal, O scattered",
+      "expected": "accepted"
+    },
+    {
+      "check": "X moved first: #X = #O + 1",
+      "title": "counts",
+      "input": "4 X and 4 O",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "200 calls",
+      "expected": "≥ 150 boards"
+    }
+  ]
+}

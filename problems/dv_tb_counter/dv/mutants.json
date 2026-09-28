@@ -1,0 +1,8 @@
+[
+  {"file": "m1_async_reset.v",     "hint": "reset timing",        "desc": "reset is asynchronous (clears count before the clock edge)"},
+  {"file": "m2_saturates.v",       "hint": "counting past 15",    "desc": "count saturates at 15 instead of wrapping to 0"},
+  {"file": "m3_ignores_enable.v",  "hint": "enable",              "desc": "count increments even when en = 0"},
+  {"file": "m4_enable_priority.v", "hint": "reset vs. enable",    "desc": "en has priority over rst"},
+  {"file": "m5_skips_eight.v",     "hint": "a value in the middle", "desc": "count jumps from 7 to 9"},
+  {"file": "m6_reset_value.v",     "hint": "reset value",         "desc": "reset loads 1 instead of 0"}
+]

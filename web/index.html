@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HDL Judge</title>
+<script>
+  // apply the theme before first paint
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("theme"); } catch (e) {}
+    if (!t) t = window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="stylesheet" href="vendor/codemirror/codemirror.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-doc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><path d="M4 7l5 5-5 5M12 18h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 16h4V8h5v8h4V8h5v8h2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h4l10 10h4M3 17h4l3-3M14 10l3-3h4M18 4l3 3-3 3M18 14l3 3-3 3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l12-7z" fill="currentColor"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M7 18a5 5 0 01-.6-9.96A6 6 0 0118 9a4.5 4.5 0 01-1 9M12 12v8M9 15l3-3 3 3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-max" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-min" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8H8M8 1L4 4l4 4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0012 3z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V3h9l9 9-9 9zM7.5 7.5h.01" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-tick" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav-left">
+    <a class="brand" href="#/" title="All problems"><svg><use href="#i-chip"/></svg><span>HDL Judge</span></a>
+    <span class="nav-sep"></span>
+    <button class="nav-btn" id="open-drawer" title="Problem list"><svg><use href="#i-list"/></svg><span class="hide-sm">Problem List</span></button>
+    <button class="nav-icon ws-only" id="prev" title="Previous problem"><svg><use href="#i-left"/></svg></button>
+    <button class="nav-icon ws-only" id="next" title="Next problem"><svg><use href="#i-right"/></svg></button>
+    <button class="nav-icon" id="shuffle" title="Random problem"><svg><use href="#i-shuffle"/></svg></button>
+  </div>
+  <div class="nav-center ws-only">
+    <button class="run-btn" id="run" title="Run the example cases (Ctrl+')"><svg><use href="#i-play"/></svg><span>Run</span></button>
+    <button class="submit-btn" id="submit" title="Submit: all hidden checks (Ctrl+Enter)"><svg><use href="#i-upload"/></svg><span>Submit</span></button>
+  </div>
+  <div class="nav-right">
+    <button class="nav-icon" id="theme" title="Toggle light / dark theme"><svg><use href="#i-sun"/></svg></button>
+    <button class="tools-pill" id="tools-btn" title="EDA tool status"><span class="dot"></span><span id="tools-label">tools</span></button>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<!-- slide-in problem list -->
+<div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="Problem list">
+  <div class="drawer-head"><b>Problem List</b><span class="muted" id="drawer-progress"></span></div>
+  <input type="search" id="drawer-search" placeholder="Search questions">
+  <ul class="drawer-list" id="drawer-list"></ul>
+</aside>
+
+<div id="tools-dialog" class="dialog hidden" role="dialog" aria-label="EDA tools">
+  <div class="dialog-card">
+    <div class="dialog-head"><h3>EDA tools</h3><button class="icon-btn" data-close><svg><use href="#i-x"/></svg></button></div>
+    <div id="tools-body"></div>
+  </div>
+</div>
+
+<template id="tpl-list">
+  <section class="list-page">
+    <div class="list-hero">
+      <div>
+        <h1>Hardware Problems</h1>
+        <p class="muted">Verilog · SystemVerilog · VHDL — compiled, synthesized and verified against hidden testbenches.</p>
+      </div>
+      <div class="progress-ring" id="progress-ring"></div>
+    </div>
+    <div class="filters">
+      <input id="search" type="search" placeholder="Search questions">
+      <select id="f-cat"><option value="">All categories</option><option value="digital">Digital design</option><option value="arch">Computer architecture</option><option value="modeling">Analog / modeling</option><option value="verification">Verification</option><option value="timing">Timing</option><option value="dft">DFT</option><option value="debug">Debug (bug fixing)</option><option value="lowpower">Low power</option></select>
+      <select id="f-diff"><option value="">Difficulty</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+    </div>
+    <div class="ptable" id="plist"></div>
+  </section>
+</template>
+
+<template id="tpl-workspace">
+  <section class="workspace" id="ws">
+    <section class="panel" id="panel-desc">
+      <div class="panel-head">
+        <div class="ptabs" data-group="left">
+          <button class="ptab active" data-tab="desc"><svg class="c-blue"><use href="#i-doc"/></svg>Description</button>
+          <button class="ptab" data-tab="subs"><svg class="c-blue"><use href="#i-clock"/></svg>Submissions</button>
+        </div>
+        <div class="spacer"></div>
+        <button class="head-icon" data-max="panel-desc" title="Maximize"><svg><use href="#i-max"/></svg></button>
+      </div>
+      <div class="panel-body">
+        <div data-pane="desc" class="desc"></div>
+        <div data-pane="subs" class="subs hidden"></div>
+      </div>
+    </section>
+
+    <div class="gutter gutter-col" id="g-col" title="Drag to resize · double-click to reset"></div>
+
+    <div class="stack" id="stack">
+      <section class="panel" id="panel-code">
+        <div class="panel-head">
+          <div class="ptabs"><span class="ptab active static"><svg class="c-green"><use href="#i-code"/></svg>Code</span></div>
+          <div class="spacer"></div>
+          <button class="head-icon" data-max="panel-code" title="Maximize"><svg><use href="#i-max"/></svg></button>
+        </div>
+        <div class="code-toolbar">
+          <select id="lang" class="lang-select" title="Language"></select>
+          <div class="spacer"></div>
+          <span class="saved muted" id="saved"></span>
+          <button class="head-icon" id="font-dec" title="Smaller font">A−</button>
+          <button class="head-icon" id="font-inc" title="Larger font">A+</button>
+          <button class="head-icon" id="reset" title="Reset to starter code"><svg><use href="#i-reset"/></svg></button>
+        </div>
+        <div class="editor-host"><textarea id="code" spellcheck="false"></textarea></div>
+      </section>
+
+      <div class="gutter gutter-row" id="g-row" title="Drag to resize · double-click to reset"></div>
+
+      <section class="panel" id="panel-console">
+        <div class="panel-head">
+          <div class="ptabs" data-group="console">
+            <button class="ptab active" data-tab="cases"><svg class="c-green"><use href="#i-check-sq"/></svg>Testcase</button>
+            <button class="ptab" data-tab="result"><svg class="c-green"><use href="#i-term"/></svg>Test Result</button>
+            <button class="ptab" data-tab="wave"><svg class="c-purple"><use href="#i-wave"/></svg>Waveform</button>
+            <button class="ptab" data-tab="logs"><svg class="c-gray"><use href="#i-list"/></svg>Logs</button>
+          </div>
+          <div class="spacer"></div>
+          <button class="head-icon" id="console-toggle" title="Collapse console"><svg><use href="#i-down"/></svg></button>
+          <button class="head-icon" data-max="panel-console" title="Maximize"><svg><use href="#i-max"/></svg></button>
+        </div>
+        <div class="panel-body">
+          <div data-pane="cases" class="cases"></div>
+          <div data-pane="result" class="result hidden"><div class="empty-state">You must run your code first</div></div>
+          <div data-pane="wave" class="wave-panel hidden"><div class="empty-state">Run or submit to see the waveform</div></div>
+          <div data-pane="logs" class="logs hidden"><div class="empty-state">No logs yet</div></div>
+        </div>
+      </section>
+    </div>
+  </section>
+</template>
+
+<script src="vendor/codemirror/codemirror.min.js"></script>
+<script src="vendor/codemirror/verilog.min.js"></script>
+<script src="vendor/codemirror/vhdl.min.js"></script>
+<script src="vendor/codemirror/matchbrackets.min.js"></script>
+<script src="vendor/codemirror/closebrackets.min.js"></script>
+<script src="vendor/codemirror/active-line.min.js"></script>
+<script src="vendor/codemirror/comment.min.js"></script>
+<script src="markdown.js"></script>
+<script src="wave.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

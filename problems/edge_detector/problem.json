@@ -1,0 +1,77 @@
+{
+  "id": 3,
+  "title": "Rising Edge Detector",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "sequential"
+  ],
+  "top": "edge_detect",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pulse",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`pulse` is a registered output: it only changes on rising edges of `clk`.",
+    "Each 0 → 1 transition of the sampled `din` produces exactly one cycle of `pulse = 1`.",
+    "`rst` is synchronous and clears both `pulse` and the stored previous sample.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "Keep one flip-flop holding the value of `din` from the previous clock edge.",
+    "A rising edge means: the current sample is 1 and the previous sample was 0, so `pulse` gets `din & ~prev`.",
+    "Update `prev` and `pulse` in the same clocked block."
+  ],
+  "examples": [
+    {
+      "check": "single one-cycle pulse",
+      "title": "long high input",
+      "input": "din samples: 1 1 1 1 0 0",
+      "expected": "pulse:       1 0 0 0 0 0   (one cycle after the first 1)"
+    },
+    {
+      "check": "alternating input",
+      "title": "alternating input",
+      "input": "din samples: 0 1 0 1 0 1 0 1 0 1",
+      "expected": "pulse:       0 1 0 1 0 1 0 1 0 1"
+    },
+    {
+      "check": "reset clears the stored sample",
+      "title": "reset in between",
+      "input": "din: 1, then rst = 1 with din = 1, then din = 1 1 0",
+      "expected": "pulse is 1 again right after reset is released"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 200,
+      "clock": "clk",
+      "title": "one pulse per rising edge of din"
+    }
+  ]
+}

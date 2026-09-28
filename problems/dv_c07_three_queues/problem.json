@@ -1,0 +1,48 @@
+{
+  "id": 113,
+  "title": "Constraint: Split Into Three Queues",
+  "difficulty": "Hard",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "three_q",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Distribute the items 1 … 12 into three queues `q[0]`, `q[1]`, `q[2]`: each item in exactly one queue.",
+    "All three queues are non-empty and have **different** sizes. The testbench calls `randomize()` and then inspects `q`.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Queues themselves are hard to constrain directly. Randomize an assignment (`owner[i]` = queue of item i) and build the queues in `post_randomize()`.",
+    "Queue sizes are counts: `owner.sum() with (int'(item == k))`.",
+    "Remember to clear the queues at the start of `post_randomize()`, since the object is randomized many times."
+  ],
+  "examples": [
+    {
+      "check": "every item 1..12 is in exactly one queue",
+      "title": "partition",
+      "input": "q = {1,5,9}, {2,3}, {4,6,7,8,10,11,12}",
+      "expected": "valid"
+    },
+    {
+      "check": "the three queues are non-empty and of different sizes",
+      "title": "sizes",
+      "input": "sizes 4, 4, 4",
+      "expected": "rejected: equal sizes"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "150 calls",
+      "expected": "≥ 130 different splits"
+    }
+  ]
+}

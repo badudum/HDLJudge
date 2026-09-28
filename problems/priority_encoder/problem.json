@@ -1,0 +1,31 @@
+{
+  "id": 14,
+  "title": "8-to-3 Priority Encoder",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": ["combinational", "encoder"],
+  "top": "prio_enc8",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "req",   "dir": "input",  "width": 8},
+    {"name": "idx",   "dir": "output", "width": 3},
+    {"name": "valid", "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "The **highest** set bit of `req` wins.",
+    "When `req == 0`: `valid = 0` and `idx = 0` (a defined value, not \"don't care\").",
+    "Purely combinational, with no latches."
+  ],
+  "hints": [
+    "An `if / else if` chain starting from bit 7 is a priority encoder.",
+    "Alternatively loop from bit 0 upward and let later (higher) bits overwrite `idx`.",
+    "Assign default values at the top of the combinational block to avoid inferring latches."
+  ],
+  "examples": [
+    {"check": "single request", "title": "one request", "input": "req = 8'b0001_0000", "expected": "idx = 4, valid = 1"},
+    {"check": "highest wins", "title": "several requests", "input": "req = 8'b0100_0110", "expected": "idx = 6, valid = 1"},
+    {"check": "no request", "title": "idle", "input": "req = 8'b0000_0000", "expected": "idx = 0, valid = 0"}
+  ]
+}

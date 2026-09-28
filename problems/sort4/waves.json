@@ -1,0 +1,242 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "in0",
+    "kind": "bus",
+    "values": [
+     "3",
+     "0",
+     "FF",
+     "4",
+     "1",
+     "A",
+     "A",
+     "A"
+    ]
+   },
+   {
+    "name": "in1",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "0",
+     "3",
+     "2",
+     "14",
+     "14",
+     "1E"
+    ]
+   },
+   {
+    "name": "in2",
+    "kind": "bus",
+    "values": [
+     "4",
+     "0",
+     "FF",
+     "2",
+     "3",
+     "1E",
+     "28",
+     "14"
+    ]
+   },
+   {
+    "name": "in3",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "0",
+     "1",
+     "4",
+     "28",
+     "1E",
+     "28"
+    ]
+   },
+   {
+    "name": "out0",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "0",
+     "1",
+     "1",
+     "A",
+     "A",
+     "A"
+    ]
+   },
+   {
+    "name": "out1",
+    "kind": "bus",
+    "values": [
+     "1",
+     "0",
+     "0",
+     "2",
+     "2",
+     "14",
+     "14",
+     "14"
+    ]
+   },
+   {
+    "name": "out2",
+    "kind": "bus",
+    "values": [
+     "3",
+     "0",
+     "FF",
+     "3",
+     "3",
+     "1E",
+     "1E",
+     "1E"
+    ]
+   },
+   {
+    "name": "out3",
+    "kind": "bus",
+    "values": [
+     "4",
+     "0",
+     "FF",
+     "4",
+     "4",
+     "28",
+     "28",
+     "28"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "sorts"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "in0",
+    "kind": "bus",
+    "values": [
+     "F5",
+     "3",
+     "3",
+     "1",
+     "3",
+     "0",
+     "0",
+     "7C"
+    ]
+   },
+   {
+    "name": "in1",
+    "kind": "bus",
+    "values": [
+     "2F",
+     "8C",
+     "DD",
+     "F7",
+     "F7",
+     "1",
+     "3",
+     "C1"
+    ]
+   },
+   {
+    "name": "in2",
+    "kind": "bus",
+    "values": [
+     "1F",
+     "0",
+     "1",
+     "1",
+     "3",
+     "2",
+     "A0",
+     "2"
+    ]
+   },
+   {
+    "name": "in3",
+    "kind": "bus",
+    "values": [
+     "2",
+     "E1",
+     "4A",
+     "63",
+     "C9",
+     "3",
+     "1",
+     "EB"
+    ]
+   },
+   {
+    "name": "out0",
+    "kind": "bus",
+    "values": [
+     "2",
+     "0",
+     "1",
+     "1",
+     "3",
+     "0",
+     "0",
+     "2"
+    ]
+   },
+   {
+    "name": "out1",
+    "kind": "bus",
+    "values": [
+     "1F",
+     "3",
+     "3",
+     "1",
+     "3",
+     "1",
+     "1",
+     "7C"
+    ]
+   },
+   {
+    "name": "out2",
+    "kind": "bus",
+    "values": [
+     "2F",
+     "8C",
+     "4A",
+     "63",
+     "C9",
+     "2",
+     "3",
+     "C1"
+    ]
+   },
+   {
+    "name": "out3",
+    "kind": "bus",
+    "values": [
+     "F5",
+     "E1",
+     "DD",
+     "F7",
+     "F7",
+     "3",
+     "A0",
+     "EB"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "5000 random"
+ }
+]

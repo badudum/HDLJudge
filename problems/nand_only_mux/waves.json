@@ -1,0 +1,66 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     0,
+     1,
+     0,
+     1,
+     0,
+     1
+    ]
+   },
+   {
+    "name": "sel",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "y",
+    "kind": "bit",
+    "values": [
+     0,
+     0,
+     1,
+     1,
+     0,
+     1,
+     0,
+     1
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "truth table"
+ }
+]

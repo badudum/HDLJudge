@@ -1,0 +1,48 @@
+{
+  "id": 125,
+  "title": "Constraint: 90° Rotated Matrix",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "rotated",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "`b` is `a` rotated **90° clockwise**: `b[i][j] = a[2 − j][i]`.",
+    "The 9 elements of `a` are distinct.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "Rotation is just an index mapping, written as one equality per element.",
+    "Clockwise: the first row of `b` is the first column of `a`, read bottom-up.",
+    "Distinctness: compare each pair once (order pairs by flattened index)."
+  ],
+  "examples": [
+    {
+      "check": "b is a rotated 90° clockwise",
+      "title": "rotation",
+      "input": "a = [[1,2,3],[4,5,6],[7,8,9]]",
+      "expected": "b = [[7,4,1],[8,5,2],[9,6,3]]"
+    },
+    {
+      "check": "all elements of a are distinct",
+      "title": "distinct",
+      "input": "a with two 5s",
+      "expected": "rejected"
+    },
+    {
+      "check": "randomness",
+      "title": "variety",
+      "input": "150 calls",
+      "expected": "≥ 145 matrices"
+    }
+  ]
+}

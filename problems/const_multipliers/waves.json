@@ -1,0 +1,66 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "3",
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6"
+    ]
+   },
+   {
+    "name": "m7",
+    "kind": "bus",
+    "values": [
+     "15",
+     "0",
+     "7",
+     "E",
+     "15",
+     "1C",
+     "23",
+     "2A"
+    ]
+   },
+   {
+    "name": "m10",
+    "kind": "bus",
+    "values": [
+     "1E",
+     "0",
+     "A",
+     "14",
+     "1E",
+     "28",
+     "32",
+     "3C"
+    ]
+   },
+   {
+    "name": "m255",
+    "kind": "bus",
+    "values": [
+     "2FD",
+     "0",
+     "FF",
+     "1FE",
+     "2FD",
+     "3FC",
+     "4FB",
+     "5FA"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "all 256 values"
+ }
+]

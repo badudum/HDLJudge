@@ -1,0 +1,84 @@
+{
+  "id": 266,
+  "title": "Debug: Branch Predictor",
+  "difficulty": "Medium",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "branch-prediction",
+    "saturating-counter"
+  ],
+  "top": "bht",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pc",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "update",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "upd_pc",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "taken",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "pred",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "ctr",
+      "dir": "output",
+      "width": 2
+    }
+  ],
+  "constraints": [
+    "16 two-bit saturating counters indexed by `pc[5:2]` (instructions are 4-byte aligned). Reset sets every counter to 01 (weakly not-taken).",
+    "Prediction (combinational): `ctr` = the counter for `pc`, and `pred = ctr[1]` (taken when the counter is 2 or 3).",
+    "On a rising edge with `update`, the counter for `upd_pc` moves toward the outcome: +1 if `taken` (saturating at 3), −1 if not (saturating at 0).",
+    "The starter code has **2 bugs**."
+  ],
+  "hints": [
+    "Train one branch as taken many times in a row. What happens after the fourth update?",
+    "Which bit of a 2-bit saturating counter says 'taken'?"
+  ],
+  "examples": [
+    {
+      "check": "learns a taken branch",
+      "title": "training",
+      "input": "update the branch at 0x40 as taken 4 times",
+      "expected": "ctr saturates at 3, pred = 1"
+    },
+    {
+      "check": "hysteresis: one mispredict does not flip",
+      "title": "hysteresis",
+      "input": "one not-taken outcome in a taken loop",
+      "expected": "pred stays 1"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

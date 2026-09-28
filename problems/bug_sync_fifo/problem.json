@@ -1,0 +1,105 @@
+{
+  "id": 86,
+  "title": "Debug: Synchronous FIFO",
+  "difficulty": "Hard",
+  "category": "debug",
+  "tags": [
+    "debug",
+    "fifo",
+    "flags",
+    "pointers"
+  ],
+  "top": "sync_fifo",
+  "synthesis": "required",
+  "timeout_s": 30,
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wr_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "rd_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "dout",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "full",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "empty",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "count",
+      "dir": "output",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Intended behavior: exactly the FIFO of problem 5. Depth 8, width 8, registered `dout`, writes ignored when full, reads ignored when empty, full/empty evaluated before the edge.",
+    "The starter code has **3 bugs**: one in a status flag, one in write protection, one in read protection.",
+    "Fix the bugs. Rewriting from scratch defeats the exercise."
+  ],
+  "hints": [
+    "Fill the FIFO with exactly 8 writes and watch `full`. When does it rise?",
+    "Keep writing while full. Does the data you read back later still come out in order?",
+    "Read from an empty FIFO. Does `count` stay at 0? Does `dout` hold?"
+  ],
+  "examples": [
+    {
+      "check": "fills up to 8 entries",
+      "title": "full flag",
+      "input": "8 writes after reset",
+      "expected": "full = 1 only after the 8th write"
+    },
+    {
+      "check": "writes while full are ignored",
+      "title": "overflow",
+      "input": "writes while full",
+      "expected": "no data lost or overwritten"
+    },
+    {
+      "check": "reads while empty are ignored",
+      "title": "underflow",
+      "input": "reads while empty",
+      "expected": "count stays 0, dout holds"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 200,
+      "clock": "clk",
+      "title": "writes, then reads (correct design)"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "2",
+     "4",
+     "8",
+     "10",
+     "20",
+     "40"
+    ]
+   },
+   {
+    "name": "n",
+    "kind": "bus",
+    "values": [
+     "10",
+     "F",
+     "E",
+     "D",
+     "C",
+     "B",
+     "A",
+     "9"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "zero input gives 16"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "1",
+     "3",
+     "7",
+     "F",
+     "1F",
+     "3F",
+     "7F",
+     "FF"
+    ]
+   },
+   {
+    "name": "n",
+    "kind": "bus",
+    "values": [
+     "F",
+     "E",
+     "D",
+     "C",
+     "B",
+     "A",
+     "9",
+     "8"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "ones below the leading one"
+ }
+]

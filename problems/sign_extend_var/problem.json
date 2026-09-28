@@ -1,0 +1,91 @@
+{
+  "id": 250,
+  "title": "Variable-Width Sign Extension",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "branchless",
+    "twos-complement"
+  ],
+  "top": "sext_var",
+  "ports": [
+    {
+      "name": "x",
+      "dir": "input",
+      "width": 16
+    },
+    {
+      "name": "n",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "y",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "The low `n + 1` bits of `x` hold a signed number (width 1 to 16). Bits above them are **garbage**. Output `y` = that number sign-extended to 16 bits.",
+    "No loops or generate, and no `?:`, `if` or `case`: no mux per bit position."
+  ],
+  "hints": [
+    "First clear the garbage: keep `x & mask`, where mask has n + 1 ones. `mask = (m << 1) - 1` with `m = 1 << n` (it wraps correctly for n = 15).",
+    "Then the famous trick: `(v ^ m) - m`, where m is the sign-bit position. XOR flips the sign bit, and subtracting m borrows through all the upper bits exactly when the sign was 1.",
+    "Everything is 16-bit arithmetic: one shifter, one subtractor, one XOR."
+  ],
+  "examples": [
+    {
+      "check": "worked examples",
+      "title": "4-bit −3",
+      "input": "x = 0xF0D (garbage 0xF0), n = 3",
+      "expected": "y = 0xFFFD"
+    },
+    {
+      "check": "worked examples",
+      "title": "full width",
+      "input": "n = 15",
+      "expected": "y = x"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\bfor\\b|\\bwhile\\b|\\bforeach\\b|\\brepeat\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bloop\\b|\\bgenerate\\b",
+      "message": "no loops or generate blocks: solve it with a bit trick",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "\\?|\\bif\\b|\\bcase[xz]?\\b",
+      "message": "branchless: no ?:, if or case",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bif\\b|\\bcase\\b|\\bwhen\\b|\\bselect\\b",
+      "message": "branchless: no if, case, when or select",
+      "languages": [
+        "vhdl"
+      ]
+    }
+  ]
+}

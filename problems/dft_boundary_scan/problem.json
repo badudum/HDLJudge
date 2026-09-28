@@ -1,0 +1,95 @@
+{
+  "id": 237,
+  "title": "Boundary-Scan Register (4 Cells)",
+  "difficulty": "Medium",
+  "category": "dft",
+  "tags": [
+    "dft",
+    "jtag",
+    "boundary-scan",
+    "ieee-1149.1"
+  ],
+  "top": "bsr4",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "capture_dr",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "shift_dr",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "update_dr",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "mode",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "scan_in",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "data_in",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "data_out",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "scan_out",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Four IEEE 1149.1 BC_1-style cells. Each has a **capture/shift** flop `cap[i]` and an **update** flop `upd[i]`. All flops are clocked by `clk`, and at most one of capture/shift/update is active per edge.",
+    "`capture_dr`: `cap <= data_in`. `shift_dr`: the chain shifts, with `cap[0] <= scan_in`, `cap[i] <= cap[i-1]`, and `scan_out = cap[3]` (combinational). `update_dr`: `upd <= cap`.",
+    "`data_out[i] = mode ? upd[i] : data_in[i]`: normal mode passes the pins through, and test mode (EXTEST) drives the updated values. Synchronous reset clears both registers."
+  ],
+  "hints": [
+    "The update register exists so that the pins don't ripple while new values are being shifted in.",
+    "`cap` is just a loadable shift register. `upd` is a parallel register loaded from it.",
+    "In a real device these enables come from the TAP controller states Capture-DR, Shift-DR and Update-DR (see the JTAG TAP problem)."
+  ],
+  "examples": [
+    {
+      "check": "capture pins and shift out",
+      "title": "sample",
+      "input": "data_in = 1010, capture, 4 shifts",
+      "expected": "scan_out = 1, 0, 1, 0 (cell 3 first)"
+    },
+    {
+      "check": "shift in, update, drive pins",
+      "title": "extest",
+      "input": "shift 0110 in, update, mode = 1",
+      "expected": "data_out = 0110"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

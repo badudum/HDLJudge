@@ -1,0 +1,35 @@
+{
+  "id": 46,
+  "title": "Carry vs. Overflow Detection",
+  "difficulty": "Easy",
+  "category": "arch",
+  "tags": ["arithmetic", "flags", "combinational"],
+  "top": "addsub_flags",
+  "synthesis": "required",
+  "max_flip_flops": 0,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "a",     "dir": "input",  "width": 8},
+    {"name": "b",     "dir": "input",  "width": 8},
+    {"name": "sub",   "dir": "input",  "width": 1},
+    {"name": "y",     "dir": "output", "width": 8},
+    {"name": "carry", "dir": "output", "width": 1},
+    {"name": "ovf",   "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "`y = a + b` when `sub = 0` and `y = a - b` when `sub = 1` (8-bit, wrapping).",
+    "`carry` is the carry-out of the 8-bit adder computing `a + (sub ? ~b : b) + sub`. For subtraction that means 1 = no borrow.",
+    "`ovf` is the **signed** (two's-complement) overflow of the same operation.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Carry is about unsigned numbers, overflow about signed ones. They are independent: all four combinations happen.",
+    "One adder does both operations: invert `b` and add 1 through the carry-in when subtracting.",
+    "Signed overflow = carry into the MSB XOR carry out of the MSB. Or: the operand signs agree and the result sign differs."
+  ],
+  "examples": [
+    {"check": "add", "title": "carry, no overflow", "input": "a = 0xFF, b = 0x01, sub = 0", "expected": "y = 0x00, carry = 1, ovf = 0"},
+    {"check": "add", "title": "overflow, no carry", "input": "a = 0x7F, b = 0x01, sub = 0", "expected": "y = 0x80, carry = 0, ovf = 1"},
+    {"check": "subtract", "title": "borrow", "input": "a = 0x00, b = 0x01, sub = 1", "expected": "y = 0xFF, carry = 0, ovf = 0"}
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "id": 188,
+  "title": "Byte-Gated Register File",
+  "difficulty": "Medium",
+  "category": "lowpower",
+  "tags": [
+    "clock-gating",
+    "register-file",
+    "byte-enable"
+  ],
+  "top": "byte_rf",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "waddr",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "wbe",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "wdata",
+      "dir": "input",
+      "width": 32
+    },
+    {
+      "name": "raddr",
+      "dir": "input",
+      "width": 2
+    },
+    {
+      "name": "rdata",
+      "dir": "output",
+      "width": 32
+    },
+    {
+      "name": "cg_en",
+      "dir": "output",
+      "width": 16
+    }
+  ],
+  "constraints": [
+    "Four 32-bit registers. On a rising edge with `we`, byte b of register `waddr` is written only if `wbe[b]` is 1. Other bytes keep their value.",
+    "The register file is split into 16 byte-wide groups (register r, byte b), each with its own clock enable. `cg_en[4*r + b]` = 1 exactly when that group is written this cycle (combinational), so a write never clocks more than 4 of the 16 groups.",
+    "`rdata = reg[raddr]`, combinational. Synchronous reset clears all registers."
+  ],
+  "hints": [
+    "`cg_en[4*r+b] = we && (waddr == r) && wbe[b]`.",
+    "Use the same enable to update the byte: `if (cg_en[4*r+b]) regs[r][8*b +: 8] <= wdata[8*b +: 8];`.",
+    "Partial writes are common (byte and halfword stores), so byte-level gating saves most of the clock power of a register file."
+  ],
+  "examples": [
+    {
+      "check": "byte enables",
+      "title": "partial write",
+      "input": "write 0xAABBCCDD to r1 with wbe = 0101",
+      "expected": "only bytes 0 and 2 of r1 change"
+    },
+    {
+      "check": "clock enables",
+      "title": "cg_en",
+      "input": "we = 1, waddr = 2, wbe = 1111",
+      "expected": "cg_en = 0x0F00"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

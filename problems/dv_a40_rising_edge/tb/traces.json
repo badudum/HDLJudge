@@ -1,0 +1,18 @@
+[
+ {
+  "name": "legal: pulse exactly on rising edges",
+  "violation": false
+ },
+ {
+  "name": "violation: missing pulse",
+  "violation": true
+ },
+ {
+  "name": "violation: extra pulse while a stays high",
+  "violation": true
+ },
+ {
+  "name": "legal: no activity",
+  "violation": false
+ }
+]

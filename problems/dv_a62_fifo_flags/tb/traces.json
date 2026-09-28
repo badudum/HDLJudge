@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: fill and drain",
+  "violation": false
+ },
+ {
+  "name": "legal: fill completely",
+  "violation": false
+ },
+ {
+  "name": "violation: full at 7",
+  "violation": true
+ },
+ {
+  "name": "violation: count not updated",
+  "violation": true
+ },
+ {
+  "name": "violation: pop from empty decrements",
+  "violation": true
+ }
+]

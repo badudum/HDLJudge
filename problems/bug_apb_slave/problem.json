@@ -1,0 +1,33 @@
+{
+  "id": 89, "title": "Debug: APB Slave", "difficulty": "Medium", "category": "debug",
+  "tags": ["debug", "apb", "amba", "registers"], "top": "apb_regs",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "pclk",    "dir": "input",  "width": 1},
+    {"name": "presetn", "dir": "input",  "width": 1},
+    {"name": "psel",    "dir": "input",  "width": 1},
+    {"name": "penable", "dir": "input",  "width": 1},
+    {"name": "pwrite",  "dir": "input",  "width": 1},
+    {"name": "paddr",   "dir": "input",  "width": 4},
+    {"name": "pwdata",  "dir": "input",  "width": 32},
+    {"name": "prdata",  "dir": "output", "width": 32},
+    {"name": "pready",  "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Intended register map (word addresses, `paddr[3:2]` selects): 0x0 CTRL (reset 0), 0x4 CONFIG (reset `32'h0000_00FF`), 0x8 DATA (reset 0), 0xC ID (read-only, always `32'hC0DE_0001`).",
+    "A write takes effect on the rising edge of the ACCESS phase (`psel && penable && pwrite`). Writes to ID are ignored.",
+    "`prdata` = the selected register whenever `psel && !pwrite`, else 0 (combinational). `pready = 1` (no wait states). `presetn` is active low and synchronous.",
+    "The starter has **3 bugs**."
+  ],
+  "hints": [
+    "Write a pattern to each of the 4 addresses, then read them all back. Do the addresses alias?",
+    "Read CONFIG right after reset.",
+    "Write to the ID register, then read it."
+  ],
+  "examples": [
+    {"check": "reset values", "title": "after reset", "input": "read 0x0, 0x4, 0x8, 0xC", "expected": "0, 0xFF, 0, 0xC0DE0001"},
+    {"check": "write then read back", "title": "write/read", "input": "write 0x8 = 0x12345678, read 0x8", "expected": "0x12345678"},
+    {"check": "read-only ID", "title": "RO register", "input": "write 0xC = 0xFFFFFFFF, read 0xC", "expected": "0xC0DE0001"}
+  ]
+}

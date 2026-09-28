@@ -1,0 +1,32 @@
+{
+  "id": 28,
+  "title": "Round-Robin Arbiter",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": ["arbitration", "sequential", "bus"],
+  "top": "rr_arbiter4",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",   "dir": "input",  "width": 1},
+    {"name": "rst",   "dir": "input",  "width": 1},
+    {"name": "req",   "dir": "input",  "width": 4},
+    {"name": "grant", "dir": "output", "width": 4}
+  ],
+  "constraints": [
+    "`grant` is registered: at each rising edge it becomes the one-hot grant for the `req` sampled at that edge, or 0 if `req == 0`.",
+    "A pointer holds the requester with the highest priority. The search goes `ptr, ptr+1, …` (mod 4) and the first active request wins.",
+    "After granting requester i, the pointer moves to `(i + 1) mod 4`. With no requests the pointer does not move.",
+    "Synchronous reset: `ptr = 0`, `grant = 0`. Must be synthesizable."
+  ],
+  "hints": [
+    "Rotate `req` right by `ptr`, run a simple fixed-priority (lowest bit wins) search, then rotate the result back.",
+    "Or double the request vector: `{req, req} >> ptr` puts the candidates in priority order.",
+    "Keep `ptr` as a 2-bit counter so wrap-around is free."
+  ],
+  "examples": [
+    {"check": "all requesting", "title": "everyone requests", "input": "reset, then req = 4'b1111 every cycle", "expected": "grant = 0001, 0010, 0100, 1000, 0001, …"},
+    {"check": "single requester", "title": "one requester", "input": "req = 4'b0100 every cycle", "expected": "grant = 0100 every cycle"},
+    {"check": "fairness", "title": "pointer skips idle requesters", "input": "after granting 0001, req = 4'b1001", "expected": "grant = 1000 (requester 3 is next in the rotation), then 0001"}
+  ]
+}

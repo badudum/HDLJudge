@@ -1,0 +1,68 @@
+{
+  "id": 214,
+  "title": "BCD Digit Adder",
+  "difficulty": "Easy",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "bcd",
+    "arithmetic"
+  ],
+  "top": "bcd_add",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 4
+    },
+    {
+      "name": "cin",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "sum",
+      "dir": "output",
+      "width": 4
+    },
+    {
+      "name": "cout",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "`a` and `b` are BCD digits (0–9 only). Compute `a + b + cin` as a BCD digit `sum` plus a decimal carry `cout`.",
+    "Purely combinational."
+  ],
+  "hints": [
+    "Add in binary first. If the 5-bit result is greater than 9, add 6 and set the carry.",
+    "Why 6? It skips the six unused codes 1010–1111."
+  ],
+  "examples": [
+    {
+      "check": "all digit pairs",
+      "title": "7 + 5",
+      "input": "a = 7, b = 5, cin = 0",
+      "expected": "sum = 2, cout = 1"
+    },
+    {
+      "check": "all digit pairs",
+      "title": "9 + 9 + 1",
+      "input": "a = 9, b = 9, cin = 1",
+      "expected": "sum = 9, cout = 1"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "max_flip_flops": 0
+}

@@ -1,0 +1,106 @@
+{
+  "id": 5,
+  "title": "Synchronous FIFO",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "memory",
+    "sequential",
+    "flow-control"
+  ],
+  "top": "sync_fifo",
+  "synthesis": "required",
+  "timeout_s": 30,
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "wr_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "rd_en",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "dout",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "full",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "empty",
+      "dir": "output",
+      "width": 1
+    },
+    {
+      "name": "count",
+      "dir": "output",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "Depth 8, width 8. `count` ranges from 0 to 8.",
+    "Writes when full and reads when empty are ignored. `full` and `empty` are evaluated before the clock edge.",
+    "`dout` is registered: it changes only on a clock edge with a successful read (or on reset, to 0).",
+    "`rst` is synchronous and active-high.",
+    "Must be synthesizable."
+  ],
+  "hints": [
+    "Use an 8-entry memory as a circular buffer with a write pointer and a read pointer.",
+    "3-bit pointers wrap on their own. To tell full from empty, keep a separate count or give the pointers a 4th bit.",
+    "Compute `do_wr = wr_en && !full` and `do_rd = rd_en && !empty` first, then update the pointers, the count and `dout` from those."
+  ],
+  "examples": [
+    {
+      "check": "fills up to 8 entries",
+      "title": "fill",
+      "input": "8 writes of 0xA0 … 0xA7, no reads",
+      "expected": "count = 1 … 8, empty drops after the first write, full = 1 after the 8th"
+    },
+    {
+      "check": "reads back in FIFO order",
+      "title": "drain",
+      "input": "8 reads after the fill",
+      "expected": "dout = 0xA0, 0xA1, … 0xA7, count = 7 … 0, empty = 1 at the end"
+    },
+    {
+      "check": "simultaneous read and write",
+      "title": "read + write together",
+      "input": "write 0x11 / 0x22 / 0x33 with rd_en = 1 on an empty FIFO, then one more read",
+      "expected": "dout = 0x11, 0x22, 0x33 (each read returns the value written just before)"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 200,
+      "clock": "clk",
+      "title": "writes, then reads"
+    }
+  ]
+}

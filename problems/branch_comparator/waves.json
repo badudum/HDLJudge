@@ -1,0 +1,130 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "5",
+     "7FFFFFFF",
+     "80000000",
+     "FFFFFFFF",
+     "FFFFFFFE",
+     "0"
+    ]
+   },
+   {
+    "name": "funct3",
+    "kind": "bus",
+    "values": [
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4"
+    ]
+   },
+   {
+    "name": "taken",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "BLT / BGE (signed)"
+ },
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "a",
+    "kind": "bus",
+    "values": [
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "1"
+    ]
+   },
+   {
+    "name": "b",
+    "kind": "bus",
+    "values": [
+     "0",
+     "1",
+     "5",
+     "7FFFFFFF",
+     "80000000",
+     "FFFFFFFF",
+     "FFFFFFFE",
+     "0"
+    ]
+   },
+   {
+    "name": "funct3",
+    "kind": "bus",
+    "values": [
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6",
+     "6"
+    ]
+   },
+   {
+    "name": "taken",
+    "kind": "bit",
+    "values": [
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "BLTU / BGEU (unsigned)"
+ }
+]

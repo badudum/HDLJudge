@@ -1,0 +1,38 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "5555",
+     "AAAA",
+     "5554",
+     "2AAA",
+     "D555",
+     "0",
+     "FFFF",
+     "7555"
+    ]
+   },
+   {
+    "name": "alt",
+    "kind": "bit",
+    "values": [
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

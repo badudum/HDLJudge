@@ -1,0 +1,22 @@
+[
+ {
+  "name": "legal: rises and stays high",
+  "violation": false
+ },
+ {
+  "name": "violation: glitch after rising",
+  "violation": true
+ },
+ {
+  "name": "legal: never rises",
+  "violation": false
+ },
+ {
+  "name": "legal: reset clears the obligation",
+  "violation": false
+ },
+ {
+  "name": "violation: drops at the end",
+  "violation": true
+ }
+]

@@ -1,0 +1,65 @@
+{
+  "id": 104,
+  "title": "Assertion: Toggles Every 4 Cycles",
+  "difficulty": "Medium",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_toggle",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "q",
+      "dir": "input",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Rule: after `q` changes, it must stay stable for exactly 3 more cycles and change again on the 4th (a divide-by-8 clock).",
+    "The first change after reset starts the pattern. Before it, q may stay constant.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`$changed(q)` is true in the cycle where q differs from its previous sample.",
+    "`$changed(q) |=> $stable(q)[*3] ##1 $changed(q)`.",
+    "Both 'too early' and 'too late' toggles must fail."
+  ],
+  "examples": [
+    {
+      "check": "legal: toggles every 4 cycles",
+      "title": "correct",
+      "input": "q = 0000111100001111",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: toggles after 3",
+      "title": "early",
+      "input": "q changes after only 3 cycles",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: toggles after 5",
+      "title": "late",
+      "input": "q changes after 5 cycles",
+      "expected": "assertion fails"
+    }
+  ]
+}

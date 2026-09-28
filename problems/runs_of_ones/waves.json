@@ -1,0 +1,52 @@
+[
+ {
+  "unit": 0,
+  "length": 8,
+  "signals": [
+   {
+    "name": "x",
+    "kind": "bus",
+    "values": [
+     "70",
+     "A6",
+     "0",
+     "FFFF",
+     "8001",
+     "C003",
+     "E000",
+     "7"
+    ]
+   },
+   {
+    "name": "run3",
+    "kind": "bit",
+    "values": [
+     1,
+     0,
+     0,
+     1,
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "name": "alone",
+    "kind": "bus",
+    "values": [
+     "0",
+     "A0",
+     "0",
+     "0",
+     "8001",
+     "0",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  "caption": "Combinational: each column is one input combination and the resulting outputs. Bus values in hex.",
+  "title": "worked examples"
+ }
+]

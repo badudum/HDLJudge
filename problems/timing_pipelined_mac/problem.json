@@ -1,0 +1,35 @@
+{
+  "id": 40,
+  "title": "Timing: Pipeline the Multiply-Add",
+  "difficulty": "Medium",
+  "category": "timing",
+  "tags": ["timing", "pipelining", "dsp", "critical-path"],
+  "top": "mac2",
+  "synthesis": "required",
+  "max_logic_depth": 24,
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk", "dir": "input",  "width": 1},
+    {"name": "a",   "dir": "input",  "width": 8},
+    {"name": "b",   "dir": "input",  "width": 8},
+    {"name": "c",   "dir": "input",  "width": 8},
+    {"name": "d",   "dir": "input",  "width": 8},
+    {"name": "y",   "dir": "output", "width": 17}
+  ],
+  "constraints": [
+    "`y = a·b + c·d` (unsigned), with a **latency of exactly 2**: the value of `y` right after rising edge n is computed from the inputs sampled at rising edge n − 1.",
+    "Throughput of one result per cycle: new inputs arrive every cycle.",
+    "Timing budget: at most **24 logic levels** between any two registers (or ports).",
+    "No reset needed. Must be synthesizable."
+  ],
+  "hints": [
+    "The starter spends both register stages badly. Registering the inputs and then doing multiply *and* add in one stage leaves a 28-level path.",
+    "Move the first register stage into the middle of the computation: register the two products, then add them in the second stage.",
+    "Registers only move where the logic is cut, not what it computes. Latency stays at 2, and the longest path shrinks to the multiplier alone."
+  ],
+  "examples": [
+    {"check": "latency", "title": "latency 2", "input": "edge n-1 samples a=2, b=3, c=4, d=5", "expected": "after edge n: y = 26"},
+    {"check": "streaming", "title": "one result per cycle", "input": "new operands every cycle", "expected": "y follows two cycles behind, every cycle"},
+    {"check": "maximum values", "title": "overflow-free", "input": "a = b = c = d = 255", "expected": "y = 130050"}
+  ]
+}

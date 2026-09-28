@@ -1,0 +1,89 @@
+{
+  "id": 247,
+  "title": "Branchless Signed Min / Max",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "combinational",
+    "brain-teaser",
+    "branchless",
+    "signed"
+  ],
+  "top": "bminmax",
+  "ports": [
+    {
+      "name": "a",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "b",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "mn",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "mx",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "`mn = min(a, b)` and `mx = max(a, b)` for **signed** 8-bit values.",
+    "**Branchless:** no `?:`, `if` or `case`, and no comparison operators (`<`, `>`, `<=`, `>=`, `$signed` compares included)."
+  ],
+  "hints": [
+    "The sign of a − b says which one is smaller, but 8-bit subtraction overflows. Subtract in 9 bits (sign-extend both).",
+    "Turn the 'a < b' bit into a mask m (all ones or all zeros).",
+    "`mn = b ^ ((a ^ b) & m)` selects a when m is all ones: XOR swapping instead of a mux."
+  ],
+  "examples": [
+    {
+      "check": "corner cases",
+      "title": "signs",
+      "input": "a = −1, b = 1",
+      "expected": "mn = −1, mx = 1"
+    },
+    {
+      "check": "corner cases",
+      "title": "overflow",
+      "input": "a = 127, b = −128",
+      "expected": "mn = −128, mx = 127"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog"
+  ],
+  "max_flip_flops": 0,
+  "forbidden": [
+    {
+      "pattern": "\\?|\\bif\\b|\\bcase[xz]?\\b",
+      "message": "branchless: no ?:, if or case",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    },
+    {
+      "pattern": "\\bif\\b|\\bcase\\b|\\bwhen\\b|\\bselect\\b",
+      "message": "branchless: no if, case, when or select",
+      "languages": [
+        "vhdl"
+      ]
+    },
+    {
+      "pattern": "(?<![<>])[<>](?![<>])",
+      "message": "no comparison operators (<, >, <=, >=): only shifts << >> >>> are allowed",
+      "languages": [
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  ]
+}

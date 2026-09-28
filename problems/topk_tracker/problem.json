@@ -1,0 +1,85 @@
+{
+  "id": 162,
+  "title": "Top-3 Maximum Tracker",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": [
+    "streaming",
+    "sorting",
+    "sequential"
+  ],
+  "top": "top3",
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "valid",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 8
+    },
+    {
+      "name": "t0",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "t1",
+      "dir": "output",
+      "width": 8
+    },
+    {
+      "name": "t2",
+      "dir": "output",
+      "width": 8
+    }
+  ],
+  "constraints": [
+    "Track the three largest values seen since reset (duplicates count separately), sorted: `t0 ≥ t1 ≥ t2`. Reset sets all three to 0.",
+    "Each rising edge with `valid = 1` inserts `din` into the sorted list and drops the smallest.",
+    "Registered outputs. Must be synthesizable."
+  ],
+  "hints": [
+    "Compare `din` with t0, t1 and t2 in parallel. The results tell you where it slots in.",
+    "Insert at position 0: shift everything down. Position 1: t2 ← t1, t1 ← din. Position 2: t2 ← din. Otherwise no change.",
+    "Use `>` (not `≥`) for the comparisons so that equal values keep their order. Either works here, since equal values are indistinguishable."
+  ],
+  "examples": [
+    {
+      "check": "fills from reset",
+      "title": "first values",
+      "input": "5, 9, 2",
+      "expected": "t0 = 9, t1 = 5, t2 = 2"
+    },
+    {
+      "check": "insert in the middle",
+      "title": "middle",
+      "input": "then 7",
+      "expected": "9, 7, 5"
+    },
+    {
+      "check": "duplicates count",
+      "title": "duplicates",
+      "input": "then 9",
+      "expected": "9, 9, 7"
+    }
+  ],
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ]
+}

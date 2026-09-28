@@ -1,0 +1,78 @@
+{
+  "id": 4,
+  "title": "Sequence Detector 1011",
+  "difficulty": "Medium",
+  "category": "digital",
+  "tags": [
+    "fsm",
+    "sequential"
+  ],
+  "top": "seq_detect",
+  "synthesis": "required",
+  "languages": [
+    "verilog",
+    "systemverilog",
+    "vhdl"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "din",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "detected",
+      "dir": "output",
+      "width": 1
+    }
+  ],
+  "constraints": [
+    "Pattern: `1011`, oldest bit first. Overlapping occurrences count.",
+    "`detected` is a Moore / registered output: it is 1 during the cycle after the edge that completes the pattern.",
+    "`rst` is synchronous and discards any partial match.",
+    "Must be synthesizable without latches."
+  ],
+  "hints": [
+    "Five states are enough: nothing matched, `1`, `10`, `101` and `1011` (detected).",
+    "On a mismatch, do not always go back to the start. For example, from `1011` an input of `0` leaves `10` matched, and from `10` an input of `0` leaves nothing.",
+    "With a Moore machine, `detected` is simply `state == S1011`."
+  ],
+  "examples": [
+    {
+      "check": "detects a single 1011",
+      "title": "single match",
+      "input": "din samples: 1 0 1 1 0 0",
+      "expected": "detected:    0 0 0 1 0 0"
+    },
+    {
+      "check": "detects overlapping",
+      "title": "overlapping matches",
+      "input": "din samples: 1 0 1 1 0 1 1 0 0",
+      "expected": "detected:    0 0 0 1 0 0 1 0 0"
+    },
+    {
+      "check": "recovers after 1010",
+      "title": "partial match 1010",
+      "input": "din samples: 1 0 1 0 1 0 1 1 0 0",
+      "expected": "detected:    0 0 0 0 0 0 0 1 0 0"
+    }
+  ],
+  "wave_windows": [
+    {
+      "from": 0,
+      "to": 200,
+      "clock": "clk",
+      "title": "detecting the pattern"
+    }
+  ]
+}

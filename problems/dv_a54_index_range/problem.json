@@ -1,0 +1,74 @@
+{
+  "id": 145,
+  "title": "Assertion: Memory Index in Range",
+  "difficulty": "Medium",
+  "category": "verification",
+  "kind": "checker",
+  "simulator": "verilator",
+  "tags": [
+    "sva",
+    "assertions",
+    "checker"
+  ],
+  "top": "chk_index",
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "rst",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "we",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "re",
+      "dir": "input",
+      "width": 1
+    },
+    {
+      "name": "addr",
+      "dir": "input",
+      "width": 4
+    }
+  ],
+  "constraints": [
+    "A memory has 12 entries (addresses 0 … 11) behind a 4-bit address. Rule 1: whenever `we` or `re` is high, `addr < 12`.",
+    "Rule 2: `we` and `re` are never high in the same cycle.",
+    "Report a violation with a failing assertion (or `$error`). Legal traces must produce no error. `rst` is active high; ignore everything while it is asserted."
+  ],
+  "hints": [
+    "`(we || re) |-> addr < 4'd12`.",
+    "Rule 2 is a simple invariant: `!(we && re)`."
+  ],
+  "examples": [
+    {
+      "check": "legal: accesses in range",
+      "title": "in range",
+      "input": "writes/reads to 0 … 11",
+      "expected": "no failure"
+    },
+    {
+      "check": "violation: write to 12",
+      "title": "out of range",
+      "input": "we with addr = 12",
+      "expected": "assertion fails"
+    },
+    {
+      "check": "violation: read and write together",
+      "title": "collision",
+      "input": "we = re = 1",
+      "expected": "assertion fails"
+    }
+  ]
+}

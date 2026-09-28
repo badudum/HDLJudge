@@ -1,0 +1,42 @@
+{
+  "id": 240,
+  "title": "Constraint: Weighted Packet Mix",
+  "difficulty": "Medium",
+  "category": "verification",
+  "simulator": "verilator",
+  "tags": [
+    "constraints",
+    "randomization"
+  ],
+  "top": "pkt_mix",
+  "synthesis": "none",
+  "timeout_s": 120,
+  "languages": [
+    "systemverilog"
+  ],
+  "ports": [],
+  "constraints": [
+    "Packets are SMALL (length 1–16), MEDIUM (17–128) or LARGE (129–255).",
+    "The kinds occur about 60 % / 30 % / 10 % of the time (checked over 1000 packets with a ±6 % tolerance), and the length always matches the kind.",
+    "Runs on Verilator with the z3 solver (`sudo pacman -S z3`)."
+  ],
+  "hints": [
+    "`kind dist { SMALL := 6, MEDIUM := 3, LARGE := 1 };` sets the weights.",
+    "Use implications (`->`) to tie the length range to the kind.",
+    "Putting the weights on `kind` rather than on `len` makes the mix independent of how wide each range is."
+  ],
+  "examples": [
+    {
+      "check": "length matches the kind",
+      "title": "ranges",
+      "input": "LARGE with len = 20",
+      "expected": "rejected"
+    },
+    {
+      "check": "mix is about 60/30/10 %",
+      "title": "weights",
+      "input": "1000 packets",
+      "expected": "≈ 600 / 300 / 100"
+    }
+  ]
+}
