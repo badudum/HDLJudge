@@ -1,6 +1,9 @@
 """Local web server for the browser UI (Python standard library only)."""
+import base64
+import hmac
 import json
 import mimetypes
+import os
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -11,6 +14,26 @@ from . import judge, problems, store, tools
 WEB = problems.ROOT / "web"
 MAX_BODY = 1 << 20
 _judge_slots = threading.BoundedSemaphore(2)   # concurrent judge runs
+
+# Optional HTTP Basic Auth gate, meant for when the server is reachable from
+# outside localhost (e.g. behind a Tailscale Funnel). Off by default so plain
+# `hwlc serve` on localhost is unchanged. Each authenticated user also gets
+# their own submission history (solved status, past code) via HWLC_AUTH_USERS,
+# a comma-separated list of "user:password" pairs, e.g. "ann:hunter2,bob:swordfish".
+def _load_users():
+    raw = os.environ.get("HWLC_AUTH_USERS", "")
+    users = {}
+    for pair in raw.split(","):
+        pair = pair.strip()
+        if not pair or ":" not in pair:
+            continue
+        name, _, pw = pair.partition(":")
+        if name:
+            users[name] = pw
+    return users
+
+
+_AUTH_USERS = _load_users()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -34,19 +57,52 @@ class Handler(BaseHTTPRequestHandler):
 
     def _host_ok(self):
         # Reject DNS-rebinding style requests: only answer to local host names.
-        # (Skipped when the user deliberately binds to a non-loopback address.)
+        # (Skipped when the user deliberately binds to a non-loopback address, or
+        # has put the server behind an auth gate / reverse proxy such as a
+        # Tailscale Funnel, which forwards the public hostname as Host.)
         if self.server.server_address[0] not in ("127.0.0.1", "::1", "localhost"):
+            return True
+        if _AUTH_USERS:
             return True
         host = (self.headers.get("Host") or "").rsplit(":", 1)[0].strip("[]")
         return host in ("localhost", "127.0.0.1", "::1")
+
+    def _authenticated_user(self):
+        """Returns the logged-in username, "" if auth is off, or None if the
+        request's credentials are missing/wrong."""
+        if not _AUTH_USERS:
+            return ""
+        given = self.headers.get("Authorization") or ""
+        if not given.startswith("Basic "):
+            return None
+        try:
+            name, _, pw = base64.b64decode(given[6:]).decode().partition(":")
+        except (ValueError, UnicodeDecodeError):
+            return None
+        expected = _AUTH_USERS.get(name)
+        if expected is not None and hmac.compare_digest(pw, expected):
+            return name
+        return None
+
+    def _require_auth(self):
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="HDL Judge"')
+        self.send_header("Content-Type", "application/json")
+        body = json.dumps({"error": "authentication required"}).encode()
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
     # ------------------------------------------------------------ routes
     def do_GET(self):
         if not self._host_ok():
             return self._error(403, "forbidden host")
+        user = self._authenticated_user()
+        if user is None:
+            return self._require_auth()
         path = urlparse(self.path).path
         if path == "/api/problems":
-            solved, attempted = store.solved(), store.attempted()
+            solved, attempted = store.solved(user), store.attempted(user)
             out = []
             for p in problems.load_all():
                 d = p.summary()
@@ -59,7 +115,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, p.detail()) if p else self._error(404, "no such problem")
         if path.startswith("/api/submissions/"):
             slug = path.rsplit("/", 1)[1]
-            return self._send(200, store.history(slug)[:100])
+            return self._send(200, store.history(slug, user)[:100])
         if path == "/api/tools":
             return self._send(200, {"tools": tools.status(),
                                     "sv_simulator": tools.sv_simulator()})
@@ -68,6 +124,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self._host_ok():
             return self._error(403, "forbidden host")
+        user = self._authenticated_user()
+        if user is None:
+            return self._require_auth()
         if urlparse(self.path).path != "/api/judge":
             return self._error(404, "not found")
         # requiring JSON forces a CORS preflight, so other web pages cannot post here
@@ -88,7 +147,7 @@ class Handler(BaseHTTPRequestHandler):
         with _judge_slots:
             result = judge.judge(p, lang, code, mode=mode)
         if mode == "submit":
-            store.record(result, code)
+            store.record(result, code, user)
         return self._send(200, result)
 
     def _static(self, path):
@@ -105,6 +164,11 @@ def serve(host="127.0.0.1", port=8080, open_browser=True):
     httpd = ThreadingHTTPServer((host, port), Handler)
     url = f"http://{'localhost' if host in ('127.0.0.1', '0.0.0.0') else host}:{port}/"
     print(f"hwlc: serving {len(problems.load_all())} problems at {url}  (Ctrl+C to stop)")
+    if _AUTH_USERS:
+        print(f"hwlc: HTTP Basic Auth enabled (users: {', '.join(sorted(_AUTH_USERS))})")
+    elif host not in ("127.0.0.1", "::1", "localhost"):
+        print("hwlc: WARNING: bound to a non-loopback address with no auth configured "
+              "(set HWLC_AUTH_USERS)")
     missing = [n for n, i in tools.status().items() if not i["path"]]
     if missing:
         print(f"hwlc: missing tools: {', '.join(missing)}  (run `python -m hwlc doctor`)")

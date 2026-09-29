@@ -10,9 +10,9 @@ FILE = DATA / "submissions.jsonl"
 _lock = threading.Lock()
 
 
-def record(result, code):
+def record(result, code, user=""):
     entry = {
-        "ts": time.time(), "problem": result["problem"], "language": result["language"],
+        "ts": time.time(), "user": user, "problem": result["problem"], "language": result["language"],
         "verdict": result["verdict"], "passed": result["passed"], "total": result["total"],
         "seconds": result["seconds"], "code": code,
     }
@@ -27,7 +27,7 @@ def record(result, code):
     return entry
 
 
-def history(slug=None):
+def history(slug=None, user=None):
     if not FILE.exists():
         return []
     out = []
@@ -37,14 +37,17 @@ def history(slug=None):
                 e = json.loads(line)
             except json.JSONDecodeError:
                 continue
-            if slug is None or e["problem"] == slug:
-                out.append(e)
+            if slug is not None and e["problem"] != slug:
+                continue
+            if user is not None and e.get("user", "") != user:
+                continue
+            out.append(e)
     return list(reversed(out))
 
 
-def solved():
-    return {e["problem"] for e in history() if e["verdict"] == "Accepted"}
+def solved(user=None):
+    return {e["problem"] for e in history(user=user) if e["verdict"] == "Accepted"}
 
 
-def attempted():
-    return {e["problem"] for e in history()}
+def attempted(user=None):
+    return {e["problem"] for e in history(user=user)}
