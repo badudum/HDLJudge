@@ -50,6 +50,7 @@
     <a class="brand" href="#/" title="All problems"><svg><use href="#i-chip"/></svg><span>HDL Judge</span></a>
     <span class="nav-sep"></span>
     <button class="nav-btn" id="open-drawer" title="Problem list"><svg><use href="#i-list"/></svg><span class="hide-sm">Problem List</span></button>
+    <a class="nav-btn" href="#/courses" title="Guided courses"><svg><use href="#i-bulb"/></svg><span class="hide-sm">Courses</span></a>
     <button class="nav-icon ws-only" id="prev" title="Previous problem"><svg><use href="#i-left"/></svg></button>
     <button class="nav-icon ws-only" id="next" title="Next problem"><svg><use href="#i-right"/></svg></button>
     <button class="nav-icon" id="shuffle" title="Random problem"><svg><use href="#i-shuffle"/></svg></button>
@@ -158,6 +159,32 @@
         </div>
       </section>
     </div>
+  </section>
+</template>
+
+<template id="tpl-courses">
+  <section class="list-page">
+    <div class="list-hero">
+      <div>
+        <h1>Courses</h1>
+        <p class="muted">Guided learning paths through the problem set.</p>
+      </div>
+    </div>
+    <div class="course-cards" id="course-cards"></div>
+  </section>
+</template>
+
+<template id="tpl-course">
+  <section class="list-page">
+    <div class="list-hero">
+      <div>
+        <p class="muted"><a href="#/courses">Courses</a></p>
+        <h1 id="course-title"></h1>
+        <p class="muted" id="course-desc"></p>
+      </div>
+      <div class="progress-ring" id="course-ring"></div>
+    </div>
+    <div id="course-stages"></div>
   </section>
 </template>
 

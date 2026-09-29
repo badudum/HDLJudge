@@ -134,11 +134,93 @@ Debian: sudo apt install iverilog yosys verilator ghdl</div>`;
   function route() {
     if (page && page.destroy) page.destroy();
     closeDrawer();
+    const hash = location.hash;
     const slug = currentSlug();
+    const courseMatch = hash.match(/^#\/course\/([\w-]+)/);
     document.body.classList.toggle("list-mode", !slug);
-    page = slug ? showWorkspace(slug) : showList();
+    if (slug) page = showWorkspace(slug);
+    else if (hash === "#/courses") page = showCourses();
+    else if (courseMatch) page = showCourse(courseMatch[1]);
+    else page = showList();
   }
   window.addEventListener("hashchange", route);
+
+  // ------------------------------------------------------------------ courses
+  let coursesCache = null;
+  async function loadCourses() {
+    if (!coursesCache) coursesCache = await fetch("courses.json").then(r => r.json());
+    return coursesCache;
+  }
+  function progressRing(solved, total) {
+    const C = 2 * Math.PI * 26;
+    const frac = total ? solved / total : 0;
+    return `<svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--fill-2)" stroke-width="5"/>
+      <circle cx="32" cy="32" r="26" fill="none" stroke="var(--green)" stroke-width="5" stroke-linecap="${frac ? "round" : "butt"}"
+        stroke-dasharray="${C * frac} ${C}" transform="rotate(-90 32 32)"/>
+      <text x="32" y="36" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text)">${solved}/${total}</text></svg>`;
+  }
+  function showCourses() {
+    const view = $("#view");
+    view.innerHTML = "";
+    view.appendChild($("#tpl-courses").content.cloneNode(true));
+    document.title = "Courses · HDL Judge";
+    Promise.all([loadCourses(), loadProblems(true)]).then(([courses, problems]) => {
+      const bySlug = Object.fromEntries(problems.map(p => [p.slug, p]));
+      $("#course-cards").innerHTML = courses.map(c => {
+        const slugs = c.stages.flatMap(s => s.slugs);
+        const solved = slugs.filter(s => bySlug[s] && bySlug[s].status === "solved").length;
+        return `<a class="course-card" href="#/course/${esc(c.id)}">
+          <h2>${esc(c.title)}</h2>
+          <p class="muted">${esc(c.description)}</p>
+          <div class="course-meta"><span>${c.stages.length} stages</span><span>${slugs.length} problems</span><span>${solved}/${slugs.length} solved</span></div>
+        </a>`;
+      }).join("") || `<p class="muted">No courses yet.</p>`;
+    }).catch(e => { $("#course-cards").innerHTML = `<p class="muted">Could not load courses: ${esc(e.message)}</p>`; });
+    return {};
+  }
+  function showCourse(id) {
+    const view = $("#view");
+    view.innerHTML = "";
+    view.appendChild($("#tpl-course").content.cloneNode(true));
+    Promise.all([loadCourses(), loadProblems(true)]).then(([courses, problems]) => {
+      const course = courses.find(c => c.id === id);
+      if (!course) { $("#view").innerHTML = `<section class="list-page"><p class="muted">No such course.</p></section>`; return; }
+      const bySlug = Object.fromEntries(problems.map(p => [p.slug, p]));
+      document.title = course.title + " · HDL Judge";
+      $("#course-title").textContent = course.title;
+      $("#course-desc").textContent = course.description;
+      const allSlugs = course.stages.flatMap(s => s.slugs);
+      const solvedAll = allSlugs.filter(s => bySlug[s] && bySlug[s].status === "solved").length;
+      $("#course-ring").innerHTML = progressRing(solvedAll, allSlugs.length) +
+        `<div class="ring-legend">Overall<br>progress</div>`;
+      $("#course-stages").innerHTML = course.stages.map((st, i) => {
+        const solved = st.slugs.filter(s => bySlug[s] && bySlug[s].status === "solved").length;
+        const rows = st.slugs.map(slug => {
+          const p = bySlug[slug];
+          if (!p) return "";
+          return `<div class="prow" data-slug="${esc(slug)}">
+            <span class="status-ico ${p.status}" title="${p.status}">${p.status === "solved" ? icon("tick") : p.status === "attempted" ? "•" : ""}</span>
+            <span><span class="ptitle">${esc(p.title)}</span><br><span class="ptags">${p.tags.map(esc).join(" · ")}</span></span>
+            <span class="cat-chip ${esc(p.category)}">${esc(catLabel(p.category))}</span>
+            <span class="${p.difficulty.toLowerCase()}">${esc(p.difficulty)}</span>
+          </div>`;
+        }).join("");
+        return `<div class="stage-card">
+          <div class="stage-head"><h3>${i + 1}. ${esc(st.title)}</h3><span class="muted">${solved}/${st.slugs.length} solved</span></div>
+          <p class="muted stage-blurb">${esc(st.blurb)}</p>
+          <div class="ptable">
+            <div class="prow head"><span>Status</span><span>Title</span><span>Category</span><span>Difficulty</span></div>
+            ${rows}
+          </div>
+        </div>`;
+      }).join("");
+      $("#course-stages").addEventListener("click", e => {
+        const r = e.target.closest(".prow[data-slug]");
+        if (r) location.hash = "#/p/" + r.dataset.slug;
+      });
+    }).catch(e => { $("#view").innerHTML = `<section class="list-page"><p class="muted">Could not load course: ${esc(e.message)}</p></section>`; });
+    return {};
+  }
 
   // ------------------------------------------------------------------ list page
   function showList() {

@@ -1,0 +1,269 @@
+[
+  {
+    "id": "hw-interview-prep",
+    "title": "Hardware Interview Prep",
+    "description": "A guided path through this problem set for interview prep, from warm-up bit tricks through RTL, computer architecture, verification/UVM, analog/mixed-signal modeling, low power, DFT and timing — finishing with live-debugging practice.",
+    "stages": [
+      {
+        "title": "Warm-Up: Bit Tricks & Combinational Basics",
+        "blurb": "Quick, no-clock puzzles — the kind of thing an interviewer throws at you in the first five minutes to see how you think about hardware.",
+        "slugs": [
+          "mux4",
+          "priority_encoder",
+          "lowest_set_bit_tricks",
+          "power_of_four",
+          "equal_without_eq",
+          "branchless_abs",
+          "alternating_bits",
+          "exactly_two_hot",
+          "spaceship_compare"
+        ]
+      },
+      {
+        "title": "Sequential Logic & FSMs",
+        "blurb": "Registers, edge detection, and state machines — the bread-and-butter RTL every interview checks first.",
+        "slugs": [
+          "edge_detector",
+          "pulse_detector",
+          "counter",
+          "gray_code",
+          "lfsr",
+          "debouncer",
+          "sequence_detector",
+          "traffic_light",
+          "vending_machine",
+          "onehot_detector"
+        ]
+      },
+      {
+        "title": "Datapath & Arithmetic",
+        "blurb": "Adders, multipliers, and the arithmetic tricks that come up in nearly every architecture interview.",
+        "slugs": [
+          "bcd_adder",
+          "add_sub",
+          "overflow_detect",
+          "saturating_adder",
+          "barrel_rotator",
+          "shift_add_multiplier",
+          "gcd",
+          "booth_multiplier",
+          "int_sqrt"
+        ]
+      },
+      {
+        "title": "Memories, FIFOs & Buffering",
+        "blurb": "Classic 'design a FIFO' style questions, from a plain sync RAM up to a full async FIFO with Gray-coded pointers.",
+        "slugs": [
+          "sp_ram",
+          "dp_ram",
+          "sync_fifo",
+          "gray_pointer",
+          "async_fifo",
+          "skid_buffer",
+          "fifo_width_conv",
+          "credit_tx"
+        ]
+      },
+      {
+        "title": "Clocking & Clock-Domain Crossing",
+        "blurb": "CDC is one of the most commonly asked digital-design topics — dividers, reset synchronizers, and handshakes.",
+        "slugs": [
+          "clk_div2",
+          "clk_div_n",
+          "clk_div3",
+          "reset_sync",
+          "cdc_slow_to_fast",
+          "cdc_handshake"
+        ]
+      },
+      {
+        "title": "Bus Protocols & Peripherals",
+        "blurb": "Implement the slave/peripheral side of the buses and serial protocols interviewers love to whiteboard.",
+        "slugs": [
+          "axil_status_ro",
+          "axil_ctrl_wo",
+          "axil_reg",
+          "axil_regfile",
+          "axil_gpio",
+          "mmio_gpio",
+          "apb_slave",
+          "uart_tx",
+          "uart_rx",
+          "spi_master",
+          "crc8"
+        ]
+      },
+      {
+        "title": "Arbitration & Flow Control",
+        "blurb": "Fairness and flow control between multiple requesters — a favorite 'design an arbiter' interview question.",
+        "slugs": [
+          "round_robin_arbiter",
+          "wrr_arbiter",
+          "bus_arbiter"
+        ]
+      },
+      {
+        "title": "Pipelining & Hazards",
+        "blurb": "Build the pieces of a pipelined CPU datapath and handle the hazards that come with it.",
+        "slugs": [
+          "regfile_2r1w",
+          "alu",
+          "alu_control",
+          "branch_comparator",
+          "rv32i_decoder",
+          "pipeline_regs",
+          "hazard_unit",
+          "forwarding_unit",
+          "pipelined_alu"
+        ]
+      },
+      {
+        "title": "Caches & Memory Hierarchy",
+        "blurb": "Cache structure and replacement policy questions — a computer-architecture interview staple.",
+        "slugs": [
+          "dm_cache",
+          "cache_tag_compare",
+          "dirty_bit_tracker",
+          "wb_cache_2way",
+          "lru_4way",
+          "plru_tree",
+          "lfu_cache",
+          "mshr",
+          "cache_refill_fsm",
+          "tlb4",
+          "mesi_cache_line"
+        ]
+      },
+      {
+        "title": "Advanced Microarchitecture",
+        "blurb": "Out-of-order execution building blocks and GPU-style scheduling — the harder end of architecture interviews.",
+        "slugs": [
+          "branch_predictor_bht",
+          "return_address_stack",
+          "register_rename",
+          "rob",
+          "scoreboard_issue",
+          "warp_scheduler",
+          "thread_mask",
+          "bank_conflict",
+          "simd_alu",
+          "irq_ctrl"
+        ]
+      },
+      {
+        "title": "Verification: Assertions (SVA)",
+        "blurb": "Write the SystemVerilog assertions a DV engineer is expected to produce on the spot in an interview.",
+        "slugs": [
+          "dv_a37_high_when_valid",
+          "dv_a_onehot_state",
+          "dv_a44_high_3_cycles",
+          "dv_a51_a_before_b",
+          "dv_a62_fifo_flags",
+          "dv_a66_ready_valid",
+          "dv_a53_within_range",
+          "dv_a52_fsm_coverage",
+          "dv_a63_arbiter_fair",
+          "dv_a76_protocol_monitor"
+        ]
+      },
+      {
+        "title": "Verification: Testbenches & Constrained-Random",
+        "blurb": "Write testbenches and randomization constraints from scratch — a core DV interview exercise.",
+        "slugs": [
+          "dv_tb_counter",
+          "dv_c35_fixed_index",
+          "dv_c23_power_of_4",
+          "dv_c01_array_sum",
+          "dv_c22_equal_ones_zeros",
+          "dv_tb_alu",
+          "dv_c37_private_ip",
+          "dv_tb_fifo",
+          "dv_c26_sudoku"
+        ]
+      },
+      {
+        "title": "Verification: UVM",
+        "blurb": "The UVM component types (driver, monitor, scoreboard, RAL, virtual sequence) that come up in almost every DV interview loop.",
+        "slugs": [
+          "dv_uvm_driver_response",
+          "dv_uvm_callback",
+          "dv_uvm_coverage_subscriber",
+          "dv_uvm_coverage_env",
+          "dv_uvm_virtual_sequence",
+          "dv_uvm_report_catcher",
+          "dv_uvm_factory_config",
+          "dv_uvm_driver_monitor",
+          "dv_uvm_analysis_fifo",
+          "dv_uvm_ral",
+          "dv_uvm_assert_cov",
+          "dv_uvm_agent_active_passive"
+        ]
+      },
+      {
+        "title": "Analog / Mixed-Signal Modeling",
+        "blurb": "Behavioral real-number models of the analog building blocks a mixed-signal interview brings up — amplifiers, converters, and filters, expressed as ordinary clocked SystemVerilog/VHDL.",
+        "slugs": [
+          "diff_amp",
+          "hysteresis_comparator",
+          "sample_hold",
+          "slew_limiter",
+          "rc_lowpass",
+          "integrator_model",
+          "ideal_adc",
+          "ideal_dac",
+          "vco",
+          "sigma_delta"
+        ]
+      },
+      {
+        "title": "Low Power & DFT",
+        "blurb": "Clock gating, retention, and scan/BIST — the low-power and design-for-test questions ASIC interviews like to probe.",
+        "slugs": [
+          "lp_isolation_cell",
+          "clock_gate_icg",
+          "lp_retention_flop",
+          "lp_power_sequencer",
+          "lp_glitchfree_clkmux",
+          "lp_fsm_cg",
+          "dft_scan_register",
+          "dft_scan_counter",
+          "dft_misr",
+          "dft_jtag_tap",
+          "dft_mbist"
+        ]
+      },
+      {
+        "title": "Timing Closure",
+        "blurb": "Redesign a design's logic structure to hit a critical-path budget — a question that separates RTL writers from RTL engineers.",
+        "slugs": [
+          "timing_parity_tree",
+          "timing_max_finder",
+          "timing_priority_enc32",
+          "timing_gray_to_bin",
+          "timing_pipelined_mac",
+          "timing_fast_adder"
+        ]
+      },
+      {
+        "title": "Debug Practice: Find the Bug",
+        "blurb": "Every one of these compiles and looks reasonable at a glance — exactly like the broken RTL an interviewer hands you to debug live.",
+        "slugs": [
+          "bug_counter",
+          "bug_req_ack",
+          "bug_edge_detector",
+          "bug_seq_detector",
+          "bug_valid_ready",
+          "bug_shift_register",
+          "bug_sp_ram",
+          "bug_onehot_fsm",
+          "bug_apb_slave",
+          "bug_crc8",
+          "bug_branch_predictor",
+          "bug_arbiter",
+          "bug_sync_fifo",
+          "bug_skid_buffer"
+        ]
+      }
+    ]
+  }
+]
