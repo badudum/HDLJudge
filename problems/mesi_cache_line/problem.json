@@ -1,0 +1,40 @@
+{
+  "id": 274,
+  "title": "MESI Cache Line Coherence FSM",
+  "difficulty": "Hard",
+  "category": "digital",
+  "tags": ["fsm", "cache", "coherence"],
+  "top": "mesi_line",
+  "synthesis": "required",
+  "languages": ["verilog", "systemverilog", "vhdl"],
+  "ports": [
+    {"name": "clk",       "dir": "input",  "width": 1},
+    {"name": "rst",       "dir": "input",  "width": 1},
+    {"name": "pr_rd",     "dir": "input",  "width": 1},
+    {"name": "pr_wr",     "dir": "input",  "width": 1},
+    {"name": "bus_rd",    "dir": "input",  "width": 1},
+    {"name": "bus_rdx",   "dir": "input",  "width": 1},
+    {"name": "shared_in", "dir": "input",  "width": 1},
+    {"name": "state",     "dir": "output", "width": 2},
+    {"name": "wb",        "dir": "output", "width": 1}
+  ],
+  "constraints": [
+    "Track one cache line's MESI state. Encoding: `state` = 0 Invalid, 1 Shared, 2 Exclusive, 3 Modified.",
+    "Exactly one of `pr_rd` (local read), `pr_wr` (local write), `bus_rd` (another cache reads this line) and `bus_rdx` (another cache wants it exclusively) is ever asserted in a cycle, or none of them. `shared_in` only matters together with `pr_rd`.",
+    "Transitions: `pr_rd` from Invalid goes to Exclusive, or to Shared if `shared_in = 1`; from Shared/Exclusive/Modified it has no effect. `pr_wr` always goes straight to Modified, from any state. `bus_rd` moves Exclusive to Shared and Modified to Shared; Invalid and Shared are unaffected. `bus_rdx` moves any state to Invalid.",
+    "`wb` (write-back) is a one-cycle pulse, asserted exactly when the *current* state is Modified and `bus_rd` or `bus_rdx` fires (the dirty line must be flushed before it can be shared or invalidated) — never on any other transition.",
+    "Synchronous reset: `state` = Invalid (0), `wb` = 0. All outputs are registered. Must be synthesizable."
+  ],
+  "hints": [
+    "This is exactly the textbook 4-state MESI diagram: work out the four rows (one per current state) for the four possible triggers, then it's a straightforward case statement.",
+    "`wb` only depends on the state you're leaving and which bus signal fired — it does not depend on where you're going.",
+    "Only Modified is dirty. A cache line that is Shared or Exclusive was never written locally by *this* cache without going through Modified first, so it never needs a write-back."
+  ],
+  "examples": [
+    {"check": "Invalid + local read, not shared -> Exclusive", "title": "I to E", "input": "state=I, pr_rd=1, shared_in=0", "expected": "state=E, wb=0"},
+    {"check": "Invalid + local read, shared -> Shared", "title": "I to S", "input": "state=I, pr_rd=1, shared_in=1", "expected": "state=S, wb=0"},
+    {"check": "Modified + bus_rd -> Shared, writeback asserted", "title": "M to S with writeback", "input": "state=M, bus_rd=1", "expected": "state=S, wb=1"},
+    {"check": "Modified + bus_rdx -> Invalid, writeback asserted", "title": "M to I with writeback", "input": "state=M, bus_rdx=1", "expected": "state=I, wb=1"},
+    {"check": "Shared + bus_rdx -> Invalid, no writeback", "title": "S to I, no writeback", "input": "state=S, bus_rdx=1", "expected": "state=I, wb=0"}
+  ]
+}

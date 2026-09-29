@@ -1,0 +1,43 @@
+{
+  "id": 273,
+  "title": "UVM: Fault-Injection Callback",
+  "difficulty": "Medium",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "callback"
+  ],
+  "top": "invert_callback",
+  "ports": [],
+  "constraints": [
+    "Write `class invert_callback extends my_callback`, overriding `pre_drive(cb_item item)` so it inverts every bit of `item.data` (`item.data = ~item.data;`).",
+    "`cb_driver` already calls every callback registered on it (via `` `uvm_do_callbacks ``) right before driving each item, so your override changes what actually gets driven onto the bus.",
+    "The hidden test registers your callback on the driver only partway through the run, so the same driver instance must behave differently before and after `uvm_callbacks#(cb_driver, my_callback)::add(...)` is called — you don't call `add` yourself.",
+    "The UVM library is the Verilator-compatible chipsalliance/uvm-verilator (UVM 2017), and building it takes about a minute."
+  ],
+  "hints": [
+    "A callback method is just a virtual function on a `uvm_callback` subclass — you don't need `uvm_object_utils` or a factory type for it here, since the hidden test constructs it with a plain `new()`.",
+    "`item` is the exact same object the driver is about to send, so mutating `item.data` in place is enough — there's nothing to return."
+  ],
+  "examples": [
+    {
+      "check": "with no callback registered, the driver passes data through unchanged",
+      "title": "before registration",
+      "input": "15 items, no callback attached",
+      "expected": "the monitor observes the original data"
+    },
+    {
+      "check": "once the callback is registered, every item is inverted before it's driven",
+      "title": "after registration",
+      "input": "15 more items, your callback now attached",
+      "expected": "the monitor observes ~data for each one"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

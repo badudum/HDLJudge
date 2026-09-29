@@ -1,0 +1,45 @@
+{
+  "id": 272,
+  "title": "UVM: Build an Agent (Active/Passive)",
+  "difficulty": "Hard",
+  "category": "verification",
+  "tags": [
+    "uvm",
+    "agent",
+    "config_db"
+  ],
+  "top": "bus_agent",
+  "ports": [],
+  "constraints": [
+    "Write `class bus_agent extends uvm_agent`. In `build_phase`, read `is_active` from `uvm_config_db#(uvm_active_passive_enum)` with field name `\"is_active\"` (leave the inherited default, `UVM_ACTIVE`, if nothing was set).",
+    "Always build `mon` (a `bus_monitor`). Only build `drv` (a `bus_driver`) and `sqr` (a `uvm_sequencer #(bus_item)`) when `get_is_active() == UVM_ACTIVE`.",
+    "In `connect_phase`, connect `drv.seq_item_port` to `sqr.seq_item_export` — again, only when active.",
+    "`bus_driver` and `bus_monitor` are already fully implemented (see below); you are only writing the agent that assembles them. The UVM library is the Verilator-compatible chipsalliance/uvm-verilator (UVM 2017), and building it takes about a minute."
+  ],
+  "hints": [
+    "`uvm_active_passive_enum` and the `is_active` field already exist on `uvm_agent` — you don't declare them yourself, just call `get_is_active()` after setting them.",
+    "`uvm_config_db#(uvm_active_passive_enum)::get(this, \"\", \"is_active\", is_active)` returns 0 (and leaves `is_active` untouched) when nothing was configured, so a bare `void'(...)` call is enough — you don't need to branch on the return value.",
+    "A passive agent's monitor still needs its virtual interface: build it exactly the same way as the active case, just without the driver/sequencer."
+  ],
+  "examples": [
+    {
+      "check": "active agent: driver drives items and the monitor observes all of them",
+      "title": "active agent",
+      "input": "20 items on a sequencer",
+      "expected": "the monitor observes all 20"
+    },
+    {
+      "check": "passive agent: monitor still observes externally-driven bus activity",
+      "title": "passive agent",
+      "input": "15 transfers driven directly on the bus (no sequencer)",
+      "expected": "the monitor observes all 15"
+    }
+  ],
+  "synthesis": "none",
+  "languages": [
+    "systemverilog"
+  ],
+  "timeout_s": 120,
+  "simulator": "verilator",
+  "uvm": true
+}

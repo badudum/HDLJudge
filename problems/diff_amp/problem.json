@@ -1,0 +1,36 @@
+{
+  "id": 275,
+  "title": "Saturating Differential Amplifier Model",
+  "difficulty": "Easy",
+  "category": "modeling",
+  "tags": ["analog", "real-number-modeling"],
+  "top": "diff_amp",
+  "synthesis": "optional",
+  "languages": ["systemverilog", "vhdl"],
+  "params": [
+    {"name": "GAIN", "type": "real", "default": "1.0"},
+    {"name": "VSAT", "type": "real", "default": "1.0"}
+  ],
+  "ports": [
+    {"name": "clk",  "dir": "input",  "width": 1},
+    {"name": "vp",   "dir": "input",  "width": 1, "type": "real"},
+    {"name": "vn",   "dir": "input",  "width": 1, "type": "real"},
+    {"name": "vout", "dir": "output", "width": 1, "type": "real"}
+  ],
+  "constraints": [
+    "`GAIN` and `VSAT` are `real` parameters / generics. The judge instantiates the model with `GAIN = 4.0`, `VSAT = 2.0`.",
+    "`vout = clamp(GAIN * (vp - vn), -VSAT, +VSAT)`, updated on each rising edge of `clk` (a clocked, sampled amplifier).",
+    "`vout` starts at `0.0` and holds between edges.",
+    "Checked with an absolute tolerance of 1e-9 V."
+  ],
+  "hints": [
+    "This is exactly an op-amp difference amplifier with an output stage that can't swing past the supply rails: compute the ideal gain first, then clip it.",
+    "SystemVerilog: nest two `?:` (or two `if`s) around `GAIN * (vp - vn)`, comparing against `-VSAT` and `VSAT`. VHDL: two `if`s work the same way over `real` signals.",
+    "Clip the *result* of the multiply, not the inputs — `vp` and `vn` are never out of range themselves."
+  ],
+  "examples": [
+    {"check": "small signal, no clipping", "title": "linear region", "input": "GAIN=4, vp=0.1, vn=0.0", "expected": "vout = 0.4"},
+    {"check": "right at the positive rail", "title": "at the rail", "input": "GAIN=4, VSAT=2, vp-vn = 0.5", "expected": "vout = 2.0 exactly"},
+    {"check": "large signal, saturates", "title": "clipped", "input": "GAIN=4, VSAT=2, vp=5.0, vn=0.0", "expected": "vout = 2.0 (4 × 5 = 20, clipped to the +2.0 V rail)"}
+  ]
+}
