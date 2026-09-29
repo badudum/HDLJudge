@@ -13,6 +13,8 @@ Layout of one problem (see docs/ADDING_PROBLEMS.md):
 import json
 from pathlib import Path
 
+from . import tools
+
 ROOT = Path(__file__).resolve().parent.parent
 PROBLEMS_DIR = ROOT / "problems"
 
@@ -21,6 +23,13 @@ LANGUAGES = {
     "systemverilog": {"label": "SystemVerilog", "ext": ".sv", "family": "verilog"},
     "vhdl": {"label": "VHDL", "ext": ".vhd", "family": "vhdl"},
 }
+
+# VHDL needs GHDL, which isn't always installed. Rather than exposing a
+# language every problem in principle supports and then failing every VHDL
+# submission with "GHDL not found", drop it from the menu until GHDL is
+# actually on PATH. No data is touched, so it comes back on its own once
+# GHDL is installed and the process restarts.
+_VHDL_ENABLED = tools.find("ghdl") is not None
 
 # required: the design must synthesize (digital problems)
 # optional: synthesis is attempted and reported, but never fails the submission
@@ -46,7 +55,7 @@ class Problem:
             raise ValueError(f"{self.slug}: bad synthesis mode {self.synthesis!r}")
         self.timeout = meta.get("timeout_s", 20)
         self.languages = [l for l in meta.get("languages", list(LANGUAGES))
-                          if l in LANGUAGES]
+                          if l in LANGUAGES and (l != "vhdl" or _VHDL_ENABLED)]
         self.constraints = meta.get("constraints", [])
         self.hints = meta.get("hints", [])
         # visible example cases; "check" is the prefix of a testbench check name
