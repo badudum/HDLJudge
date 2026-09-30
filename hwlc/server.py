@@ -35,6 +35,12 @@ def _load_users():
 
 _AUTH_USERS = _load_users()
 
+# Usernames (from HWLC_AUTH_USERS) that can log in and judge code normally,
+# but whose submissions, solved status and drafts are never written to
+# disk - a shared "guest" / "trial" login that leaves no trace and can't
+# see a previous guest's leftovers either.
+_GUEST_USERS = {u.strip() for u in os.environ.get("HWLC_GUEST_USERS", "").split(",") if u.strip()}
+
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "hwlc"
@@ -116,6 +122,9 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith("/api/submissions/"):
             slug = path.rsplit("/", 1)[1]
             return self._send(200, store.history(slug, user)[:100])
+        if path.startswith("/api/draft/"):
+            slug = path.rsplit("/", 1)[1]
+            return self._send(200, store.drafts_for(user, slug))
         if path == "/api/tools":
             return self._send(200, {"tools": tools.status(),
                                     "sv_simulator": tools.sv_simulator()})
@@ -127,7 +136,8 @@ class Handler(BaseHTTPRequestHandler):
         user = self._authenticated_user()
         if user is None:
             return self._require_auth()
-        if urlparse(self.path).path != "/api/judge":
+        path = urlparse(self.path).path
+        if path not in ("/api/judge", "/api/draft"):
             return self._error(404, "not found")
         # requiring JSON forces a CORS preflight, so other web pages cannot post here
         if not (self.headers.get("Content-Type") or "").startswith("application/json"):
@@ -138,15 +148,33 @@ class Handler(BaseHTTPRequestHandler):
         try:
             req = json.loads(self.rfile.read(length))
             p = problems.get(req["problem"])
-            lang, code = req["language"], req["code"]
-            mode = req.get("mode", "submit")
+            lang = req["language"]
         except (ValueError, KeyError, TypeError):
             return self._error(400, "bad request")
-        if not p or lang not in p.languages or mode not in ("check", "run", "submit"):
+        if not p or lang not in p.languages:
+            return self._error(400, "unknown problem or language")
+        if path == "/api/draft":
+            code = req.get("code")
+            if user not in _GUEST_USERS:
+                if code is None:
+                    store.delete_draft(user, p.slug, lang)
+                elif isinstance(code, str):
+                    store.save_draft(user, p.slug, lang, code)
+                else:
+                    return self._error(400, "bad request")
+            elif code is not None and not isinstance(code, str):
+                return self._error(400, "bad request")
+            return self._send(200, {"ok": True})
+        try:
+            code = req["code"]
+            mode = req.get("mode", "submit")
+        except KeyError:
+            return self._error(400, "bad request")
+        if mode not in ("check", "run", "submit"):
             return self._error(400, "unknown problem or language")
         with _judge_slots:
             result = judge.judge(p, lang, code, mode=mode)
-        if mode == "submit":
+        if mode == "submit" and user not in _GUEST_USERS:
             store.record(result, code, user)
         return self._send(200, result)
 
@@ -166,6 +194,8 @@ def serve(host="127.0.0.1", port=8080, open_browser=True):
     print(f"hwlc: serving {len(problems.load_all())} problems at {url}  (Ctrl+C to stop)")
     if _AUTH_USERS:
         print(f"hwlc: HTTP Basic Auth enabled (users: {', '.join(sorted(_AUTH_USERS))})")
+        if _GUEST_USERS:
+            print(f"hwlc: non-persistent guest users: {', '.join(sorted(_GUEST_USERS))}")
     elif host not in ("127.0.0.1", "::1", "localhost"):
         print("hwlc: WARNING: bound to a non-loopback address with no auth configured "
               "(set HWLC_AUTH_USERS)")

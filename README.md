@@ -82,8 +82,9 @@ python3 -m hwlc install-desktop    # optional: add "HDL Judge" to your applicati
 The app opens in its own window (GTK + WebKitGTK through PyGObject). Without WebKitGTK it falls back
 to your browser; `python3 -m hwlc serve` always uses the browser.
 
-Your progress (submission history, solved problems) is stored locally in `data/`, and editor drafts in
-the app's browser storage. Neither is tracked by git.
+Your progress (submission history, solved problems, in-progress drafts) is stored locally in `data/`,
+plus a fast local copy of drafts in the app's browser storage for zero-latency typing. None of it is
+tracked by git.
 
 ## The workspace
 

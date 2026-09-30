@@ -280,6 +280,7 @@ Debian: sudo apt install iverilog yosys verilator ghdl</div>`;
     const ctl = { destroyed: false, wave: null, cleanups: [] };
     const on = (target, ev, fn, opt) => { target.addEventListener(ev, fn, opt); ctl.cleanups.push(() => target.removeEventListener(ev, fn, opt)); };
     let problem = null, lang = null, editor = null, errMarks = [], busy = false, caseIdx = 0, lastResult = null;
+    let serverDrafts = {};
 
     // ---------------------------------------------------------------- layout
     const DEFAULT_LEFT = 0.45, DEFAULT_CONSOLE = 0.38;
@@ -416,10 +417,19 @@ Debian: sudo apt install iverilog yosys verilator ghdl</div>`;
     const getCode = () => editor ? editor.getValue() : ta.value;
     const setCode = v => { if (editor) editor.setValue(v); else ta.value = v; };
     const draftKey = () => `draft:${slug}:${lang}`;
-    let savedTimer = null;
+    let savedTimer = null, draftSyncTimer = null;
+    function syncDraftToServer(l, code) {
+      clearTimeout(draftSyncTimer);
+      draftSyncTimer = setTimeout(() => {
+        api("/api/draft", { problem: slug, language: l, code }).catch(() => {});
+      }, 800);
+    }
     function saveDraft() {
       if (!lang) return;
-      store.set(draftKey(), getCode());
+      const code = getCode();
+      store.set(draftKey(), code);
+      serverDrafts[lang] = code;
+      syncDraftToServer(lang, code);
       $("#saved").textContent = "Saved";
       clearTimeout(savedTimer);
       savedTimer = setTimeout(() => { $("#saved").textContent = ""; }, 1200);
@@ -428,7 +438,9 @@ Debian: sudo apt install iverilog yosys verilator ghdl</div>`;
       lang = l;
       store.set("lang", l);
       $("#lang").value = l;
-      setCode(store.get(draftKey(), null) ?? problem.starters[l]);
+      const draft = serverDrafts[l] ?? store.get(draftKey(), null);
+      setCode(draft ?? problem.starters[l]);
+      if (draft != null) store.set(draftKey(), draft);
       if (editor) { editor.setOption("mode", CM_MODE[l]); editor.clearHistory(); }
       clearErrMarks();
       $("#saved").textContent = "";
@@ -440,6 +452,9 @@ Debian: sudo apt install iverilog yosys verilator ghdl</div>`;
     $("#reset").addEventListener("click", () => {
       if (!problem || !confirm("Reset to the starter code? Your current code will be discarded.")) return;
       store.del(draftKey());
+      delete serverDrafts[lang];
+      clearTimeout(draftSyncTimer);
+      api("/api/draft", { problem: slug, language: lang, code: null }).catch(() => {});
       setCode(problem.starters[lang]);
     });
 
@@ -465,6 +480,8 @@ Debian: sudo apt install iverilog yosys verilator ghdl</div>`;
       document.title = `${p.id}. ${p.title} · HDL Judge`;
       const sel = $("#lang");
       sel.innerHTML = p.languages.map(l => `<option value="${l}">${LANG_LABEL[l]}</option>`).join("");
+      serverDrafts = await api("/api/draft/" + slug).catch(() => ({}));
+      if (ctl.destroyed) return;
       const pref = store.get("lang", p.languages[0]);
       setLang(p.languages.includes(pref) ? pref : p.languages[0]);
       sel.addEventListener("change", () => setLang(sel.value));
